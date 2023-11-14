@@ -6,6 +6,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { env } from "~/env.mjs";
 
 import { db } from "~/server/db";
 
@@ -48,6 +49,37 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     CredentialsProvider({
+      name: "Admin Privileges",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "chad" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        if (!credentials) return null;
+
+        const username = credentials["username"];
+        const password = credentials["password"];
+
+        const isAuthorized =
+          username === env.SUPER_ADMIN_USERNAME &&
+          password === env.SUPER_ADMIN_PASSWORD;
+
+        if (!isAuthorized) {
+          // Return null if user data could not be retrieved
+          return null;
+        }
+
+        console.log("Super admin Authorized");
+
+        const user = {
+          id: "sudo",
+          username: env.SUPER_ADMIN_USERNAME,
+        };
+
+        return user;
+      },
+    }),
+    CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "Credentials",
       // The credentials is used to generate a suitable form on the sign in page.
@@ -65,7 +97,7 @@ export const authOptions: NextAuthOptions = {
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        
+
         const res = await fetch("/your/endpoint", {
           method: "POST",
           body: JSON.stringify(credentials),
