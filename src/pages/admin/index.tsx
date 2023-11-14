@@ -1,9 +1,10 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 import { api } from "~/utils/api";
 
-export default function Home() {
+export default function Admin() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
   const { data: sessionData } = useSession();
@@ -16,9 +17,28 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className=" flex min-h-screen flex-col items-center justify-center bg-[#121212]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          
+      <main className=" flex min-h-screen flex-col bg-[#121212]">
+        <div className="container flex flex-col items-start justify-start gap-12 px-4 py-10">
+          <div className="item-center container flex flex-row gap-6">
+            <Avatar>
+              <AvatarImage src="./public/avatar.png" />
+              <AvatarFallback>Streamline</AvatarFallback>
+            </Avatar>
+
+            <p className="text-primary-foreground text-lg font-semibold">
+              {sessionData
+                ? "Logged in as: " + sessionData.user.name
+                : "Please Login."}
+            </p>
+          </div>
+          <div className="">
+            <p className="text-primary-foreground text-lg ">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
+              vero vitae accusantium, reprehenderit, natus sunt veniam sint
+              inventore quaerat excepturi saepe dolores aliquid, temporibus
+              blanditiis corporis magnam iure at amet.
+            </p>
+          </div>
         </div>
       </main>
     </>
