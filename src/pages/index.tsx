@@ -7,6 +7,8 @@ import { api } from "~/utils/api";
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
+  const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
@@ -19,8 +21,13 @@ export default function Home() {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+              {sessionData
+                ? "Logged in as: " + sessionData.user.name
+                : "Please Login."}
             </p>
+          </div>
+
+          <div className="flex flex-col items-center gap-2">
             <AuthShowcase />
           </div>
         </div>
@@ -30,9 +37,10 @@ export default function Home() {
 }
 
 function AuthShowcase() {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
 
-  console.log(sessionData);
+  console.log("[Session status] ", status);
+  console.log("[Session data] ", sessionData);
 
   const { data: secretMessage } = api.post.getSecretMessage.useQuery(
     undefined, // no input
