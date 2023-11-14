@@ -1,13 +1,14 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { randomUUID, randomBytes } from "crypto";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-
+import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "~/env.mjs";
+
 import { db } from "~/server/db";
 
 /**
@@ -22,12 +23,15 @@ declare module "next-auth" {
       id: string;
       // ...other properties
       // role: UserRole;
+      name: string;
     };
   }
 
   // interface User {
   //   // ...other properties
   //   // role: UserRole;
+  //   id: string;
+  //   name: string;
   // }
 }
 
@@ -38,29 +42,88 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, user, token }) => ({
       ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
+      ...token,
     }),
+    jwt: ({ account, token, user, profile }) => {
+      return { ...user, ...account, ...profile, ...token };
+    },
   },
   adapter: PrismaAdapter(db),
+  session: {
+    strategy: "jwt",
+  },
+  secret: env.NEXTAUTH_SECRET,
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    CredentialsProvider({
+      name: "Admin Privileges",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "chad" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        console.log("[Environment] ", env.NODE_ENV);
+
+        if (!credentials) return null;
+
+        const username = credentials["username"];
+        const password = credentials["password"];
+
+        const isAuthorized =
+          username === env.SUPER_ADMIN_USERNAME &&
+          password === env.SUPER_ADMIN_PASSWORD;
+
+        if (!isAuthorized) {
+          // Return null if user data could not be retrieved
+          return null;
+        }
+
+        const user = {
+          id: "sudo",
+          name: env.SUPER_ADMIN_USERNAME,
+        };
+
+        console.log("[Auth] ", "Super admin Authorized");
+
+        return user;
+      },
     }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    CredentialsProvider({
+      // The name to display on the sign in form (e.g. 'Sign in with...')
+      name: "Credentials",
+      // The credentials is used to generate a suitable form on the sign in page.
+      // You can specify whatever fields you are expecting to be submitted.
+      // e.g. domain, username, password, 2FA token, etc.
+      // You can pass any HTML attribute to the <input> tag through the object.
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        // You need to provide your own logic here that takes the credentials
+        // submitted and returns either a object representing a user or value
+        // that is false/null if the credentials are invalid.
+        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
+        // You can also use the `req` object to obtain additional parameters
+        // (i.e., the request IP address)
+
+        const res = await fetch("/your/endpoint", {
+          method: "POST",
+          body: JSON.stringify(credentials),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const user = await res.json();
+
+        // If no error and we have user data, return it
+        if (res.ok && user) {
+          return user;
+        }
+        // Return null if user data could not be retrieved
+        return null;
+      },
+    }),
   ],
 };
 
