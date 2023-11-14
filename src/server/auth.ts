@@ -22,13 +22,16 @@ declare module "next-auth" {
       id: string;
       // ...other properties
       // role: UserRole;
+      name: string;
     };
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    // role: UserRole;
+    id: string;
+    name: string;
+  }
 }
 
 /**
@@ -43,6 +46,7 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        name: user.name,
       },
     }),
   },
