@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { randomUUID, randomBytes } from "crypto";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -26,12 +27,12 @@ declare module "next-auth" {
     };
   }
 
-  interface User {
-    // ...other properties
-    // role: UserRole;
-    id: string;
-    name: string;
-  }
+  // interface User {
+  //   // ...other properties
+  //   // role: UserRole;
+  //   id: string;
+  //   name: string;
+  // }
 }
 
 /**
@@ -41,16 +42,19 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, user, token }) => ({
       ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-        name: user.name,
-      },
+      ...token,
     }),
+    jwt: ({ account, token, user, profile }) => {
+      return { ...user, ...account, ...profile, ...token };
+    },
   },
   adapter: PrismaAdapter(db),
+  session: {
+    strategy: "jwt",
+  },
+  secret: env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "Admin Privileges",
@@ -59,6 +63,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        console.log("[Environment] ", env.NODE_ENV);
+
         if (!credentials) return null;
 
         const username = credentials["username"];
@@ -78,7 +84,7 @@ export const authOptions: NextAuthOptions = {
           name: env.SUPER_ADMIN_USERNAME,
         };
 
-        console.log("Super admin Authorized");
+        console.log("[Auth] ", "Super admin Authorized");
 
         return user;
       },
