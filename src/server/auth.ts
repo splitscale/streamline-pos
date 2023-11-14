@@ -69,12 +69,12 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        console.log("Super admin Authorized");
-
         const user = {
           id: "sudo",
-          username: env.SUPER_ADMIN_USERNAME,
+          name: env.SUPER_ADMIN_USERNAME,
         };
+
+        console.log("Super admin Authorized");
 
         return user;
       },
