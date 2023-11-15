@@ -1,12 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
+"use client"
 
-// import { api } from "~/utils/api";
+export default async function DisplayUserList(userData: any) {
 
-export default async function DisplayUserList() {
-  const prisma = new PrismaClient();
-
-  const allUsers = await prisma.account.findMany();
+  const allUsers = userData;
 
   console.log(allUsers);
 
@@ -17,7 +13,7 @@ export default async function DisplayUserList() {
         <div className="flex flex-col">
           <p className="flex text-lg">User Accounts:</p>
           <div>
-            {allUsers.map((user) => (
+            {allUsers.map((user: any) => (
               <div key={user.id}>{`ID: ${user.id}`}</div>
             ))}
           </div>
