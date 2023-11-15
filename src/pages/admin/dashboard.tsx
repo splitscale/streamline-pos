@@ -37,7 +37,7 @@ export default function Admin() {
                 className="text-lg font-semibold"
                 size="lg"
                 variant="ghost"
-                onClick={() => void signOut({ callbackUrl: "/admin" })}
+                onClick={() => void signOut({ callbackUrl: "/admin/dashboard" })}
               >
                 Sign out
               </Button>
