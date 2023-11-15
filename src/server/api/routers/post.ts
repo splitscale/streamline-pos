@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { env } from "~/env.mjs";
+import getUsers from "~/pages/api/auth/users";
 
 import {
   createTRPCRouter,
@@ -38,5 +40,17 @@ export const postRouter = createTRPCRouter({
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
+  }),
+  getUsers: protectedProcedure.query(async () => {
+    const token = env.SUPER_ADMIN_PASSWORD;
+
+    const res = await fetch(
+      `http://localhost:8080/auth/v1/users?token=${token}`,
+      {
+        method: "GET",
+      },
+    );
+
+    return await res.json();
   }),
 });
