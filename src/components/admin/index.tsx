@@ -94,13 +94,15 @@ export default function DisplayUserList(userData: any) {
       {allUsers.map((user: any) => (
         <div key={user.id}>
           <Card>
-            <CardHeader>
-              <CardTitle>
-                {user.firstName ? user.firstName : "No username"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{user.id}</p>
+            <CardContent className="align-center  flex flex-col p-2">
+              <div key={user.id}>
+                <div className="space-y-1">
+                  <p className="text-md font-semibold leading-none">
+                    {user.firstName ? user.firstName : "No username"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">{user.id}</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>

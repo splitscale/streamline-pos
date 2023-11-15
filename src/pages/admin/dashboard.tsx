@@ -43,7 +43,8 @@ export default function Admin() {
                 Sign out
               </Button>
             </div>
-            <div>
+            <div className="container flex flex-col space-y-2">
+              <header className="text-xl font-bold">Users</header>
               <DisplayUserList />
             </div>
           </div>
