@@ -1,9 +1,16 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { SignInForm } from "~/components/form/signInForm";
 
 export default function Admin() {
   const { data: sessionData } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (sessionData) router.push("/admin/dashboard");
+  });
 
   return (
     <>
