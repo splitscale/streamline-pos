@@ -90,39 +90,100 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     CredentialsProvider({
-      id: "user-login",
-      // The name to display on the sign in form (e.g. 'Sign in with...')
+      id: "user-signup",
       name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
+        const res = await fetch(
+          `http://localhost:8080/auth/v1/credential/register`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          },
+        );
 
-        const res = await fetch("/your/endpoint", {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
-        });
+        if (!res.ok) return null;
 
-        const user = await res.json();
+        const loginRes = await fetch(
+          `http://localhost:8080/auth/v1/credential/login`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          },
+        );
 
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
-        }
-        // Return null if user data could not be retrieved
-        return null;
+        const user: {
+          tokens: {
+            accessToken: string;
+            refreshToken: string;
+          };
+          user: {
+            id: string;
+            created: string;
+            edited: string;
+            displayName: string;
+            firstName: null;
+            lastName: null;
+            photoUrl: null;
+            email: null;
+          };
+        } = await loginRes.json();
+
+        return { id: user.user.id, name: user.user.displayName };
+      },
+    }),
+
+    CredentialsProvider({
+      id: "user-signin",
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        const loginRes = await fetch(
+          `http://localhost:8080/auth/v1/credential/login`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          },
+        );
+
+        if (!loginRes.ok) return null;
+
+        const user: {
+          tokens: {
+            accessToken: string;
+            refreshToken: string;
+          };
+          user: {
+            id: string;
+            created: string;
+            edited: string;
+            displayName: string;
+            firstName: null;
+            lastName: null;
+            photoUrl: null;
+            email: null;
+          };
+        } = await loginRes.json();
+
+        return { id: user.user.id, name: user.user.displayName };
       },
     }),
   ],

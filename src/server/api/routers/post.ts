@@ -53,18 +53,4 @@ export const postRouter = createTRPCRouter({
 
     return await res.json();
   }),
-  registerUser: protectedProcedure
-    .input(z.object({ username: z.string(), password: z.string() }))
-    .query(async ({ input }) => {
-      const res = await fetch(
-        `http://localhost:8080/auth/v1/credential/register`,
-        {
-          method: "POST",
-          body: JSON.stringify(input),
-        },
-      );
-
-      if (res.ok) return true;
-      return false;
-    }),
 });

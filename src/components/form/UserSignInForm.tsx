@@ -19,8 +19,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { cn } from "~/utils/utils";
 import { signIn } from "next-auth/react";
-import { api } from "~/utils/api";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -28,7 +28,7 @@ const formSchema = z.object({
   password: z.string().min(2).max(50),
 });
 
-export function SignUpForm() {
+export function UserSignInForm() {
   const router = useRouter();
 
   // 1. Define your form.
@@ -44,15 +44,14 @@ export function SignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-
-    const res = await signIn("user-signup", {
+    const res = await signIn("user-signin", {
       ...values,
       redirect: false,
     });
 
     if (!res?.ok) {
       alert(
-        `Registration failed! This should not happen if the auth server is up! Or maybe the user already exist?`,
+        `Login failed! This should not happen if the auth server is up! see: ${res?.error}`,
       );
     } else {
       router.push("/mobile");
@@ -62,8 +61,8 @@ export function SignUpForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign up</CardTitle>
-        <CardDescription>Sign Up using basic credentials</CardDescription>
+        <CardTitle>Sign in</CardTitle>
+        <CardDescription>Sign in</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -106,7 +105,7 @@ export function SignUpForm() {
               )}
             />
             <Button className="w-full" variant={"default"} type="submit">
-              Sign Up
+              Sign in
             </Button>
           </form>
         </Form>

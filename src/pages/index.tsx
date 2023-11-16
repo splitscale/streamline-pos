@@ -2,13 +2,20 @@ import { sign } from "crypto";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import router from "next/router";
+import { useEffect, useState } from "react";
+import { UserSignInForm } from "~/components/form/UserSignInForm";
 import { SignInForm } from "~/components/form/signInForm";
 import { SignUpForm } from "~/components/form/signUpForm";
 import { Button } from "~/components/ui/button";
 
 export default function Home() {
   const [signUpMode, setSignUpMode] = useState(true);
+  const { data: sessionData } = useSession();
+
+  useEffect(() => {
+    if (sessionData) router.push("/mobile");
+  });
 
   return (
     <>
@@ -21,7 +28,7 @@ export default function Home() {
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
-            {signUpMode ? <SignUpForm /> : <SignInForm />}
+            {signUpMode ? <SignUpForm /> : <UserSignInForm />}
             {signUpMode ? (
               <AlreadyHaveAnAccount cb={(value) => setSignUpMode(value)} />
             ) : (
