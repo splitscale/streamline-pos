@@ -32,7 +32,7 @@ export default function POSTabs() {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="pos" className="flex justify-center">
+      <TabsContent value="pos" className="flex justify-center py-4">
         <input
           type="text"
           placeholder="Search..."
@@ -58,7 +58,7 @@ export default function POSTabs() {
             <CardDescription>Customer</CardDescription>
             <Card className="px-3 py-10"></Card>
             <Card className="px-3 py-10"></Card>
-            <Button className="rounded-lg bg-pink-500 text-white hover:bg-blue-600">
+            <Button className="rounded-lg bg-pink-500 text-white hover:bg-pink-600">
               Done
             </Button>
           </CardHeader>
@@ -72,7 +72,7 @@ export default function POSTabs() {
             <CardDescription>Customer</CardDescription>
             <Card className="px-3 py-10"></Card>
             <Card className="px-3 py-10"></Card>
-            <Button className="rounded-lg bg-pink-500 text-white hover:bg-blue-600">
+            <Button className="rounded-lg bg-pink-500 text-white hover:bg-pink-600">
               Done
             </Button>
           </CardHeader>
