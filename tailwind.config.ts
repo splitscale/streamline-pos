@@ -15,6 +15,13 @@ module.exports = {
       screens: {
         "2xl": "1400px",
       },
+      minHeight: {
+        "1/2": "50%",
+      },
+
+      aspectRatio: {
+        "square": "2 / 1",
+      },
     },
     extend: {
       colors: {
@@ -23,6 +30,7 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        pink:"#FC7070",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
