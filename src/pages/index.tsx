@@ -1,12 +1,21 @@
+import { sign } from "crypto";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-
-import { api } from "~/utils/api";
+import { useRouter } from "next/navigation";
+import router from "next/router";
+import { useEffect, useState } from "react";
+import { UserSignInForm } from "~/components/form/UserSignInForm";
+import { SignInForm } from "~/components/form/signInForm";
+import { SignUpForm } from "~/components/form/signUpForm";
+import { Button } from "~/components/ui/button";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
+  const [signUpMode, setSignUpMode] = useState(true);
   const { data: sessionData } = useSession();
+
+  useEffect(() => {
+    if (sessionData) router.push("/mobile");
+  });
 
   return (
     <>
@@ -19,15 +28,12 @@ export default function Home() {
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {sessionData
-                ? "Logged in as: " + sessionData.user.name
-                : "Please Login."}
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center gap-2">
-            <AuthShowcase />
+            {signUpMode ? <SignUpForm /> : <UserSignInForm />}
+            {signUpMode ? (
+              <AlreadyHaveAnAccount cb={(value) => setSignUpMode(value)} />
+            ) : (
+              <CreateAnAccount cb={(value) => setSignUpMode(true)} />
+            )}
           </div>
         </div>
       </main>
@@ -35,29 +41,26 @@ export default function Home() {
   );
 }
 
-function AuthShowcase() {
-  const { data: sessionData, status } = useSession();
-
-  console.log("[Session status] ", status);
-  console.log("[Session data] ", sessionData);
-
-  const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
+function AlreadyHaveAnAccount({ cb }: { cb: (value: boolean) => void }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
+    <Button
+      className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+      variant={"link"}
+      onClick={() => cb(false)}
+    >
+      Already have an account?
+    </Button>
+  );
+}
+
+function CreateAnAccount({ cb }: { cb: (value: boolean) => void }) {
+  return (
+    <Button
+      className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+      variant={"link"}
+      onClick={() => cb(true)}
+    >
+      Create an account
+    </Button>
   );
 }
