@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import DisplayUserList from "~/components/admin";
 import { Button } from "~/components/ui/button";
 
 export default function Admin() {
@@ -23,12 +24,12 @@ export default function Admin() {
       </Head>
 
       {sessionData ? (
-        <main className="text-primary-foreground flex min-h-screen flex-col bg-[#121212]">
+        <main className="flex min-h-screen flex-col bg-[#121212] text-primary-foreground">
           <div className="container flex flex-col items-start justify-start gap-12  py-10">
             <div className=" item-center flex w-full flex-row place-content-between">
               <div>
                 <p className=" text-4xl font-semibold">Streamline Admin</p>
-                <p className="text-secondary text-lg ">
+                <p className="text-lg text-secondary ">
                   {sessionData.user.name}
                 </p>
               </div>
@@ -42,8 +43,9 @@ export default function Admin() {
                 Sign out
               </Button>
             </div>
-            <div>
-              <p className=" text-lg ">Should display content here</p>
+            <div className="container flex flex-col space-y-2">
+              <header className="text-xl font-bold">Users</header>
+              <DisplayUserList />
             </div>
           </div>
         </main>
