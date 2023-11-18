@@ -97,6 +97,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        if(credentials?.username === env.SUPER_ADMIN_USERNAME) return null
+        
         const res = await fetch(
           `http://localhost:8080/auth/v1/credential/register`,
           {
@@ -107,7 +109,7 @@ export const authOptions: NextAuthOptions = {
             },
             body: JSON.stringify(credentials),
           },
-        );
+        )
 
         if (!res.ok) return null;
 
