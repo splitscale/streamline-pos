@@ -11,14 +11,6 @@ interface Props {
  }
 
 export default function ItemCard({ addToCart, card}: Props) {
-  const [messages, setMessages] = useState<string[]>([]);
-  
-  const handleButtonClick = () => {
-    console.log("clicked");
-    setMessages([...messages, "Hello"]);
-    const item = { name: "SCM1", price: 100 }; // Replace with actual item
-    addToCart(item);
-  };
   const mappedDivs = card.map((item, index) => (
     <div key={index}  
     onClick={() => addToCart({ name: item.name, price: Number(item.price) })}
