@@ -2,6 +2,7 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { Inter as FontSans } from "next/font/google";
+import { Navbar } from "~/components/navbar";
 import "~/styles/globals.css";
 
 import { api } from "~/utils/api";
@@ -17,7 +18,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
+
     <SessionProvider session={session}>
+      STREAMLINE
       <Component
         className={cn(
           "bg-background min-h-screen font-sans antialiased",
