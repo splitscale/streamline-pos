@@ -1,5 +1,3 @@
-"use client";
-
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
@@ -11,8 +9,15 @@ export default function Admin() {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
+  function isNormalUser() {
+ 
+    if (sessionData && sessionData.user.name !== "gigachad")
+      return true;
+  }
+
   useEffect(() => {
-    if (!sessionData) router.push("/admin");
+    if (sessionData) router.push("/admin/dashboard");
+    if (isNormalUser()) router.push("/");
   });
 
   return (

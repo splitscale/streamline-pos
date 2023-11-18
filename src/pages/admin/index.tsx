@@ -8,8 +8,15 @@ export default function Admin() {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
+  function isNormalUser() {
+ 
+    if (sessionData && sessionData.user.name !== "gigachad")
+      return true;
+  }
+
   useEffect(() => {
     if (sessionData) router.push("/admin/dashboard");
+    if (isNormalUser()) router.push("/");
   });
 
   return (
