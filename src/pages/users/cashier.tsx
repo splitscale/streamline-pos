@@ -33,6 +33,7 @@ export default function CounterPage() {
   const [discount, setDiscount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [isModalOpen3, setIsModalOpen3] = useState(false);
 
   const handleCommentOpen = () => {
     setCommentOpen(true);
@@ -98,6 +99,9 @@ export default function CounterPage() {
   };
   const toggleModal2 = () => {
     setIsModalOpen2(!isModalOpen2);
+  };
+  const toggleModal3 = () => {
+    setIsModalOpen3(!isModalOpen3);
   };
 
   const mockData = [
@@ -329,7 +333,15 @@ export default function CounterPage() {
             <div className="items-center text-center font-semibold text-gray-500">
               Amount Payable
             </div>
-            <div className="ml-2 mr-2 gap-2 mt-40 grid-row 3 grid text-center font-semibold text-white">
+            <div className="p-2 gap-5 grid grid-cols-2 mt-16 items-center justify-center">
+            <div className="">
+              <input className="  border-red-100 border-2 w-56 "></input>
+            </div>
+            <div className="bg-pink fles text-xl item-center text-center rounded-md h-auto mx-10   w-3/4">
+              exact
+            </div>
+            </div>
+            <div className="mt-5  ml-2 mr-2 gap-2 grid-row 3 grid text-center font-semibold text-white">
               <div className="gap-1 grid grid-cols-3 h-10">
                 <div className="bg-pink rounded-md">10</div>
                 <div className="bg-pink rounded-md">20</div>
@@ -346,15 +358,38 @@ export default function CounterPage() {
                 <div className="bg-pink rounded-md">1000</div>
               </div>
             </div>
+           
             <div
               className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={toggleModal2}
+              onClick={toggleModal3}
             >
               Receive Payment
             </div>
           </div>
           
         )}
+        {isModalOpen3 && (
+          <div
+            id="staticModal"
+            data-modal-backdrop="static"
+            aria-hidden="true"
+            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+          >
+            <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+              Done
+            </div>
+           
+           
+            <div
+              className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2()}}
+            >
+              DONE
+            </div>
+          </div>
+          
+        )}
+
       </div>
     </>
   );
