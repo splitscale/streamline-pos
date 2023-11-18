@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import ItemCard from "~/components/itemCard";
 import { Navbar } from "~/components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +30,8 @@ export default function CounterPage() {
   const [open, setOpen] = useState(false);
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [discount, setDiscount] = useState("0");
+  const [amountPayable,setAmountPayable] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
@@ -103,6 +104,9 @@ export default function CounterPage() {
   const toggleModal3 = () => {
     setIsModalOpen3(!isModalOpen3);
   };
+  const toggleDiscount = (discountAmount: string)=>{
+    setDiscount(discountAmount)
+  }
 
   const mockData = [
     { name: "Item 1", price: "100" },
@@ -117,10 +121,18 @@ export default function CounterPage() {
 
     // More items...
   ];
-
+  const clearCart = () => {
+    setCartItems([]);
+   };
   const total = cartItems.reduce((total, cartItem) => {
     return total + Number(cartItem.quantity) * Number(cartItem.item.price);
   }, 0);
+
+  const discountRate = Number(discount)/100
+  const discountAmount = total * discountRate;
+  const discountPayable = total - discountAmount;
+
+  
   return (
     <>
       <div className="grid-rows-3 items-center">
@@ -291,22 +303,23 @@ export default function CounterPage() {
               </div>
               <div className="grid grid-cols-2 font-semibold text-red-600">
                 <div>Discount</div>
-                <div className="text-end">-{total}</div>
+                <div className="text-end">-{discountAmount}</div>
               </div>
               <div className="text-l grid grid-cols-2 font-bold">
                 <div>Amount Payable</div>
-                <div className="text-end">{total}</div>
+                <div className="text-end">{amountPayable}</div>
               </div>
             </div>
             <div className="m-2 grid grid-cols-2 rounded-md bg-gray-300 px-2">
-              <div className="m-2 ">Discount</div>
+              <div className="m-2 ">{discount}</div>
               <div className="  m-2 text-end">%</div>
             </div>
-            <div className="m-1 grid grid-cols-4 gap-1 rounded-md px-2 text-center font-semibold text-white">
-              <div className="rounded-md bg-pink">25%</div>
-              <div className="rounded-md bg-pink">50%</div>
-              <div className="rounded-md bg-pink">75%</div>
-              <div className="rounded-md bg-pink">100%</div>
+            <div className="m-1 grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
+            <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('0'), setAmountPayable(total - discountAmount)}}>0%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('25'),setAmountPayable(total - discountAmount)}}>25%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('50'),setAmountPayable(total - discountAmount)}}>50%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('75'),setAmountPayable(total - discountAmount)}}>75%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'),setAmountPayable(total - discountAmount)}}>100%</div>
             </div>
             <div
               className="ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
@@ -328,7 +341,7 @@ export default function CounterPage() {
               Receive
             </div>
             <div className="mt-32 items-center text-center text-5xl font-bold">
-              ₱ {total}
+              ₱ {amountPayable}
             </div>
             <div className="items-center text-center font-semibold text-gray-500">
               Amount Payable
@@ -382,7 +395,7 @@ export default function CounterPage() {
            
             <div
               className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2()}}
+              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2(),clearCart()}}
             >
               DONE
             </div>
