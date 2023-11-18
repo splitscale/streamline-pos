@@ -31,6 +31,8 @@ export default function CounterPage() {
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [discount, setDiscount] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
 
   const handleCommentOpen = () => {
     setCommentOpen(true);
@@ -90,9 +92,12 @@ export default function CounterPage() {
       ),
     );
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+  const toggleModal2 = () => {
+    setIsModalOpen2(!isModalOpen2);
   };
 
   const mockData = [
@@ -242,7 +247,10 @@ export default function CounterPage() {
             aria-hidden="true"
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
-            <div className="text-2xl font-bold m-2" onClick={toggleModal}> Payment </div>
+            <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
+              {" "}
+              Payment{" "}
+            </div>
             <div className="text-l rounded- m-2 grid w-auto grid-cols-3  gap-2 p-2 text-center font-semibold ">
               <div className="">Item</div>
               <div className="">Quantity</div>
@@ -290,19 +298,62 @@ export default function CounterPage() {
               <div className="m-2 ">Discount</div>
               <div className="  m-2 text-end">%</div>
             </div>
-            <div className="m-1 grid gap-1 grid-cols-4 rounded-md text-center text-white font-semibold px-2">
+            <div className="m-1 grid grid-cols-4 gap-1 rounded-md px-2 text-center font-semibold text-white">
               <div className="rounded-md bg-pink">25%</div>
               <div className="rounded-md bg-pink">50%</div>
               <div className="rounded-md bg-pink">75%</div>
               <div className="rounded-md bg-pink">100%</div>
             </div>
             <div
-          className="ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-          onClick={toggleModal}
-        >
-          Receive Payment
-        </div>
+              className="ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              onClick={toggleModal2}
+            >
+              Receive Payment
+            </div>
           </div>
+        )}
+
+        {isModalOpen2 && (
+          <div
+            id="staticModal"
+            data-modal-backdrop="static"
+            aria-hidden="true"
+            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+          >
+            <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+              Receive
+            </div>
+            <div className="mt-32 items-center text-center text-5xl font-bold">
+              ₱ {total}
+            </div>
+            <div className="items-center text-center font-semibold text-gray-500">
+              Amount Payable
+            </div>
+            <div className="ml-2 mr-2 gap-2 mt-40 grid-row 3 grid text-center font-semibold text-white">
+              <div className="gap-1 grid grid-cols-3 h-10">
+                <div className="bg-pink rounded-md">10</div>
+                <div className="bg-pink rounded-md">20</div>
+                <div className="bg-pink rounded-md">50</div>
+              </div>
+              <div className="gap-1 grid grid-cols-3 h-10">
+                <div className="bg-pink rounded-md">100</div>
+                <div className="bg-pink rounded-md">200</div>
+                <div className="bg-pink rounded-md">300</div>
+              </div>
+              <div className="gap-1 grid grid-cols-3 h-10 ">
+                <div className="bg-pink rounded-md">400</div>
+                <div className="bg-pink rounded-md">500</div>
+                <div className="bg-pink rounded-md">1000</div>
+              </div>
+            </div>
+            <div
+              className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              onClick={toggleModal2}
+            >
+              Receive Payment
+            </div>
+          </div>
+          
         )}
       </div>
     </>
