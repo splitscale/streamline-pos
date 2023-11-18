@@ -154,6 +154,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        if(credentials?.username === env.SUPER_ADMIN_USERNAME) return null
+
         const loginRes = await fetch(
           `http://localhost:8080/auth/v1/credential/login`,
           {
