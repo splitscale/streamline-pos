@@ -86,9 +86,9 @@ export default function POSTabs() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="orders" className="w-full">
-                <Card className="border border-black mb-3">
-                  <CardHeader>
+              <TabsContent value="orders" className="grid justify-items-center">
+                <Card className="border border-black mb-3 w-full max-w-screen-sm">
+                  <CardHeader className="grid">
                     <CardTitle className="-mb-2">ONIICHAN</CardTitle>
                     <CardDescription>Customer #001</CardDescription>
                     <Card className="px-3 py-6 bg-gray-300">
@@ -117,7 +117,7 @@ export default function POSTabs() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
+                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
                       Done
                     </Button>
                   </CardHeader>
@@ -125,8 +125,8 @@ export default function POSTabs() {
 
                 <span className="text-xs text-black">incoming..</span>
 
-                <Card className="border border-black mb-3">
-                  <CardHeader>
+                <Card className="border border-black mb-3 mb-3 w-full max-w-screen-sm">
+                  <CardHeader className="grid">
                     <CardTitle className="-mb-2">JER</CardTitle>
                     <CardDescription>Customer #002</CardDescription>
                     <Card className="px-3 py-6 bg-gray-300">
@@ -155,7 +155,7 @@ export default function POSTabs() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
+                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
                       Done
                     </Button>
                   </CardHeader>

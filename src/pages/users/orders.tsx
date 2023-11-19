@@ -29,7 +29,7 @@ export default function ordersPage() {
           </Button>
         </div>
         <div className="flex flex-col py-3 w-full justify-start items-center">
-          <Card className="w-[90%] border border-black mb-3">
+          <Card className="w-[90%] border border-black mb-3 max-w-screen-sm">
             <CardHeader>
               <CardTitle className="text-center -mb-2">ONIICHAN</CardTitle>
               <CardDescription className="text-center">Customer #001</CardDescription>
