@@ -86,14 +86,38 @@ export default function POSTabs() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="orders" className="container">
+              <TabsContent value="orders" className="w-full">
                 <Card>
                   <CardHeader>
                     <CardTitle>ONIICHAN</CardTitle>
                     <CardDescription>Customer</CardDescription>
-                    <Card className="px-3 py-10"></Card>
-                    <Card className="px-3 py-10"></Card>
-                    <Button className="rounded-lg bg-pink-500 text-white hover:bg-pink-600">
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          3x fried chicken
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 280.00
+                        </div>
+                        <div className="text-left self-center">
+                          only thighs
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          1x hotdog
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 250.00
+                        </div>
+                        <div className="text-left self-center">
+                          no bun
+                        </div>
+                      </div>
+                    </Card>
+                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"}>
                       Done
                     </Button>
                   </CardHeader>
@@ -105,9 +129,33 @@ export default function POSTabs() {
                   <CardHeader>
                     <CardTitle>JER</CardTitle>
                     <CardDescription>Customer</CardDescription>
-                    <Card className="px-3 py-10"></Card>
-                    <Card className="px-3 py-10"></Card>
-                    <Button className="rounded-lg bg-pink-500 text-white hover:bg-pink-600">
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          2x fried chicken
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 280.00
+                        </div>
+                        <div className="text-left self-center">
+                          legs only
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          1x spaghetti
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 130.00
+                        </div>
+                        <div className="text-left self-center">
+                          no cheese
+                        </div>
+                      </div>
+                    </Card>
+                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"}>
                       Done
                     </Button>
                   </CardHeader>
