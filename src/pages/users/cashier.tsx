@@ -260,7 +260,7 @@ export default function CounterPage() {
           </div>
         ))}
         <div
-          className=" flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+          className=" flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50 mx-4 mb-4 mt-3"
           onClick={toggleModal}
         >
           Proceed Payment
@@ -320,6 +320,8 @@ export default function CounterPage() {
                 <div className="text-end">{discountPayable}</div>
               </div>
             </div>
+            
+            
             <div className="m-2 grid grid-cols-2 rounded-md bg-gray-300 px-2">
               <div className="m-2 ">{discount}</div>
               <div className="  m-2 text-end">%</div>
@@ -348,6 +350,7 @@ export default function CounterPage() {
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+              {"< "}
               Receive
             </div>
             <div className="mt-32 items-center text-center text-5xl font-bold">
@@ -398,10 +401,10 @@ export default function CounterPage() {
             aria-hidden="true"
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
-            <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+            <div className="m-2 text-2xl font-bold" onClick={toggleModal3}>
+              {"< "}
               Done
             </div>
-           
            
             <div
               className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
