@@ -271,7 +271,7 @@ export default function CounterPage() {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50 overflow-scroll"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
               {"< "}
