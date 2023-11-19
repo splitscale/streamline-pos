@@ -1,19 +1,11 @@
-import { useSession, signOut } from "next-auth/react";
 import Head from "next/head";
-
-import { useEffect } from "react";
 
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useRouter } from "next/router";
 import { Button } from "~/components/ui/button";
 
@@ -28,16 +20,18 @@ export default function ordersPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col text-primary-foreground">
-        <Button
-          className="justify-center w-40"
-          variant={"default"}
-          onClick={() => router.back()}>
-            test back button
-        </Button>
-        <div className="flex flex-col gap-2 py-3 w-full justify-start items-center">
-          <Card className="w-[90%] border border-black">
+        <div className="mt-3 ml-1 flex justify-start">
+          <Button
+            className="text-black font-bold text-2xl"
+            variant={"ghost"}
+            onClick={() => router.back()}>
+              &lt; Orders
+          </Button>
+        </div>
+        <div className="flex flex-col py-3 w-full justify-start items-center">
+          <Card className="w-[90%] border border-black mb-3">
             <CardHeader>
-              <CardTitle className="text-center">ONIICHAN</CardTitle>
+              <CardTitle className="text-center -mb-2">ONIICHAN</CardTitle>
               <CardDescription className="text-center">Customer #001</CardDescription>
               <Card className="px-3 py-6 bg-gray-300">
                 <div className="grid grid-cols-2 gap-0">

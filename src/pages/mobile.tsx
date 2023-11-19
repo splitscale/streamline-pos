@@ -87,9 +87,9 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="orders" className="w-full">
-                <Card>
+                <Card className="border border-black mb-3">
                   <CardHeader>
-                    <CardTitle>ONIICHAN</CardTitle>
+                    <CardTitle className="-mb-2">ONIICHAN</CardTitle>
                     <CardDescription>Customer #001</CardDescription>
                     <Card className="px-3 py-6 bg-gray-300">
                       <div className="grid grid-cols-2 gap-0">
@@ -123,11 +123,11 @@ export default function POSTabs() {
                   </CardHeader>
                 </Card>
 
-                <span className="text-xs text-white">incoming..</span>
+                <span className="text-xs text-black">incoming..</span>
 
-                <Card>
+                <Card className="border border-black mb-3">
                   <CardHeader>
-                    <CardTitle>JER</CardTitle>
+                    <CardTitle className="-mb-2">JER</CardTitle>
                     <CardDescription>Customer #002</CardDescription>
                     <Card className="px-3 py-6 bg-gray-300">
                       <div className="grid grid-cols-2 gap-0">
