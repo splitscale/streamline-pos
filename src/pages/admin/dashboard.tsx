@@ -34,7 +34,7 @@ export default function Admin() {
             <div className=" item-center flex w-full flex-row place-content-between">
               <div>
                 <p className=" text-4xl font-semibold">Streamline Admin</p>
-                <p className="text-lg text-secondary ">
+                <p className="text-lg text-secondary">
                   {sessionData.user.name}
                 </p>
               </div>

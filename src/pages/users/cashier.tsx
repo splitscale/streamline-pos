@@ -123,7 +123,17 @@ export default function CounterPage() {
   ];
   const clearCart = () => {
     setCartItems([]);
-   };
+  };
+  // clear amount when done
+  const clearAmountPayable = () => {
+    setAmountPayable(0)
+  }
+
+  // clear discount to 0 when done
+  const clearDiscountAmount = () => {
+    setDiscount("0")
+  }
+
   const total = cartItems.reduce((total, cartItem) => {
     return total + Number(cartItem.quantity) * Number(cartItem.item.price);
   }, 0);
@@ -250,7 +260,7 @@ export default function CounterPage() {
           </div>
         ))}
         <div
-          className=" flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+          className=" flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50 mx-4 mb-4 mt-3"
           onClick={toggleModal}
         >
           Proceed Payment
@@ -261,16 +271,16 @@ export default function CounterPage() {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50 overflow-scroll"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
-              {" "}
+              {"< "}
               Payment{" "}
             </div>
-            <div className="text-l rounded- m-2 grid w-auto grid-cols-3  gap-2 p-2 text-center font-semibold ">
+            <div className="text-l rounded m-2 grid w-auto grid-cols-3  gap-2 p-2 text-center font-semibold ">
               <div className="">Item</div>
               <div className="">Quantity</div>
-              <div className="">Subtotal</div>
+              <div className="">Subtotal</div>   
             </div>
 
             {cartItems.map((cartItem, index) => (
@@ -279,7 +289,7 @@ export default function CounterPage() {
                  bg-gray-300 md:text-3xl "
                 key={index}
               >
-                <div className=" grid grid-rows-2 p-2 text-center  ">
+                <div className=" grid grid-rows-2 p-2 text-center ">
                   <div className="tex-center font-bold">
                     {cartItem.item.name}
                   </div>
@@ -307,22 +317,24 @@ export default function CounterPage() {
               </div>
               <div className="text-l grid grid-cols-2 font-bold">
                 <div>Amount Payable</div>
-                <div className="text-end">{amountPayable}</div>
+                <div className="text-end">{discountPayable}</div>
               </div>
             </div>
+            
+            
             <div className="m-2 grid grid-cols-2 rounded-md bg-gray-300 px-2">
               <div className="m-2 ">{discount}</div>
               <div className="  m-2 text-end">%</div>
             </div>
             <div className="m-1 grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
             <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('0'), setAmountPayable(total - discountAmount)}}>0%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('25'),setAmountPayable(total - discountAmount)}}>25%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('50'),setAmountPayable(total - discountAmount)}}>50%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('75'),setAmountPayable(total - discountAmount)}}>75%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'),setAmountPayable(total - discountAmount)}}>100%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('25'), setAmountPayable(total - discountAmount)}}>25%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('50'), setAmountPayable(total - discountAmount)}}>50%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('75'), setAmountPayable(total - discountAmount)}}>75%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'), setAmountPayable(total - discountAmount)}}>100%</div>
             </div>
             <div
-              className="ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              className="ml-1 mr-1 mb-3 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
               onClick={toggleModal2}
             >
               Receive Payment
@@ -338,10 +350,11 @@ export default function CounterPage() {
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+              {"< "}
               Receive
             </div>
             <div className="mt-32 items-center text-center text-5xl font-bold">
-              ₱ {amountPayable}
+              ₱ {discountPayable}
             </div>
             <div className="items-center text-center font-semibold text-gray-500">
               Amount Payable
@@ -388,14 +401,14 @@ export default function CounterPage() {
             aria-hidden="true"
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
-            <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+            <div className="m-2 text-2xl font-bold" onClick={toggleModal3}>
+              {"< "}
               Done
             </div>
            
-           
             <div
               className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2(),clearCart()}}
+              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2(),clearCart(),clearAmountPayable(),clearDiscountAmount()}}
             >
               DONE
             </div>
