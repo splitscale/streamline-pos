@@ -332,7 +332,7 @@ export default function CounterPage() {
               <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'),setAmountPayable(total - discountAmount)}}>100%</div>
             </div>
             <div
-              className="ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              className="ml-1 mr-1 mb-3 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
               onClick={toggleModal2}
             >
               Receive Payment
