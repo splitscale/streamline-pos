@@ -317,7 +317,7 @@ export default function CounterPage() {
               </div>
               <div className="text-l grid grid-cols-2 font-bold">
                 <div>Amount Payable</div>
-                <div className="text-end">{amountPayable}</div>
+                <div className="text-end">{discountPayable}</div>
               </div>
             </div>
             <div className="m-2 grid grid-cols-2 rounded-md bg-gray-300 px-2">
@@ -326,10 +326,10 @@ export default function CounterPage() {
             </div>
             <div className="m-1 grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
             <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('0'), setAmountPayable(total - discountAmount)}}>0%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('25'),setAmountPayable(total - discountAmount)}}>25%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('50'),setAmountPayable(total - discountAmount)}}>50%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('75'),setAmountPayable(total - discountAmount)}}>75%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'),setAmountPayable(total - discountAmount)}}>100%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('25'), setAmountPayable(total - discountAmount)}}>25%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('50'), setAmountPayable(total - discountAmount)}}>50%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('75'), setAmountPayable(total - discountAmount)}}>75%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'), setAmountPayable(total - discountAmount)}}>100%</div>
             </div>
             <div
               className="ml-1 mr-1 mb-3 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
@@ -351,7 +351,7 @@ export default function CounterPage() {
               Receive
             </div>
             <div className="mt-32 items-center text-center text-5xl font-bold">
-              ₱ {amountPayable}
+              ₱ {discountPayable}
             </div>
             <div className="items-center text-center font-semibold text-gray-500">
               Amount Payable
