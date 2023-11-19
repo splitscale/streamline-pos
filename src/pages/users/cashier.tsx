@@ -290,7 +290,7 @@ export default function CounterPage() {
                 key={index}
               >
                 <div className=" grid grid-rows-2 p-2 text-center ">
-                  <div className="text-center font-bold">
+                  <div className="tex-center font-bold">
                     {cartItem.item.name}
                   </div>
                   <div>{cartItem.item.price}</div>
