@@ -90,7 +90,7 @@ export default function POSTabs() {
                 <Card>
                   <CardHeader>
                     <CardTitle>ONIICHAN</CardTitle>
-                    <CardDescription>Customer</CardDescription>
+                    <CardDescription>Customer #001</CardDescription>
                     <Card className="px-3 py-6 bg-gray-300">
                       <div className="grid grid-cols-2 gap-0">
                         <div className="font-bold text-left self-center">
@@ -117,7 +117,7 @@ export default function POSTabs() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"}>
+                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
                       Done
                     </Button>
                   </CardHeader>
@@ -128,7 +128,7 @@ export default function POSTabs() {
                 <Card>
                   <CardHeader>
                     <CardTitle>JER</CardTitle>
-                    <CardDescription>Customer</CardDescription>
+                    <CardDescription>Customer #002</CardDescription>
                     <Card className="px-3 py-6 bg-gray-300">
                       <div className="grid grid-cols-2 gap-0">
                         <div className="font-bold text-left self-center">
@@ -155,7 +155,7 @@ export default function POSTabs() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"}>
+                    <Button className="rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
                       Done
                     </Button>
                   </CardHeader>
