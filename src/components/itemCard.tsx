@@ -5,7 +5,7 @@ import { useState } from "react";
 interface Props {
   card: {
     name:string,
-    price:string
+    price:number
   }[],
   addToCart: (item: { name: string; price: number }) => void;
  }

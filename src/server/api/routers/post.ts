@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { env } from "~/env.mjs";
-import getUsers from "~/pages/api/auth/users";
 
 import {
   createTRPCRouter,
