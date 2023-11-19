@@ -123,7 +123,17 @@ export default function CounterPage() {
   ];
   const clearCart = () => {
     setCartItems([]);
-   };
+  };
+  // clear amount when done
+  const clearAmountPayable = () => {
+    setAmountPayable(0)
+  }
+
+  // clear discount to 0 when done
+  const clearDiscountAmount = () => {
+    setDiscount("0")
+  }
+
   const total = cartItems.reduce((total, cartItem) => {
     return total + Number(cartItem.quantity) * Number(cartItem.item.price);
   }, 0);
@@ -264,13 +274,13 @@ export default function CounterPage() {
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
-              {" "}
+              {"< "}
               Payment{" "}
             </div>
-            <div className="text-l rounded- m-2 grid w-auto grid-cols-3  gap-2 p-2 text-center font-semibold ">
+            <div className="text-l rounded m-2 grid w-auto grid-cols-3  gap-2 p-2 text-center font-semibold ">
               <div className="">Item</div>
               <div className="">Quantity</div>
-              <div className="">Subtotal</div>
+              <div className="">Subtotal</div>   
             </div>
 
             {cartItems.map((cartItem, index) => (
@@ -279,7 +289,7 @@ export default function CounterPage() {
                  bg-gray-300 md:text-3xl "
                 key={index}
               >
-                <div className=" grid grid-rows-2 p-2 text-center  ">
+                <div className=" grid grid-rows-2 p-2 text-center ">
                   <div className="tex-center font-bold">
                     {cartItem.item.name}
                   </div>
@@ -395,7 +405,7 @@ export default function CounterPage() {
            
             <div
               className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2(),clearCart()}}
+              onClick={()=>{toggleModal3(),toggleModal(),toggleModal2(),clearCart(),clearAmountPayable(),clearDiscountAmount()}}
             >
               DONE
             </div>
