@@ -11,3 +11,8 @@ export interface OrderProps {
   items: Item[];
   doneCallback?: (v: string) => void;
 }
+
+export interface EarningReportProps {
+  todaysEarnings?: number;
+  totalEarnings?: number;
+}
