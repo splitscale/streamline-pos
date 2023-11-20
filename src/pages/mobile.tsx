@@ -153,7 +153,7 @@ export default function POSTabs() {
                       </div>
                     </div>
                     {/* Receive */}
-                    <div className="grid grid-cols-2">
+                    <div className="my-1 grid grid-cols-2">
                       <div className="flex flex-col">
                         <div className="text-xs text-[#979797]">
                           Received Payment
@@ -170,7 +170,7 @@ export default function POSTabs() {
                       </div>
                     </div>
                     {/* Cash out */}
-                    <div className="grid grid-cols-2">
+                    <div className="my-1 grid grid-cols-2">
                       <div className="flex flex-col">
                         <div className="text-xs text-[#979797]">Cash out</div>
                         <div className="font-semibold">Patrick</div>
@@ -183,7 +183,7 @@ export default function POSTabs() {
                       </div>
                     </div>
                     {/* Cash in */}
-                    <div className="grid grid-cols-2">
+                    <div className="my-1 grid grid-cols-2">
                       <div className="flex flex-col">
                         <div className="text-xs text-[#979797]">Cash in</div>
                         <div className="font-semibold">Sarah</div>
