@@ -16,7 +16,7 @@ export function OrderCard(props: OrderProps) {
 
         <Button
           className="hover:bg-pink-600  w-full rounded-md"
-          variant={"destructive"}
+          variant={"default"}
           onClick={() => {
             if (props.doneCallback) props.doneCallback(props.id);
           }}
