@@ -66,84 +66,209 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="dashboard">
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle>Dashboard</CardTitle>
                     <CardDescription>
                       Change your Dashboard here. Click save when you're done.
                     </CardDescription>
                   </CardHeader>
-                </Card>
+                </Card> */}
+                <>
+                  {/* Balance */}
+                  <div className="grid grid-rows-2 rounded-md bg-[#D9D9D9] text-black">
+                    <div className="mx-4 grid grid-rows-2">
+                      <div className="text-xl font-bold">P25, 000.00</div>
+                      <div className="text-xs font-bold">Cashbox Balance</div>
+                    </div>
+                    <div className="mx-4 grid grid-cols-2 gap-2">
+                      <Button className="bg-[#FC7070] bg-opacity-30 font-semibold text-[#FC7070]">
+                        Cash in
+                      </Button>
+                      <Button className="bg-[#FC7070] bg-opacity-30 font-semibold text-[#FC7070]">
+                        Cash out
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Grid of buttons */}
+                  <div className="mb-5 mt-3 grid auto-cols-fr grid-cols-4 gap-5">
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
+                        soon
+                      </div>
+                      <div className="mt-1 text-center text-xs text-[#979797]">
+                        Cashier
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
+                        soon
+                      </div>
+                      <div className="mt-1 text-center text-xs text-[#979797]">
+                        Reports
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
+                        soon
+                      </div>
+                      <div className="mt-1 text-center text-xs text-[#979797]">
+                        Orders
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
+                        soon
+                      </div>
+                      <div className="mt-1 text-center text-xs text-[#979797]">
+                        Inventory
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center rounded-md">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-black">
+                        <span className="">...</span>
+                      </div>
+                      <div className="mt-1 text-center text-xs text-[#979797]">
+                        More
+                      </div>
+                    </div>
+                  </div>
+                  {/* Powered by Splitscale */}
+                  <div className="grid h-14 grid-cols-4 rounded-md bg-black">
+                    <div className="col-span-1 ml-2 mt-1 text-xs">
+                      Powered by
+                    </div>
+                    <div className="col-span-3 flex items-center text-lg font-semibold">
+                      Splitscale Systems
+                    </div>
+                  </div>
+                  {/* Invoice */}
+                  <div className="mt-3 flex flex-col rounded-md bg-[#D9D9D9] p-3 text-black">
+                    {/* Transaction */}
+                    <div className="grid grid-cols-2">
+                      <div className="font-semibold">Transactions</div>
+                      <div className="text-end text-xs text-[#FC7070]">
+                        See all
+                      </div>
+                    </div>
+                    {/* Receive */}
+                    <div className="grid grid-cols-2">
+                      <div className="flex flex-col">
+                        <div className="text-xs text-[#979797]">
+                          Received Payment
+                        </div>
+                        <div className="font-semibold">Bjorn</div>
+                      </div>
+                      <div className="flex flex-col text-end">
+                        <div className="text-xs text-[#979797]">
+                          3 minutes ago
+                        </div>
+                        <div className="font-semibold text-[#FC7070]">
+                          P250.00
+                        </div>
+                      </div>
+                    </div>
+                    {/* Cash out */}
+                    <div className="grid grid-cols-2">
+                      <div className="flex flex-col">
+                        <div className="text-xs text-[#979797]">Cash out</div>
+                        <div className="font-semibold">Patrick</div>
+                      </div>
+                      <div className="flex flex-col text-end">
+                        <div className="text-xs text-[#979797]">
+                          13 hours ago
+                        </div>
+                        <div className="font-semibold">- P30.00</div>
+                      </div>
+                    </div>
+                    {/* Cash in */}
+                    <div className="grid grid-cols-2">
+                      <div className="flex flex-col">
+                        <div className="text-xs text-[#979797]">Cash in</div>
+                        <div className="font-semibold">Sarah</div>
+                      </div>
+                      <div className="flex flex-col text-end">
+                        <div className="text-xs text-[#979797]">
+                          07 Nov 2023
+                        </div>
+                        <div className="font-semibold text-[#FC7070]">
+                          P 1,000.00
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
               </TabsContent>
 
               <TabsContent value="orders" className="grid justify-items-center">
-                <Card className="border border-black mb-3 w-full max-w-screen-sm">
+                <Card className="mb-3 w-full max-w-screen-sm border border-black">
                   <CardHeader className="grid">
                     <CardTitle className="-mb-2">ONIICHAN</CardTitle>
                     <CardDescription>Customer #001</CardDescription>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           3x fried chicken
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 280.00
                         </div>
-                        <div className="text-left self-center">
-                          only thighs
-                        </div>
+                        <div className="self-center text-left">only thighs</div>
                       </div>
                     </Card>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           1x hotdog
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 250.00
                         </div>
-                        <div className="text-left self-center">
-                          no bun
-                        </div>
+                        <div className="self-center text-left">no bun</div>
                       </div>
                     </Card>
-                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
+                    <Button
+                      className="hover:bg-pink-600 w-[10rem] justify-self-center rounded-lg"
+                      variant={"destructive"}
+                      onClick={() => router.push("/users/orders")}
+                    >
                       Done
                     </Button>
                   </CardHeader>
                 </Card>
 
-                <Card className="border border-black mb-3 mb-3 w-full max-w-screen-sm">
+                <Card className="mb-3 w-full max-w-screen-sm border border-black">
                   <CardHeader className="grid">
                     <CardTitle className="-mb-2">JER</CardTitle>
                     <CardDescription>Customer #002</CardDescription>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           2x fried chicken
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 280.00
                         </div>
-                        <div className="text-left self-center">
-                          legs only
-                        </div>
+                        <div className="self-center text-left">legs only</div>
                       </div>
                     </Card>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           1x spaghetti
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 130.00
                         </div>
-                        <div className="text-left self-center">
-                          no cheese
-                        </div>
+                        <div className="self-center text-left">no cheese</div>
                       </div>
                     </Card>
-                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
+                    <Button
+                      className="hover:bg-pink-600 w-[10rem] justify-self-center rounded-lg"
+                      variant={"destructive"}
+                      onClick={() => router.push("/users/orders")}
+                    >
                       Done
                     </Button>
                   </CardHeader>
