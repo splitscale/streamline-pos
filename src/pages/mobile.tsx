@@ -2,6 +2,7 @@ import { useSession, signOut } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { FileUploadInput } from "~/components/form/FIleUploadInput";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -14,6 +15,9 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Inventory } from "./inventory";
+import { Header } from "~/components/header";
+import CounterPage from "./users/cashier";
 
 export default function POSTabs() {
   const { data: sessionData } = useSession();
@@ -33,20 +37,9 @@ export default function POSTabs() {
 
       <main className="flex min-h-screen flex-col bg-white text-primary-foreground dark:bg-[#121212]">
         <div className=" flex flex-col gap-2  py-3">
-          <div className="item-center container flex w-full flex-row place-content-between">
-            <div>
-              <p className="text-3xl font-bold text-black">Streamline POS</p>
-              <p className="text-sm text-black">By Splitscale Systems</p>
-            </div>
-
-            <Button
-              className="font-semibold text-black"
-              variant="ghost"
-              onClick={() => void signOut({ callbackUrl: "/" })}
-            >
-              Sign out
-            </Button>
-          </div>
+          {/* Header */}
+          <Header />
+          {/* Body */}
           <div className="container flex flex-col space-y-2">
             <Tabs
               defaultValue="pos"
@@ -67,12 +60,9 @@ export default function POSTabs() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="pos" className="flex justify-center py-4 ">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="flex h-10 w-[90%] rounded-full border border-slate-300 bg-white px-5 text-sm"
-                />
+              <TabsContent value="pos">
+                {/* POS */}
+                <CounterPage />
               </TabsContent>
 
               <TabsContent value="dashboard">
@@ -123,8 +113,6 @@ export default function POSTabs() {
                   </CardHeader>
                 </Card>
 
-                <span className="text-xs text-black">incoming..</span>
-
                 <Card className="border border-black mb-3 mb-3 w-full max-w-screen-sm">
                   <CardHeader className="grid">
                     <CardTitle className="-mb-2">JER</CardTitle>
@@ -163,79 +151,10 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="inventory">
-                <div>
-                  <div className="container flex w-full max-w-md flex-col">
-                    <Label
-                      htmlFor="file"
-                      className="text-base font-semibold text-black"
-                    >
-                      Upload an Excel File
-                    </Label>
-                    <div className="flex w-full flex-col items-stretch gap-2">
-                      <div className="w-full">
-                        <Input
-                          id="file"
-                          type="file"
-                          className="w-full rounded-lg bg-gray-200 px-4 py-2"
-                        />
-                        <span className="text-sm text-gray-400">
-                          File formats: .xlsx, .xls
-                        </span>
-                      </div>
-                      <Button className="rounded-lg bg-[#00B2FF] text-white hover:bg-blue-600">
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="mt-16 text-black">
-                    <div className="mb-7 grid grid-cols-2 gap-2">
-                      <div className="rounded-md bg-[#D9D9D9] px-5 py-2 text-black">
-                        <div className="text-xl font-bold">2</div>
-                        <div className="font-semibold">Items</div>
-                      </div>
-                      <div className="rounded-md bg-[#D9D9D9] px-5 py-2 text-black">
-                        <div className="text-xl font-bold">115</div>
-                        <div className="text-sm font-semibold">
-                          Stocks remaining
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex-col">
-                      <div className="mb-2 grid grid-cols-2">
-                        <div className="self-end text-sm font-semibold">
-                          Items
-                        </div>{" "}
-                        <Button className="bg-[#FC7070]">Add item</Button>
-                      </div>
-                      <div className="my-2 grid grid-cols-2 rounded-md bg-[#D9D9D9]">
-                        <div className="pl-3">
-                          <h3 className="text-lg font-semibold">
-                            Fried Chicken
-                          </h3>
-                          <p className="text-sm">25 left</p>
-                        </div>
-                        <div className="pr-3 text-end text-lg font-bold">
-                          P 200.00
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex-col">
-                      <div className="my-2 grid grid-cols-2 rounded-md bg-[#D9D9D9]">
-                        <div className="pl-3">
-                          <h3 className="text-lg font-semibold">
-                            Healthy Drinks
-                          </h3>
-                          <p className="text-sm">90 left</p>
-                        </div>
-                        <div className="pr-3 text-end text-lg font-bold">
-                          P 100.00
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Inventory />
               </TabsContent>
             </Tabs>
+            He
           </div>
         </div>
       </main>
