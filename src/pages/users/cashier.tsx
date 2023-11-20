@@ -20,9 +20,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "next/link";
+import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
 
@@ -34,7 +33,7 @@ export default function CounterPage() {
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [amountPayable,setAmountPayable] = useState(0)
+  const [amountPayable, setAmountPayable] = useState(0);
   const [receiveAmount,setReceiveAmount] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
@@ -135,8 +134,8 @@ export default function CounterPage() {
   };
   // clear amount when done
   const clearAmountPayable = () => {
-    setAmountPayable(0)
-  }
+    setAmountPayable(0);
+  };
 
   // clear discount to 0 when done
   const clearDiscountAmount = () => {
@@ -175,118 +174,151 @@ export default function CounterPage() {
 
         <hr className="m-4 h-px bg-gray-200  dark:bg-gray-700"></hr>
 
-        {cartItems.map((cartItem, index) => (
-          <div
-            className=" text-black grid grid-cols-3 items-center gap-1 rounded-md border-4  border-gray-100 md:text-3xl "
-            key={index}
-          >
-            <div className="grid grid-rows-2  text-center ">
-              <div className="font-bold">{cartItem.item.name}</div>
-              <div>{cartItem.item.price}</div>
-              <div>{cartItem.comment}</div>
-            </div>
-            <div className=" grid grid-cols-3 rounded-full bg-pink  ">
-              <div
-                className=" py-2 text-center font-bold"
-                onClick={() => decrementQuantity(cartItem.item)}
-              >
-                <FontAwesomeIcon icon={faMinus} style={{ color: "#ffffff" }} />
+        <div className="grid grid-cols-1 gap-2">
+          {cartItems.map((cartItem, index) => (
+            <div
+              className=" text-blackgrid grid-cols-3 items-center gap-2 rounded-md bg-gray-200"
+              key={index}
+            >
+              <div className="grid grid-rows-2 text-center text-black">
+                <div className="text-lg font-semibold normal-case">
+                  {cartItem.item.name}
+                </div>
+                <p>{`P ${cartItem.item.price * cartItem.quantity}`}</p>
+                <p>{cartItem.comment}</p>
               </div>
-              <div className=" text-center text-2xl font-bold text-stone-50 md:text-4xl">
-                <div>{cartItem.quantity}</div>
-              </div>
-              <div
-                className=" py-2 text-center font-bold"
-                onClick={() => incrementQuantity(cartItem.item)}
-              >
-                <FontAwesomeIcon icon={faPlus} style={{ color: "#ffffff" }} />
-              </div>
-            </div>
-            <div className=" grid grid-cols-2 text-center text-2xl text-red-500 ">
-              <div>
-                <div>
+              {/* qty control */}
+              <div className="grid grid-cols-3 rounded-full bg-pink">
+                <div
+                  className="self-center p-3"
+                  onClick={() => decrementQuantity(cartItem.item)}
+                >
                   <FontAwesomeIcon
-                    icon={faClipboard}
-                    onClick={handleCommentOpen}
+                    icon={faMinus}
+                    style={{ color: "#ffffff" }}
+                    size="xs"
                   />
                 </div>
 
-                <Dialog
-                  open={commentOpen}
-                  onClose={handleCommentClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
+                <div className="flex content-center justify-center ">
+                  <p className="self-center  text-center text-xl font-semibold text-white">
+                    {cartItem.quantity}
+                  </p>
+                </div>
+
+                <div
+                  className="self-center p-3"
+                  onClick={() => incrementQuantity(cartItem.item)}
                 >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Add Comment"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Please enter a comment for this item.
-                    </DialogContentText>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Comment"
-                      type="text"
-                      fullWidth
-                      value={comment}
-                      onChange={(event) => setComment(event.target.value)}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleCommentClose}>Cancel</Button>
-                    <Button
-                      onClick={() => {
-                        handleCommentClose();
-                        addComment(cartItem.item, comment);
-                        console.log(cartItems);
-                      }}
-                    >
-                      Done
-                    </Button>
-                  </DialogActions>
-                </Dialog>
+                  <FontAwesomeIcon icon={faPlus} style={{ color: "#ffffff" }} />
+                </div>
               </div>
 
-              <div>
-                <FontAwesomeIcon icon={faTrash} onClick={handleClickOpen} />
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Confirm Delete"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this item?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button
-                      onClick={() => {
-                        handleClose();
-                        removeFromCart(cartItem.item);
-                      }}
+              {/* comment control */}
+              <div className=" grid grid-cols-2 text-center text-2xl text-red-500 ">
+                <div>
+                  <div className="p-5">
+                    <FontAwesomeIcon
+                      icon={faClipboard}
+                      onClick={handleCommentOpen}
+                    />
+                  </div>
+
+                  <Dialog
+                    open={commentOpen}
+                    onClose={handleCommentClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Add Comment"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Please enter a comment for this item.
+                      </DialogContentText>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Comment"
+                        type="text"
+                        fullWidth
+                        value={comment}
+                        onChange={(event) => setComment(event.target.value)}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        variant={"secondary"}
+                        onClick={handleCommentClose}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleCommentClose();
+                          addComment(cartItem.item, comment);
+                          console.log(cartItems);
+                        }}
+                      >
+                        Done
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+
+                <div>
+                  <div className="p-5">
+                    <FontAwesomeIcon icon={faTrash} onClick={handleClickOpen} />
+                    <div />
+
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
                     >
-                      Yes
-                    </Button>
-                  </DialogActions>
-                </Dialog>
+                      <DialogTitle id="alert-dialog-title">
+                        {"Confirm Delete"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Are you sure you want to delete this item?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button variant={"secondary"} onClick={handleClose}>
+                          Cancel
+                        </Button>
+                        <Button
+                          variant={"destructive"}
+                          onClick={() => {
+                            handleClose();
+                            removeFromCart(cartItem.item);
+                          }}
+                        >
+                          Yes
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        <div
-          className=" flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50 mx-4 mb-4 mt-3"
-          onClick={(checkCartItems)}
-        >
-          Proceed Payment
+          ))}
+        </div>
+
+        <div className="pt-2">
+          {cartItems.length !== 0 ? (
+            <Button
+              className="hover:bg-pink-600  w-full rounded-md"
+              variant="default"
+              onClick={(checkCartItems)}
+            >
+              Proceed to payment
+            </Button>
+          ) : null}
         </div>
 
         {isModalOpen && (
@@ -294,16 +326,16 @@ export default function CounterPage() {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed text-black right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50 overflow-scroll"
+            className=" fixed text-black right-0 top-0  z-50  h-screen w-screen justify-center overflow-scroll bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
               {"< "}
               Payment{" "}
             </div>
-            <div className="text-l rounded m-2 grid w-auto grid-cols-3  gap-2 p-2 text-center font-semibold ">
+            <div className="text-l m-2 grid w-auto grid-cols-3 gap-2  rounded p-2 text-center font-semibold ">
               <div className="">Item</div>
               <div className="">Quantity</div>
-              <div className="">Subtotal</div>   
+              <div className="">Subtotal</div>
             </div>
 
             {cartItems.map((cartItem, index) => (
@@ -343,8 +375,7 @@ export default function CounterPage() {
                 <div className="text-end">{discountPayable}</div>
               </div>
             </div>
-            
-            
+
             <div className="m-2 grid grid-cols-2 rounded-md bg-gray-300 px-2">
               <div className="m-2 ">{discount}</div>
               <div className="  m-2 text-end">%</div>
@@ -355,6 +386,50 @@ export default function CounterPage() {
               <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(50), setAmountPayable(total - discountAmount)}}>50%</div>
               <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount(75), setAmountPayable(total - discountAmount)}}>75%</div>
               <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount(100), setAmountPayable(total - discountAmount)}}>100%</div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount("0"), setAmountPayable(total - discountAmount);
+                }}
+              >
+                0%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount("25"),
+                    setAmountPayable(total - discountAmount);
+                }}
+              >
+                25%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount("50"),
+                    setAmountPayable(total - discountAmount);
+                }}
+              >
+                50%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount("75"),
+                    setAmountPayable(total - discountAmount);
+                }}
+              >
+                75%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount("100"),
+                    setAmountPayable(total - discountAmount);
+                }}
+              >
+                100%
+              </div>
             </div>
             <div
               className="ml-1 mr-1 mb-3 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
@@ -412,15 +487,14 @@ export default function CounterPage() {
                 <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(1000)}}>1000</div>
               </div>
             </div>
-           
+
             <div
-              className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              className="ml-1 mr-1 mt-10 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
               onClick={toggleModal3}
             >
               Receive Payment
             </div>
           </div>
-          
         )}
         {isModalOpen3 && (
           <div
@@ -483,9 +557,7 @@ export default function CounterPage() {
               DONE
             </div>
           </div>
-          
         )}
-
       </div>
     </>
   );

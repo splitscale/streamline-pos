@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -23,6 +26,8 @@ import { Inventory } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
 import { api } from "~/utils/api";
+import { Dashboard } from "./dashboard";
+import { Orders } from "./orders";
 export default function POSTabs() {
   const { data: sessionData } = useSession();
   const router = useRouter();
@@ -30,7 +35,7 @@ export default function POSTabs() {
   // useEffect(() => {
   //   if (!sessionData) router.push("/");
   // });
-  const { data: item } = api.cashier.getAllItem.useQuery({ user_id: "123" });
+  const { data: item } = api.cashier.getAllItem.useQuery({ user_id: "12" });
 
   const {
     data: sales,
@@ -38,6 +43,20 @@ export default function POSTabs() {
     isError,
   } = api.cashier.getAllSales.useQuery({ user_id: "123" });
 
+  
+  const updateStatus = api.cashier.updateSalesStatus.useMutation();
+  const handleClick = (sales_id:string) => {
+    // Call the mutation function here
+    console.log('success')
+    updateStatus.mutate({
+      sales_Id: sales_id,
+      sales_status: true
+    })
+
+
+    
+    
+  };
   return (
     <>
       <Head>
@@ -52,18 +71,21 @@ export default function POSTabs() {
           <Header />
           {/* Body */}
           <div className="container flex flex-col space-y-2">
-            <Tabs
-              defaultValue="pos"
-              className="flex min-h-screen flex-col bg-transparent"
-            >
-              <TabsList className=" flex w-80 justify-between self-center bg-white text-[#979797] dark:bg-gradient-to-b dark:from-[#2e026d] dark:to-[#15162c] sm:w-96">
-                <TabsTrigger className="rounded-full" value="pos">
+            <Tabs defaultValue="pos" className="flex flex-col bg-transparent">
+              <TabsList className=" flex w-80  justify-between self-center  bg-white text-[#979797] dark:bg-gradient-to-b dark:from-[#2e026d] dark:to-[#15162c] sm:w-96">
+                <TabsTrigger className="rounded-full " value="pos">
                   POS
                 </TabsTrigger>
                 <TabsTrigger className="rounded-full" value="dashboard">
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger onClick={()=>{sales}} className="rounded-full" value="orders">
+                <TabsTrigger
+                  onClick={() => {
+                    sales;
+                  }}
+                  className="rounded-full"
+                  value="orders"
+                >
                   Orders
                 </TabsTrigger>
                 <TabsTrigger className="rounded-full" value="inventory">
@@ -77,45 +99,47 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="dashboard">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Dashboard</CardTitle>
-                    <CardDescription>
-                      Change your Dashboard here. Click save when you're done.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                {/* Dashboard tab */}
+                <Dashboard />
               </TabsContent>
 
               <TabsContent value="orders" className="grid justify-items-center">
-              {sales?.map((sales, index) => (
-                <div key={index}>
+                {sales?.map((sales, index) => (
                   
-                  <Card className="mb-3 w-full max-w-screen-sm border border-black">
-                    <CardHeader className="grid">
-                      <CardTitle className="-mb-2">{sales.customer_name}</CardTitle>
-                      <CardDescription>Customer #{index+1}</CardDescription>
-                      {sales.itemOrders.map((item) => (
-                        <div key={index}>
-                      <Card className="bg-gray-300 px-3 py-6">
-                        <div className="grid grid-cols-2 gap-0">
-                          <div className="self-center text-left font-bold">
-                            {item.quantity}x {item.name}
+                  <div key={index}>
+                    <Card className="mb-3 w-64 border border-black">
+                      <CardHeader className="grid">
+                        <CardTitle className="mb-2">
+                          {sales.customer_name}
+                        </CardTitle>
+
+                        {sales.itemOrders.map((item) => (
+                          <div key={index}>
+                            <Card className="bg-gray-300 px-3 py-2  ">
+                              <div className="grid grid-cols-2 gap-0">
+                                <div className="w-full self-center text-left font-bold">
+                                  {item.quantity}x {item.name}
+                                </div>
+                                <div className="self-center text-right font-bold"></div>
+                                <div className="self-center text-left">
+                                  {item.comment}
+                                </div>
+                              </div>
+                            </Card>
                           </div>
-                          <div className="self-center text-right font-bold">
-                            ₱ {item.price}
-                          </div>
-                          <div className="self-center text-left">
-                            {item.comment}
-                          </div>
+                        ))}
+                        <div className="rounded-md bg-blue-950 text-center text-white"
+                        onClick={()=>{
+                          handleClick(sales.sales_Id)
+                          window.location.reload();
+                        }}
+                        >
+                          DONE
                         </div>
-                      </Card>
-                      </div>
-                      ))}
-                    </CardHeader>
-                  </Card>
-                </div>
-              ))}
+                      </CardHeader>
+                    </Card>
+                  </div>
+                ))}
               </TabsContent>
 
               <TabsContent value="inventory">
