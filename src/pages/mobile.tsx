@@ -19,6 +19,7 @@ import { Inventory } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
 import { Orders } from "./orders";
+import { Dashboard } from "./dashboard";
 
 export default function POSTabs() {
   const { data: sessionData } = useSession();
@@ -67,21 +68,17 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="dashboard">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Dashboard</CardTitle>
-                    <CardDescription>
-                      Change your Dashboard here. Click save when you're done.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                {/* Dashboard tab */}
+                <Dashboard />
               </TabsContent>
 
               <TabsContent value="orders" className="grid justify-items-center">
+                {/* Orders tab */}
                 <Orders />
               </TabsContent>
 
               <TabsContent value="inventory">
+                {/* Inventory tab */}
                 <Inventory />
               </TabsContent>
             </Tabs>
