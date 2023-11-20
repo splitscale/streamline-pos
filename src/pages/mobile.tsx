@@ -86,28 +86,76 @@ export default function POSTabs() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="orders" className="container">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>ONIICHAN</CardTitle>
-                    <CardDescription>Customer</CardDescription>
-                    <Card className="px-3 py-10"></Card>
-                    <Card className="px-3 py-10"></Card>
-                    <Button className="bg-pink-500 hover:bg-pink-600 rounded-lg text-white">
+              <TabsContent value="orders" className="grid justify-items-center">
+                <Card className="border border-black mb-3 w-full max-w-screen-sm">
+                  <CardHeader className="grid">
+                    <CardTitle className="-mb-2">ONIICHAN</CardTitle>
+                    <CardDescription>Customer #001</CardDescription>
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          3x fried chicken
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 280.00
+                        </div>
+                        <div className="text-left self-center">
+                          only thighs
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          1x hotdog
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 250.00
+                        </div>
+                        <div className="text-left self-center">
+                          no bun
+                        </div>
+                      </div>
+                    </Card>
+                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
                       Done
                     </Button>
                   </CardHeader>
                 </Card>
 
-                <span className="text-xs text-white">incoming..</span>
+                <span className="text-xs text-black">incoming..</span>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle>JER</CardTitle>
-                    <CardDescription>Customer</CardDescription>
-                    <Card className="px-3 py-10"></Card>
-                    <Card className="px-3 py-10"></Card>
-                    <Button className="bg-pink-500 hover:bg-pink-600 rounded-lg text-white">
+                <Card className="border border-black mb-3 mb-3 w-full max-w-screen-sm">
+                  <CardHeader className="grid">
+                    <CardTitle className="-mb-2">JER</CardTitle>
+                    <CardDescription>Customer #002</CardDescription>
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          2x fried chicken
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 280.00
+                        </div>
+                        <div className="text-left self-center">
+                          legs only
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="px-3 py-6 bg-gray-300">
+                      <div className="grid grid-cols-2 gap-0">
+                        <div className="font-bold text-left self-center">
+                          1x spaghetti
+                        </div>
+                        <div className="font-bold text-right self-center">
+                          ₱ 130.00
+                        </div>
+                        <div className="text-left self-center">
+                          no cheese
+                        </div>
+                      </div>
+                    </Card>
+                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
                       Done
                     </Button>
                   </CardHeader>
