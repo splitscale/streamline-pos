@@ -18,6 +18,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Inventory } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
+import DashboardBalance from "~/components/dashboard/balance";
+import DashboardMenu from "~/components/dashboard/dashboardMenuButton";
+import ReceiveTransaction from "~/components/dashboard/receive";
+import CashOutTransaction from "~/components/dashboard/cashout";
+import CashInTransaction from "~/components/dashboard/cashin";
 
 export default function POSTabs() {
   const { data: sessionData } = useSession();
@@ -76,64 +81,10 @@ export default function POSTabs() {
                 </Card> */}
                 <>
                   {/* Balance */}
-                  <div className="grid grid-rows-2 rounded-md bg-[#D9D9D9] text-black">
-                    <div className="mx-4 grid grid-rows-2">
-                      <div className="text-xl font-bold">P25, 000.00</div>
-                      <div className="text-xs font-bold">Cashbox Balance</div>
-                    </div>
-                    <div className="mx-4 grid grid-cols-2 gap-2">
-                      <Button className="bg-[#FC7070] bg-opacity-30 font-semibold text-[#FC7070]">
-                        Cash in
-                      </Button>
-                      <Button className="bg-[#FC7070] bg-opacity-30 font-semibold text-[#FC7070]">
-                        Cash out
-                      </Button>
-                    </div>
-                  </div>
+                  <DashboardBalance />
 
                   {/* Grid of buttons */}
-                  <div className="mb-5 mt-3 grid auto-cols-fr grid-cols-4 gap-5">
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
-                        soon
-                      </div>
-                      <div className="mt-1 text-center text-xs text-[#979797]">
-                        Cashier
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
-                        soon
-                      </div>
-                      <div className="mt-1 text-center text-xs text-[#979797]">
-                        Reports
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
-                        soon
-                      </div>
-                      <div className="mt-1 text-center text-xs text-[#979797]">
-                        Orders
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-sm text-black">
-                        soon
-                      </div>
-                      <div className="mt-1 text-center text-xs text-[#979797]">
-                        Inventory
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center rounded-md">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-md bg-[#D9D9D9] text-black">
-                        <span className="">...</span>
-                      </div>
-                      <div className="mt-1 text-center text-xs text-[#979797]">
-                        More
-                      </div>
-                    </div>
-                  </div>
+                  <DashboardMenu />
                   {/* Powered by Splitscale */}
                   <div className="grid h-14 grid-cols-4 rounded-md bg-black">
                     <div className="col-span-1 ml-2 mt-1 text-xs">
@@ -153,50 +104,11 @@ export default function POSTabs() {
                       </div>
                     </div>
                     {/* Receive */}
-                    <div className="my-1 grid grid-cols-2">
-                      <div className="flex flex-col">
-                        <div className="text-xs text-[#979797]">
-                          Received Payment
-                        </div>
-                        <div className="font-semibold">Bjorn</div>
-                      </div>
-                      <div className="flex flex-col text-end">
-                        <div className="text-xs text-[#979797]">
-                          3 minutes ago
-                        </div>
-                        <div className="font-semibold text-[#FC7070]">
-                          P250.00
-                        </div>
-                      </div>
-                    </div>
+                    <ReceiveTransaction />
                     {/* Cash out */}
-                    <div className="my-1 grid grid-cols-2">
-                      <div className="flex flex-col">
-                        <div className="text-xs text-[#979797]">Cash out</div>
-                        <div className="font-semibold">Patrick</div>
-                      </div>
-                      <div className="flex flex-col text-end">
-                        <div className="text-xs text-[#979797]">
-                          13 hours ago
-                        </div>
-                        <div className="font-semibold">- P30.00</div>
-                      </div>
-                    </div>
+                    <CashOutTransaction />
                     {/* Cash in */}
-                    <div className="my-1 grid grid-cols-2">
-                      <div className="flex flex-col">
-                        <div className="text-xs text-[#979797]">Cash in</div>
-                        <div className="font-semibold">Sarah</div>
-                      </div>
-                      <div className="flex flex-col text-end">
-                        <div className="text-xs text-[#979797]">
-                          07 Nov 2023
-                        </div>
-                        <div className="font-semibold text-[#FC7070]">
-                          P 1,000.00
-                        </div>
-                      </div>
-                    </div>
+                    <CashInTransaction />
                   </div>
                 </>
               </TabsContent>
