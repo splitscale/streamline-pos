@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useSession, signOut } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -20,11 +22,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Inventory } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
-
+import { api } from "~/utils/api";
 export default function POSTabs() {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
+  // useEffect(() => {
+  //   if (!sessionData) router.push("/");
+  // });
+  const { data: item } = api.cashier.getAllItem.useQuery({ user_id: "123" });
+
+  const {
+    data: sales,
+    isLoading,
+    isError,
+  } = api.cashier.getAllSales.useQuery({ user_id: "123" });
 
   return (
     <>
@@ -51,7 +63,7 @@ export default function POSTabs() {
                 <TabsTrigger className="rounded-full" value="dashboard">
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger className="rounded-full" value="orders">
+                <TabsTrigger onClick={()=>{sales}} className="rounded-full" value="orders">
                   Orders
                 </TabsTrigger>
                 <TabsTrigger className="rounded-full" value="inventory">
@@ -76,84 +88,40 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="orders" className="grid justify-items-center">
-                <Card className="border border-black mb-3 w-full max-w-screen-sm">
-                  <CardHeader className="grid">
-                    <CardTitle className="-mb-2">ONIICHAN</CardTitle>
-                    <CardDescription>Customer #001</CardDescription>
-                    <Card className="px-3 py-6 bg-gray-300">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
-                          3x fried chicken
+              {sales?.map((sales, index) => (
+                <div key={index}>
+                  
+                  <Card className="mb-3 w-full max-w-screen-sm border border-black">
+                    <CardHeader className="grid">
+                      <CardTitle className="-mb-2">{sales.customer_name}</CardTitle>
+                      <CardDescription>Customer #{index+1}</CardDescription>
+                      {sales.itemOrders.map((item) => (
+                        <div key={index}>
+                      <Card className="bg-gray-300 px-3 py-6">
+                        <div className="grid grid-cols-2 gap-0">
+                          <div className="self-center text-left font-bold">
+                            {item.quantity}x {item.name}
+                          </div>
+                          <div className="self-center text-right font-bold">
+                            ₱ {item.price}
+                          </div>
+                          <div className="self-center text-left">
+                            {item.comment}
+                          </div>
                         </div>
-                        <div className="font-bold text-right self-center">
-                          ₱ 280.00
-                        </div>
-                        <div className="text-left self-center">
-                          only thighs
-                        </div>
+                      </Card>
                       </div>
-                    </Card>
-                    <Card className="px-3 py-6 bg-gray-300">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
-                          1x hotdog
-                        </div>
-                        <div className="font-bold text-right self-center">
-                          ₱ 250.00
-                        </div>
-                        <div className="text-left self-center">
-                          no bun
-                        </div>
-                      </div>
-                    </Card>
-                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
-                      Done
-                    </Button>
-                  </CardHeader>
-                </Card>
-
-                <Card className="border border-black mb-3 mb-3 w-full max-w-screen-sm">
-                  <CardHeader className="grid">
-                    <CardTitle className="-mb-2">JER</CardTitle>
-                    <CardDescription>Customer #002</CardDescription>
-                    <Card className="px-3 py-6 bg-gray-300">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
-                          2x fried chicken
-                        </div>
-                        <div className="font-bold text-right self-center">
-                          ₱ 280.00
-                        </div>
-                        <div className="text-left self-center">
-                          legs only
-                        </div>
-                      </div>
-                    </Card>
-                    <Card className="px-3 py-6 bg-gray-300">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
-                          1x spaghetti
-                        </div>
-                        <div className="font-bold text-right self-center">
-                          ₱ 130.00
-                        </div>
-                        <div className="text-left self-center">
-                          no cheese
-                        </div>
-                      </div>
-                    </Card>
-                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
-                      Done
-                    </Button>
-                  </CardHeader>
-                </Card>
+                      ))}
+                    </CardHeader>
+                  </Card>
+                </div>
+              ))}
               </TabsContent>
 
               <TabsContent value="inventory">
-                <Inventory />
+                <Inventory card={item} />
               </TabsContent>
             </Tabs>
-            He
           </div>
         </div>
       </main>
