@@ -26,13 +26,14 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
 
+
 export default function CounterPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
-  const [discount, setDiscount] = useState("0");
+  const [discount, setDiscount] = useState(0);
   const [amountPayable,setAmountPayable] = useState(0)
   const [receiveAmount,setReceiveAmount] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,7 +108,7 @@ export default function CounterPage() {
   const toggleModal3 = () => {
     setIsModalOpen3(!isModalOpen3);
   };
-  const toggleDiscount = (discountAmount: string)=>{
+  const toggleDiscount = (discountAmount: number)=>{
     setDiscount(discountAmount)
   }
 
@@ -124,6 +125,11 @@ export default function CounterPage() {
 
     // More items...
   ];
+  const {
+    data: item,
+    isLoading,
+    isError,
+  } = api.cashier.getAllItem.useQuery({user_id:"123"});
   const clearCart = () => {
     setCartItems([]);
   };
@@ -134,14 +140,13 @@ export default function CounterPage() {
 
   // clear discount to 0 when done
   const clearDiscountAmount = () => {
-    setDiscount("0")
+    setDiscount(0)
   }
-
   const total = cartItems.reduce((total, cartItem) => {
     return total + Number(cartItem.quantity) * Number(cartItem.item.price);
   }, 0);
 
-  const discountRate = Number(discount)/100
+  const discountRate = discount/100
   const discountAmount = total * discountRate;
   const discountPayable = total - discountAmount;
   const setValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,18 +165,19 @@ export default function CounterPage() {
  const addItemOrder = api.cashier.createItemOrder.useMutation();
  const salesOrder = api.cashier.createSale.useMutation();
  const orderCode = orderCodeGenerator();
+ const [customerName,setCustomerName] = useState("");
   return (
     <>
-      <div className="grid-rows-3 items-center">
+      <div className="m-2 grid-rows-3 items-center text-black ">
         <SearchBar />
 
-        <ItemCard addToCart={addToCart} card={mockData} />
+        <ItemCard addToCart={addToCart} card={item} />
 
         <hr className="m-4 h-px bg-gray-200  dark:bg-gray-700"></hr>
 
         {cartItems.map((cartItem, index) => (
           <div
-            className=" grid grid-cols-3 items-center gap-1 rounded-md border-4  border-gray-100 md:text-3xl "
+            className=" text-black grid grid-cols-3 items-center gap-1 rounded-md border-4  border-gray-100 md:text-3xl "
             key={index}
           >
             <div className="grid grid-rows-2  text-center ">
@@ -288,7 +294,7 @@ export default function CounterPage() {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50 overflow-scroll"
+            className=" fixed text-black right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50 overflow-scroll"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
               {"< "}
@@ -344,11 +350,11 @@ export default function CounterPage() {
               <div className="  m-2 text-end">%</div>
             </div>
             <div className="m-1 grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
-            <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('0'), setAmountPayable(total - discountAmount)}}>0%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('25'), setAmountPayable(total - discountAmount)}}>25%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount('50'), setAmountPayable(total - discountAmount)}}>50%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('75'), setAmountPayable(total - discountAmount)}}>75%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount('100'), setAmountPayable(total - discountAmount)}}>100%</div>
+            <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(0), setAmountPayable(total - discountAmount)}}>0%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(25), setAmountPayable(total - discountAmount)}}>25%</div>
+              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(50), setAmountPayable(total - discountAmount)}}>50%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount(75), setAmountPayable(total - discountAmount)}}>75%</div>
+              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount(100), setAmountPayable(total - discountAmount)}}>100%</div>
             </div>
             <div
               className="ml-1 mr-1 mb-3 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
@@ -423,7 +429,6 @@ export default function CounterPage() {
             aria-hidden="true"
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
-            
             <div className="m-2 text-2xl font-bold" onClick={toggleModal3}>
               {"< "}
               Done
@@ -431,20 +436,26 @@ export default function CounterPage() {
             <div className="mt-56 items-center text-center text-6xl font-bold">
               ₱ {receiveAmount-discountPayable}
             </div>
-            <div className="mb-64 items-center text-center text-xl font-semibold text-gray-500">
+            <div className="mb-20 items-center text-center text-xl font-semibold text-gray-500">
               Change
             </div>
+            <input className=" border-red-100 border-2 w-full" placeholder="Customers Name" value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    ></input>
            
             <div
               className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
               onClick={(e)=>{ e.preventDefault(); 
                 
                 salesOrder.mutate({
+                  user_id:'123',
                   sales_Id: orderCode,
+                  customer_name: customerName,
                   cashier_name: "Ferj2",
-                  initial_price: amountPayable,
-                  discount: 10,
+                  initial_price: total,
+                  discount: discount,
                   final_price: discountPayable,
+                  payment:receiveAmount
                 });
                 setTimeout(() => {
                 cartItems.forEach((cartItem, index) => {

@@ -4,13 +4,16 @@ import { useState } from "react";
 
 interface Props {
   card: {
-    name:string,
-    price:number
-  }[],
+    items_id: string;
+    user_id: string;
+    name: string;
+    price: number;
+    stock: number;
+  }[] | undefined,
   addToCart: (item: { name: string; price: number }) => void;
  }
 
-export default function ItemCard({ addToCart, card}: Props) {
+export default function ItemCard({ addToCart, card = []}: Props) {
   const mappedDivs = card.map((item, index) => (
     <div key={index}  
     onClick={() => addToCart({ name: item.name, price: Number(item.price) })}

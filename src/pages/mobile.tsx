@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useSession, signOut } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -23,9 +25,6 @@ export default function POSTabs() {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!sessionData) router.push("/");
-  });
 
   return (
     <>

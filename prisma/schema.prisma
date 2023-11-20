@@ -74,29 +74,33 @@ model VerificationToken {
 
 model Items {
     items_id String @id @default(cuid())
+    user_id  String
     name     String
     price    Float
     stock    Float
 }
 
-
-
 model Sales {
-    id            String      @id @default(cuid())
-    sales_Id      String      @unique
-    cashier_name  String
-    initial_price Float
-    discount      Float
-    final_price   Float
-    sales_date    DateTime @default(now())
-    itemOrders    ItemOrder[]
+    id                  String      @id @default(cuid())
+    sales_Id            String      @unique
+    user_id             String
+    customer_name       String
+    cashier_name        String
+    initial_price       Float
+    discount_percentage Float
+    final_price         Float
+    payment             Float
+    sales_status        Boolean     @default(false)
+    sales_date          DateTime    @default(now())
+    itemOrders          ItemOrder[]
 }
+
 model ItemOrder {
     itemOrder_id String  @id @default(cuid())
     name         String
     price        Float
     quantity     Float
     comment      String?
-    sales_Id      String
+    sales_Id     String
     sales        Sales   @relation(fields: [sales_Id], references: [sales_Id])
 }
