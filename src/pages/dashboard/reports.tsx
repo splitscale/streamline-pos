@@ -1,23 +1,26 @@
-export default function ReportPage() {
+import { EarningReportProps } from "~/types/global";
 
+export function EarningsReport(props: EarningReportProps) {
   return (
     <>
-      <div className="m-2 text-2xl font-bold" >
-        {"< "}
-        Reports{" "}
-      </div>
-      <div className="grid grid-rows-2 m-5 gap-3  ">
-        <div className=" grid grid-rows-2 bg-[#FC7070]    justify-center rounded-md py-3">
-          <div className="text-3xl text-[#FFFFFF] font-semibold">P 2, 107.00</div>
-          <div className="text-sm text-center self-center text-[#FFFFFF] ">Todays Earnings</div>
+      <div className="grid grid-rows-2 gap-2">
+        <div className=" grid grid-rows-2 justify-center rounded-md bg-[#FC7070] py-2">
+          <div className="text-center text-3xl font-semibold text-[#FFFFFF]">
+            {`P ${props.todaysEarnings ?? 0}`}
+          </div>
+          <div className="self-center text-center text-sm text-[#FFFFFF] ">
+            Todays Earnings
+          </div>
         </div>
-        <div className=" grid grid-rows-2 bg-[#FC7070] justify-center rounded-md py-3">
-          <div className="text-3xl text-[#FFFFFF] font-semibold">P 34, 830.00</div>
-          <div className="text-sm text-center justify self-center text-[#FFFFFF] ">Total Earnings</div>
+        <div className=" grid grid-rows-2 justify-center rounded-md bg-[#FC7070] py-2">
+          <div className=" text-center text-3xl font-semibold text-[#FFFFFF]">
+            {`P ${props.totalEarnings ?? 0}`}
+          </div>
+          <div className="justify self-center text-center text-sm text-[#FFFFFF] ">
+            Total Earnings
+          </div>
         </div>
-
-
       </div>
     </>
-  )
+  );
 }

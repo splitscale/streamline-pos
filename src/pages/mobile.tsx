@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 import { useSession, signOut } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -18,20 +25,43 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Inventory } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
+import { api } from "~/utils/api";
+import { Dashboard } from "./dashboard";
+import { Orders } from "./orders";
 import DashboardBalance from "~/components/dashboard/balance";
 import DashboardMenu from "~/components/dashboard/dashboardMenuButton";
 import ReceiveTransaction from "~/components/dashboard/receive";
 import CashOutTransaction from "~/components/dashboard/cashout";
 import CashInTransaction from "~/components/dashboard/cashin";
-
 export default function POSTabs() {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!sessionData) router.push("/");
-  });
+  // useEffect(() => {
+  //   if (!sessionData) router.push("/");
+  // });
+  const { data: item } = api.cashier.getAllItem.useQuery({ user_id: "12" });
 
+  const {
+    data: sales,
+    isLoading,
+    isError,
+  } = api.cashier.getAllSales.useQuery({ user_id: "123" });
+
+  
+  const updateStatus = api.cashier.updateSalesStatus.useMutation();
+  const handleClick = (sales_id:string) => {
+    // Call the mutation function here
+    console.log('success')
+    updateStatus.mutate({
+      sales_Id: sales_id,
+      sales_status: true
+    })
+
+
+    
+    
+  };
   return (
     <>
       <Head>
@@ -46,18 +76,21 @@ export default function POSTabs() {
           <Header />
           {/* Body */}
           <div className="container flex flex-col space-y-2">
-            <Tabs
-              defaultValue="pos"
-              className="flex min-h-screen flex-col bg-transparent"
-            >
-              <TabsList className=" flex w-80 justify-between self-center bg-white text-[#979797] dark:bg-gradient-to-b dark:from-[#2e026d] dark:to-[#15162c] sm:w-96">
-                <TabsTrigger className="rounded-full" value="pos">
+            <Tabs defaultValue="pos" className="flex flex-col bg-transparent">
+              <TabsList className=" flex w-80  justify-between self-center  bg-white text-[#979797] dark:bg-gradient-to-b dark:from-[#2e026d] dark:to-[#15162c] sm:w-96">
+                <TabsTrigger className="rounded-full " value="pos">
                   POS
                 </TabsTrigger>
                 <TabsTrigger className="rounded-full" value="dashboard">
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger className="rounded-full" value="orders">
+                <TabsTrigger
+                  onClick={() => {
+                    sales;
+                  }}
+                  className="rounded-full"
+                  value="orders"
+                >
                   Orders
                 </TabsTrigger>
                 <TabsTrigger className="rounded-full" value="inventory">
@@ -70,16 +103,7 @@ export default function POSTabs() {
                 <CounterPage />
               </TabsContent>
 
-              <TabsContent value="dashboard">
-                {/* <Card>
-                  <CardHeader>
-                    <CardTitle>Dashboard</CardTitle>
-                    <CardDescription>
-                      Change your Dashboard here. Click save when you're done.
-                    </CardDescription>
-                  </CardHeader>
-                </Card> */}
-                <>
+              <TabsContent value="dashboard">         
                   {/* Balance */}
                   <DashboardBalance />
 
@@ -110,88 +134,52 @@ export default function POSTabs() {
                     {/* Cash in */}
                     <CashInTransaction />
                   </div>
-                </>
+             
               </TabsContent>
+        
+               <TabsContent value="orders" className="grid justify-items-center">
+                {sales?.map((sales, index) => (
+                  
+                  <div key={index}>
+                    <Card className="mb-3 w-64 border border-black">
+                      <CardHeader className="grid">
+                        <CardTitle className="mb-2">
+                          {sales.customer_name}
+                        </CardTitle>
 
-              <TabsContent value="orders" className="grid justify-items-center">
-                <Card className="mb-3 w-full max-w-screen-sm border border-black">
-                  <CardHeader className="grid">
-                    <CardTitle className="-mb-2">ONIICHAN</CardTitle>
-                    <CardDescription>Customer #001</CardDescription>
-                    <Card className="bg-gray-300 px-3 py-6">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="self-center text-left font-bold">
-                          3x fried chicken
+                        {sales.itemOrders.map((item) => (
+                          <div key={index}>
+                            <Card className="bg-gray-300 px-3 py-2  ">
+                              <div className="grid grid-cols-2 gap-0">
+                                <div className="w-full self-center text-left font-bold">
+                                  {item.quantity}x {item.name}
+                                </div>
+                                <div className="self-center text-right font-bold"></div>
+                                <div className="self-center text-left">
+                                  {item.comment}
+                                </div>
+                              </div>
+                            </Card>
+                          </div>
+                        ))}
+                        <div className="rounded-md bg-blue-950 text-center text-white"
+                        onClick={()=>{
+                          handleClick(sales.sales_Id)
+                          window.location.reload();
+                        }}
+                        >
+                          DONE
                         </div>
-                        <div className="self-center text-right font-bold">
-                          ₱ 280.00
-                        </div>
-                        <div className="self-center text-left">only thighs</div>
-                      </div>
+                      </CardHeader>
                     </Card>
-                    <Card className="bg-gray-300 px-3 py-6">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="self-center text-left font-bold">
-                          1x hotdog
-                        </div>
-                        <div className="self-center text-right font-bold">
-                          ₱ 250.00
-                        </div>
-                        <div className="self-center text-left">no bun</div>
-                      </div>
-                    </Card>
-                    <Button
-                      className="hover:bg-pink-600 w-[10rem] justify-self-center rounded-lg"
-                      variant={"destructive"}
-                      onClick={() => router.push("/users/orders")}
-                    >
-                      Done
-                    </Button>
-                  </CardHeader>
-                </Card>
-
-                <Card className="mb-3 w-full max-w-screen-sm border border-black">
-                  <CardHeader className="grid">
-                    <CardTitle className="-mb-2">JER</CardTitle>
-                    <CardDescription>Customer #002</CardDescription>
-                    <Card className="bg-gray-300 px-3 py-6">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="self-center text-left font-bold">
-                          2x fried chicken
-                        </div>
-                        <div className="self-center text-right font-bold">
-                          ₱ 280.00
-                        </div>
-                        <div className="self-center text-left">legs only</div>
-                      </div>
-                    </Card>
-                    <Card className="bg-gray-300 px-3 py-6">
-                      <div className="grid grid-cols-2 gap-0">
-                        <div className="self-center text-left font-bold">
-                          1x spaghetti
-                        </div>
-                        <div className="self-center text-right font-bold">
-                          ₱ 130.00
-                        </div>
-                        <div className="self-center text-left">no cheese</div>
-                      </div>
-                    </Card>
-                    <Button
-                      className="hover:bg-pink-600 w-[10rem] justify-self-center rounded-lg"
-                      variant={"destructive"}
-                      onClick={() => router.push("/users/orders")}
-                    >
-                      Done
-                    </Button>
-                  </CardHeader>
-                </Card>
+                  </div>
+                ))}
               </TabsContent>
 
               <TabsContent value="inventory">
-                <Inventory />
+                <Inventory card={item} />
               </TabsContent>
             </Tabs>
-            He
           </div>
         </div>
       </main>
