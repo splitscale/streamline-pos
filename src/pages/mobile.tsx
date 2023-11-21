@@ -28,6 +28,11 @@ import CounterPage from "./users/cashier";
 import { api } from "~/utils/api";
 import { Dashboard } from "./dashboard";
 import { Orders } from "./orders";
+import DashboardBalance from "~/components/dashboard/balance";
+import DashboardMenu from "~/components/dashboard/dashboardMenuButton";
+import ReceiveTransaction from "~/components/dashboard/receive";
+import CashOutTransaction from "~/components/dashboard/cashout";
+import CashInTransaction from "~/components/dashboard/cashin";
 export default function POSTabs() {
   const { data: sessionData } = useSession();
   const router = useRouter();
@@ -98,12 +103,41 @@ export default function POSTabs() {
                 <CounterPage />
               </TabsContent>
 
-              <TabsContent value="dashboard">
-                {/* Dashboard tab */}
-                <Dashboard />
-              </TabsContent>
+              <TabsContent value="dashboard">         
+                  {/* Balance */}
+                  <DashboardBalance />
 
-              <TabsContent value="orders" className="grid justify-items-center">
+                  {/* Grid of buttons */}
+                  <DashboardMenu />
+                  {/* Powered by Splitscale */}
+                  <div className="grid h-14 grid-cols-4 rounded-md bg-black">
+                    <div className="col-span-1 ml-2 mt-1 text-xs">
+                      Powered by
+                    </div>
+                    <div className="col-span-3 flex items-center text-lg font-semibold">
+                      Splitscale Systems
+                    </div>
+                  </div>
+                  {/* Invoice */}
+                  <div className="mt-3 flex flex-col rounded-md bg-[#D9D9D9] p-3 text-black">
+                    {/* Transaction */}
+                    <div className="grid grid-cols-2">
+                      <div className="font-semibold">Transactions</div>
+                      <div className="text-end text-xs text-[#FC7070]">
+                        See all
+                      </div>
+                    </div>
+                    {/* Receive */}
+                    <ReceiveTransaction />
+                    {/* Cash out */}
+                    <CashOutTransaction />
+                    {/* Cash in */}
+                    <CashInTransaction />
+                  </div>
+             
+              </TabsContent>
+        
+               <TabsContent value="orders" className="grid justify-items-center">
                 {sales?.map((sales, index) => (
                   
                   <div key={index}>
