@@ -2,45 +2,53 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useSession } from "next-auth/react";
+import { useReducer } from "react";
 import { BoxCard } from "~/components/BoxCard";
 import {
   CallbackValue,
   FileUploadInput,
 } from "~/components/form/FIleUploadInput";
 import { Button } from "~/components/ui/button";
+import { useForceUpdate } from "~/components/useForceUpdate";
 import { api } from "~/utils/api";
-interface Props {
-  card:
-    | {
-        items_id: string;
-        user_id: string;
-        name: string;
-        price: number;
-        stock: number;
-      }[]
-    | undefined;
+
+export interface DbItem {
+  items_id: string;
+  user_id: string;
+  name: string;
+  price: number;
+  stock: number;
 }
 
-export function Inventory({ card = [] }: Props) {
-  const session = useSession();
+interface Props {
+  card: DbItem[];
+  userId?: string;
+  doneCallback?: () => void;
+}
+
+export function Inventory({ card = [], userId, doneCallback }: Props) {
   const totalStock = card.reduce((total, item) => total + item.stock, 0);
   const numberOfItems = card.length;
 
   const dbItem = api.cashier.createItem.useMutation();
-  const uid = session.data?.user.id;
 
-  const handleSubmit = (values: CallbackValue) => {
-    if (!uid) {
+  const handleSubmit = (values: CallbackValue[]) => {
+    if (!userId || userId.trim() === "") {
       alert("Please Login");
       return;
     }
 
-    dbItem.mutate({
-      user_id: uid,
-      name: values.name,
-      price: values.price,
-      stock: values.stock,
+    values.forEach((item) => {
+      dbItem.mutate({
+        user_id: userId,
+        name: item.name,
+        price: item.price,
+        stock: item.stock,
+      });
     });
+
+    alert("Upload completed!");
+    if (doneCallback) doneCallback();
   };
 
   return (

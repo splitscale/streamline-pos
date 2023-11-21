@@ -27,7 +27,7 @@ export interface CallbackValue {
 }
 
 export function FileUploadInput(props: {
-  submitCallback: (value: CallbackValue) => void;
+  submitCallback: (value: CallbackValue[]) => void;
 }) {
   const [file, setFile] = useState<File>();
 
@@ -53,14 +53,17 @@ export function FileUploadInput(props: {
     if (file === undefined) return;
 
     const data = await excelToJSON({ arrayBuffer: await file.arrayBuffer() });
-
-    data.forEach((item) => {
-      props.submitCallback({
+    const mappedData = data.map((item) => {
+      let callbackValue = {
         name: item.name,
         price: item.price,
         stock: item.availableUnits,
-      });
+      };
+
+      return callbackValue;
     });
+
+    props.submitCallback(mappedData);
   }
 
   return (
@@ -83,7 +86,6 @@ export function FileUploadInput(props: {
                     id="file"
                     type="file"
                     className="w-full rounded-lg bg-gray-200 text-black"
-                    {...field}
                     onChange={handleFileChange}
                   />
                   <span className="text-sm text-gray-400">
@@ -96,9 +98,11 @@ export function FileUploadInput(props: {
           )}
         />
 
-        <Button type="submit" variant={"default"}>
-          Submit
-        </Button>
+        {file ? (
+          <Button type="submit" variant={"default"}>
+            Submit
+          </Button>
+        ) : null}
       </form>
     </Form>
   );

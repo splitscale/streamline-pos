@@ -25,7 +25,7 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
 
-export default function CounterPage() {
+export default function CounterPage(props: { uid: string }) {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -128,7 +128,7 @@ export default function CounterPage() {
     data: item,
     isLoading,
     isError,
-  } = api.cashier.getAllItem.useQuery({ user_id: "123" });
+  } = api.cashier.getAllItem.useQuery({ user_id: props.uid });
 
   const clearCart = () => {
     setCartItems([]);
