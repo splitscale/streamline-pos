@@ -24,6 +24,7 @@ import TextField from "@mui/material/TextField";
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
+import { Input } from "~/components/ui/input";
 
 export default function CounterPage(props: { uid: string }) {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -327,7 +328,7 @@ export default function CounterPage(props: { uid: string }) {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed right-0 top-0 z-50  h-screen  w-screen justify-center overflow-scroll bg-slate-50 text-black"
+            className="container fixed right-0 top-0 z-50  h-screen  w-screen justify-center overflow-scroll bg-slate-50 text-black"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
               {"< "}
@@ -381,99 +382,65 @@ export default function CounterPage(props: { uid: string }) {
               <div className="m-2 ">{discount}</div>
               <div className="  m-2 text-end">%</div>
             </div>
-            <div className="m-1 grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount(0), setAmountPayable(total - discountAmount);
-                }}
-              >
-                0%
+            <div className="grid-col-1 grid gap-2">
+              <div className="grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    toggleDiscount(0), setAmountPayable(total - discountAmount);
+                  }}
+                >
+                  0%
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    toggleDiscount(25),
+                      setAmountPayable(total - discountAmount);
+                  }}
+                >
+                  25%
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    toggleDiscount(50),
+                      setAmountPayable(total - discountAmount);
+                  }}
+                >
+                  50%
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    toggleDiscount(75),
+                      setAmountPayable(total - discountAmount);
+                  }}
+                >
+                  75%
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    toggleDiscount(100),
+                      setAmountPayable(total - discountAmount);
+                  }}
+                >
+                  100%
+                </Button>
               </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount(25), setAmountPayable(total - discountAmount);
-                }}
-              >
-                25%
+
+              <div>
+                <Button
+                  variant="default"
+                  className="w-full"
+                  onClick={() => {
+                    toggleModal2(), setAmountPayable(total - discountAmount);
+                  }}
+                >
+                  Receive Payment
+                </Button>
               </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount(50), setAmountPayable(total - discountAmount);
-                }}
-              >
-                50%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount(75), setAmountPayable(total - discountAmount);
-                }}
-              >
-                75%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount(100), setAmountPayable(total - discountAmount);
-                }}
-              >
-                100%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount("0"), setAmountPayable(total - discountAmount);
-                }}
-              >
-                0%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount("25"),
-                    setAmountPayable(total - discountAmount);
-                }}
-              >
-                25%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount("50"),
-                    setAmountPayable(total - discountAmount);
-                }}
-              >
-                50%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount("75"),
-                    setAmountPayable(total - discountAmount);
-                }}
-              >
-                75%
-              </div>
-              <div
-                className="rounded-md bg-pink"
-                onClick={() => {
-                  toggleDiscount("100"),
-                    setAmountPayable(total - discountAmount);
-                }}
-              >
-                100%
-              </div>
-            </div>
-            <div
-              className="mb-3 ml-1 mr-1 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={() => {
-                toggleModal2(), setAmountPayable(total - discountAmount);
-              }}
-            >
-              Receive Payment
             </div>
           </div>
         )}
@@ -483,121 +450,142 @@ export default function CounterPage(props: { uid: string }) {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+            className="container fixed right-0 top-0 z-50  h-screen  w-screen  overflow-scroll bg-slate-50"
           >
-            <div className="m-2 text-2xl font-bold" onClick={toggleModal2}>
+            <div className=" m-2 text-2xl font-bold" onClick={toggleModal2}>
               {"< "}
               Receive
             </div>
-            <div className="mt-32 items-center text-center text-5xl font-bold">
-              ₱ {discountPayable}
-            </div>
-            <div className="items-center text-center font-semibold text-gray-500">
-              Amount Payable
-            </div>
-            <div className="mt-16 grid grid-cols-2 items-center justify-center gap-5 p-2">
-              <div className="">
-                <input
-                  className="w-56 border-2 border-red-100"
-                  value={receiveAmount}
-                  onChange={setValue}
-                ></input>
-              </div>
-              <div
-                className="fles item-center mx-10 h-auto w-3/4 rounded-md bg-pink text-center text-xl  text-white"
-                onClick={() => {
-                  setReceiveAmount(amountPayable);
-                }}
-              >
-                exact
-              </div>
-            </div>
-            <div className="grid-row  3 ml-2 mr-2 mt-5 grid gap-2 text-center font-semibold text-white">
-              <div className="grid h-10 grid-cols-3 gap-1">
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(10);
-                  }}
-                >
-                  10
-                </div>
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(20);
-                  }}
-                >
-                  20
-                </div>
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(50);
-                  }}
-                >
-                  50
-                </div>
-              </div>
-              <div className="grid h-10 grid-cols-3 gap-1">
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(100);
-                  }}
-                >
-                  100
-                </div>
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(200);
-                  }}
-                >
-                  200
-                </div>
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(300);
-                  }}
-                >
-                  300
-                </div>
-              </div>
-              <div className="grid h-10 grid-cols-3 gap-1 ">
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(400);
-                  }}
-                >
-                  400
-                </div>
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(500);
-                  }}
-                >
-                  500
-                </div>
-                <div
-                  className="rounded-md bg-pink"
-                  onClick={() => {
-                    setReceiveAmount(1000);
-                  }}
-                >
-                  1000
-                </div>
-              </div>
-            </div>
 
-            <div
-              className="ml-1 mr-1 mt-10 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={toggleModal3}
-            >
-              Receive Payment
+            <div className="grid grid-rows-2">
+              <div className="self-center ">
+                <div className="items-center text-center text-5xl font-bold">
+                  ₱ {discountPayable}
+                </div>
+                <div className="items-center text-center font-semibold text-gray-500">
+                  Amount Payable
+                </div>
+              </div>
+
+              <div className="grid grid-rows-2 gap-5">
+                <div>
+                  {/* input control */}
+                  <div className="grid grid-cols-2 gap-2 py-5">
+                    <Input
+                      value={receiveAmount}
+                      type="number"
+                      onChange={setValue}
+                    />
+
+                    <Button
+                      variant={"default"}
+                      onClick={() => {
+                        setReceiveAmount(amountPayable);
+                      }}
+                    >
+                      Exact
+                    </Button>
+                  </div>
+
+                  {/* keypad */}
+                  <div className="grid-row-3 grid gap-2">
+                    {/* row 1 */}
+                    <div className="grid grid-cols-3 gap-1">
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(10);
+                        }}
+                      >
+                        10
+                      </Button>
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(20);
+                        }}
+                      >
+                        20
+                      </Button>
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(50);
+                        }}
+                      >
+                        50
+                      </Button>
+                    </div>
+
+                    {/* row 2 */}
+                    <div className="grid grid-cols-3 gap-1">
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(100);
+                        }}
+                      >
+                        100
+                      </Button>
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(200);
+                        }}
+                      >
+                        200
+                      </Button>
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(300);
+                        }}
+                      >
+                        300
+                      </Button>
+                    </div>
+
+                    {/* row 3 */}
+                    <div className="grid grid-cols-3 gap-1 ">
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(400);
+                        }}
+                      >
+                        400
+                      </Button>
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(500);
+                        }}
+                      >
+                        500
+                      </Button>
+                      <Button
+                        variant={"default"}
+                        onClick={() => {
+                          setReceiveAmount(1000);
+                        }}
+                      >
+                        1000
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* submit control */}
+                <div>
+                  <Button
+                    variant="default"
+                    className="w-full"
+                    onClick={toggleModal3}
+                  >
+                    Place Order
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -606,67 +594,81 @@ export default function CounterPage(props: { uid: string }) {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+            className="container fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal3}>
               {"< "}
-              Done
-            </div>
-            <div className="mt-56 items-center text-center text-6xl font-bold">
-              ₱ {receiveAmount - discountPayable}
-            </div>
-            <div className="mb-20 items-center text-center text-xl font-semibold text-gray-500">
               Change
             </div>
-            <input
-              className=" w-full border-2 border-red-100"
-              placeholder="Customers Name"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-            ></input>
 
-            <div
-              className="ml-1 mr-1 mt-10 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={(e) => {
-                e.preventDefault();
+            <div className="grid grid-rows-3">
+              {/* data view */}
+              <div>
+                <div className="mt-56 items-center text-center text-6xl font-bold">
+                  ₱ {receiveAmount - discountPayable}
+                </div>
+                <div className="mb-20 items-center text-center text-xl font-semibold text-gray-500">
+                  Change
+                </div>
+              </div>
 
-                salesOrder.mutate({
-                  user_id: "123",
-                  sales_Id: orderCode,
-                  customer_name: customerName,
-                  cashier_name: "Ferj2",
-                  initial_price: total,
-                  discount: discount,
-                  final_price: discountPayable,
-                  payment: receiveAmount,
-                });
-                setTimeout(() => {
-                  cartItems.forEach((cartItem, index) => {
+              {/* input control */}
+              <div>
+                <Input
+                  placeholder="Customer Name"
+                  value={customerName}
+                  type="text"
+                  onChange={(e) => setCustomerName(e.target.value)}
+                />
+              </div>
+
+              {/* submit control */}
+              <div>
+                <Button
+                  variant="default"
+                  className="w-full"
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    salesOrder.mutate({
+                      user_id: "123",
+                      sales_Id: orderCode,
+                      customer_name: customerName,
+                      cashier_name: "Ferj2",
+                      initial_price: total,
+                      discount: discount,
+                      final_price: discountPayable,
+                      payment: receiveAmount,
+                    });
                     setTimeout(() => {
-                      addItemOrder.mutate({
-                        sales: {
-                          connect: {
-                            sales_Id: orderCode,
-                          },
-                        },
-                        name: cartItem.item.name,
-                        price: cartItem.item.price,
-                        quantity: cartItem.quantity,
-                        comment: cartItem.comment,
+                      cartItems.forEach((cartItem, index) => {
+                        setTimeout(() => {
+                          addItemOrder.mutate({
+                            sales: {
+                              connect: {
+                                sales_Id: orderCode,
+                              },
+                            },
+                            name: cartItem.item.name,
+                            price: cartItem.item.price,
+                            quantity: cartItem.quantity,
+                            comment: cartItem.comment,
+                          });
+                        }, index * 500);
                       });
-                    }, index * 500);
-                  });
-                }, 1000);
+                    }, 1000);
 
-                toggleModal3(),
-                  toggleModal(),
-                  toggleModal2(),
-                  clearCart(),
-                  clearAmountPayable(),
-                  clearDiscountAmount();
-              }}
-            >
-              DONE
+                    toggleModal3(),
+                      toggleModal(),
+                      toggleModal2(),
+                      clearCart(),
+                      clearAmountPayable(),
+                      clearDiscountAmount();
+                  }}
+                >
+                  Nice
+                </Button>
+              </div>
             </div>
           </div>
         )}
