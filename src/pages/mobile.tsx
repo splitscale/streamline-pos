@@ -76,6 +76,7 @@ export default function POSTabs() {
           <div className=" flex flex-col gap-2 py-3">
             {/* Header */}
             <Header />
+
             {/* Body */}
             <div className="container flex flex-col">
               <Tabs defaultValue="pos" className="flex flex-col">

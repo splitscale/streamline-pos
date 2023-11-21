@@ -27,6 +27,18 @@ export default function CounterPage(props: { uid: string }) {
     setCartItems((prevItems) => [...prevItems, { item, quantity: 1 }]);
   };
 
+  const incrementQuantity = (quantity: number, name: string) => {
+    const mapped = cartItems.map((cartItem) =>
+      cartItem.item.name === name
+        ? { ...cartItem, quantity: quantity }
+        : cartItem,
+    );
+
+    setCartItems(mapped);
+
+    console.log(`[QUANTITY SET] Item: ${name}, New Quantity: ${quantity}`);
+  };
+
   //Deletes the item from the cart
   const removeFromCart = (name: string) => {
     setCartItems((prevItems) =>
@@ -142,6 +154,7 @@ export default function CounterPage(props: { uid: string }) {
               comment={cartItem.comment}
               onTrash={removeFromCart}
               onComment={addComment}
+              onQuantitySet={incrementQuantity}
             />
           ))}
         </div>
@@ -217,12 +230,27 @@ export default function CounterPage(props: { uid: string }) {
               </div>
             </div>
 
-            <div className="m-2 grid grid-cols-2 rounded-md bg-gray-300 px-2">
-              <div className="m-2 ">{discount}</div>
-              <div className="  m-2 text-end">%</div>
+            <div className="my-2 flex grow flex-row gap-2">
+              <div className="flex grow flex-row  rounded-md bg-gray-300 px-2">
+                <Input
+                  className="border-transparent bg-transparent"
+                  value={discount === 0 ? undefined : discount}
+                  type="number"
+                  onChange={(e) => toggleDiscount(Number(e.target.value))}
+                />
+                <div className="m-2 text-end">%</div>
+              </div>
+              <Button
+                className="w-16"
+                variant={"destructive"}
+                onClick={() => toggleDiscount(0)}
+              >
+                Clear
+              </Button>
             </div>
+
             <div className="grid-col-1 grid gap-2">
-              <div className="grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
+              <div className="grid grid-cols-5 gap-2 rounded-md">
                 <Button
                   variant={"secondary"}
                   onClick={() => {
@@ -269,7 +297,6 @@ export default function CounterPage(props: { uid: string }) {
                   100%
                 </Button>
               </div>
-
               <div>
                 <Button
                   variant="default"
@@ -312,7 +339,7 @@ export default function CounterPage(props: { uid: string }) {
                   {/* input control */}
                   <div className="grid grid-cols-2 gap-2 py-5">
                     <Input
-                      value={receiveAmount}
+                      value={receiveAmount === 0 ? undefined : receiveAmount}
                       type="number"
                       onChange={setValue}
                     />

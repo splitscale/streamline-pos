@@ -3,13 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
-import { env } from "~/env.mjs";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 const itemOrderInput = z.object({
   name: z.string().min(1),
   price: z.number().min(0),
@@ -44,6 +39,10 @@ const item = z.object({
 
 const user_id = z.object({
   user_id: z.string().min(1),
+});
+
+const item_id = z.object({
+  item_id: z.string().min(1),
 });
 
 export const cashierRouter = createTRPCRouter({
@@ -123,6 +122,37 @@ export const cashierRouter = createTRPCRouter({
         where: { sales_Id: input.sales_Id },
         data: {
           sales_status: input.sales_status,
+        },
+      });
+    }),
+  deleteSingleItem: publicProcedure
+    .input(item_id)
+    .mutation(async ({ ctx, input }) => {
+      // simulate a slow db call
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      return ctx.db.items.delete({
+        where: {
+          items_id: input.item_id,
+        },
+      });
+    }),
+  updateItem: publicProcedure
+    .input(item)
+    .input(item_id)
+    .mutation(async ({ ctx, input }) => {
+      // simulate a slow db call
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      return ctx.db.items.update({
+        where: {
+          user_id: input.user_id,
+          items_id: input.item_id,
+          name: input.name,
+        },
+        data: {
+          price: input.price,
+          stock: input.stock,
         },
       });
     }),

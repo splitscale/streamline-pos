@@ -27,6 +27,7 @@ export interface CashierCardProps {
   comment: string;
   onTrash: (id: string) => void;
   onComment: (comment: string, name: string) => void;
+  onQuantitySet: (quantity: number, name: string) => void;
 }
 
 export function CashierCard(props: CashierCardProps) {
@@ -53,6 +54,23 @@ export function CashierCard(props: CashierCardProps) {
     setOpen(false);
   };
 
+  function handleQuantitySet(
+    qty: number,
+    options?: { operation: "increment" | "decrement" },
+  ): void {
+    let mutableQty = qty;
+
+    if (quantity <= 1) props.onTrash(props.name);
+
+    if (options?.operation === "increment") mutableQty += 1;
+    if (options?.operation === "decrement") mutableQty -= 1;
+
+    props.onQuantitySet(mutableQty, props.name);
+
+    setQuantity(mutableQty);
+    setQuantity(mutableQty);
+  }
+
   return (
     <>
       <div className="flex flex-col gap-2 rounded-md  bg-gray-300 p-2">
@@ -77,11 +95,12 @@ export function CashierCard(props: CashierCardProps) {
         <div className="flex flex-col gap-3 divide-y-2 divide-dashed divide-slate-500">
           <QuantityControl
             quantity={quantity}
-            onIncrement={() => setQuantity(quantity + 1)}
-            onDecrement={() => {
-              setQuantity(quantity - 1);
-              if (quantity <= 1) props.onTrash(props.name);
-            }}
+            onIncrement={() =>
+              handleQuantitySet(quantity, { operation: "increment" })
+            }
+            onDecrement={() =>
+              handleQuantitySet(quantity, { operation: "decrement" })
+            }
           />
 
           <div className="flex grow flex-col">
