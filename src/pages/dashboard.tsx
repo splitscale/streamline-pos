@@ -1,6 +1,6 @@
-import { EarningsReport } from "./dashboard/reports";
+import EarningsReport from "./dashboard/reports";
 
-export function Dashboard() {
+export default function Dashboard() {
   return (
     <div>
       <EarningsReport todaysEarnings={2500} totalEarnings={35000} />

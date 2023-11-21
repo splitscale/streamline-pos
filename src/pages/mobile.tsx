@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -15,7 +8,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { DbItem, Inventory } from "./inventory";
+import Inventory, { DbItem } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
 import { api } from "~/utils/api";
@@ -24,22 +17,9 @@ import DashboardMenu from "~/components/dashboard/dashboardMenuButton";
 import ReceiveTransaction from "~/components/dashboard/receive";
 import CashOutTransaction from "~/components/dashboard/cashout";
 import CashInTransaction from "~/components/dashboard/cashin";
-import {
-  JSXElementConstructor,
-  Key,
-  PromiseLikeOfReactNode,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { SalesEntry } from "~/types/global";
-import {
-  mapJsonSalesArr,
-  mapJsonToSalesEntry,
-} from "~/utils/mapJsonToSalesEntry";
+import { mapJsonSalesArr } from "~/utils/mapJsonToSalesEntry";
 
 export default function POSTabs() {
   const router = useRouter();

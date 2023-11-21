@@ -1,15 +1,15 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 const addItem: React.FC = () => {
   return (
-    <div className="bg-white p-4 min-h-screen flex flex-col justify-between">
+    <div className="flex min-h-screen flex-col justify-between bg-white p-4">
       <div>
-        <div className="flex items-center mb-4">
-          <Link href="/" className="text-black font-bold text-lg">
+        <div className="mb-4 flex items-center">
+          <Link href="/" className="text-lg font-bold text-black">
             &lt;
           </Link>
-          <h1 className="text-2xl font-extrabold ml-2">Add Item</h1>
+          <h1 className="ml-2 text-2xl font-extrabold">Add Item</h1>
         </div>
 
         <div className="mb-4">
@@ -22,7 +22,7 @@ const addItem: React.FC = () => {
               <input
                 type="text"
                 id="name"
-                className="input-field w-full bg-gray-300 p-2 rounded mx-auto"
+                className="input-field mx-auto w-full rounded bg-gray-300 p-2"
                 placeholder="Name"
               />
             </div>
@@ -31,7 +31,7 @@ const addItem: React.FC = () => {
               <input
                 type="text"
                 id="price"
-                className="input-field w-full bg-gray-300 p-2 rounded mx-auto"
+                className="input-field mx-auto w-full rounded bg-gray-300 p-2"
                 placeholder="Price"
               />
             </div>
@@ -40,7 +40,7 @@ const addItem: React.FC = () => {
               <input
                 type="text"
                 id="quantity"
-                className="input-field w-full bg-gray-300 p-2 rounded mx-auto"
+                className="input-field mx-auto w-full rounded bg-gray-300 p-2"
                 placeholder="Stock Quantity"
               />
             </div>
@@ -51,7 +51,7 @@ const addItem: React.FC = () => {
       <div className="w-full px-2">
         <button
           type="submit"
-          className="bg-red-400 text-white font-bold py-2 px-2 w-full rounded-md"
+          className="w-full rounded-md bg-red-400 px-2 py-2 font-bold text-white"
         >
           Save
         </button>

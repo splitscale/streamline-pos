@@ -11,9 +11,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { api } from "~/utils/api";
 import { excelToJSON } from "~/modules/excelManager";
-import _logger from "node_modules/next-auth/utils/logger";
 import { useState, ChangeEvent } from "react";
 
 const formSchema = z.object({
@@ -48,8 +46,6 @@ export function FileUploadInput(props: {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    _logger.debug("Uploading: " + values.file, null);
-
     if (file === undefined) return;
 
     const data = await excelToJSON({ arrayBuffer: await file.arrayBuffer() });

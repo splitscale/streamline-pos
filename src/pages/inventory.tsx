@@ -25,7 +25,7 @@ interface Props {
   userId?: string;
 }
 
-export function Inventory({ card = [], userId }: Props) {
+export default function Inventory({ card = [], userId }: Props) {
   const totalStock = card.reduce((total, item) => total + item.stock, 0);
   const numberOfItems = card.length;
 
