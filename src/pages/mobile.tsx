@@ -18,6 +18,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Inventory } from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
+import DashboardBalance from "~/components/dashboard/balance";
+import DashboardMenu from "~/components/dashboard/dashboardMenuButton";
+import ReceiveTransaction from "~/components/dashboard/receive";
+import CashOutTransaction from "~/components/dashboard/cashout";
+import CashInTransaction from "~/components/dashboard/cashin";
 
 export default function POSTabs() {
   const { data: sessionData } = useSession();
@@ -66,84 +71,116 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="dashboard">
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle>Dashboard</CardTitle>
                     <CardDescription>
                       Change your Dashboard here. Click save when you're done.
                     </CardDescription>
                   </CardHeader>
-                </Card>
+                </Card> */}
+                <>
+                  {/* Balance */}
+                  <DashboardBalance />
+
+                  {/* Grid of buttons */}
+                  <DashboardMenu />
+                  {/* Powered by Splitscale */}
+                  <div className="grid h-14 grid-cols-4 rounded-md bg-black">
+                    <div className="col-span-1 ml-2 mt-1 text-xs">
+                      Powered by
+                    </div>
+                    <div className="col-span-3 flex items-center text-lg font-semibold">
+                      Splitscale Systems
+                    </div>
+                  </div>
+                  {/* Invoice */}
+                  <div className="mt-3 flex flex-col rounded-md bg-[#D9D9D9] p-3 text-black">
+                    {/* Transaction */}
+                    <div className="grid grid-cols-2">
+                      <div className="font-semibold">Transactions</div>
+                      <div className="text-end text-xs text-[#FC7070]">
+                        See all
+                      </div>
+                    </div>
+                    {/* Receive */}
+                    <ReceiveTransaction />
+                    {/* Cash out */}
+                    <CashOutTransaction />
+                    {/* Cash in */}
+                    <CashInTransaction />
+                  </div>
+                </>
               </TabsContent>
 
               <TabsContent value="orders" className="grid justify-items-center">
-                <Card className="border border-black mb-3 w-full max-w-screen-sm">
+                <Card className="mb-3 w-full max-w-screen-sm border border-black">
                   <CardHeader className="grid">
                     <CardTitle className="-mb-2">ONIICHAN</CardTitle>
                     <CardDescription>Customer #001</CardDescription>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           3x fried chicken
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 280.00
                         </div>
-                        <div className="text-left self-center">
-                          only thighs
-                        </div>
+                        <div className="self-center text-left">only thighs</div>
                       </div>
                     </Card>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           1x hotdog
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 250.00
                         </div>
-                        <div className="text-left self-center">
-                          no bun
-                        </div>
+                        <div className="self-center text-left">no bun</div>
                       </div>
                     </Card>
-                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
+                    <Button
+                      className="hover:bg-pink-600 w-[10rem] justify-self-center rounded-lg"
+                      variant={"destructive"}
+                      onClick={() => router.push("/users/orders")}
+                    >
                       Done
                     </Button>
                   </CardHeader>
                 </Card>
 
-                <Card className="border border-black mb-3 mb-3 w-full max-w-screen-sm">
+                <Card className="mb-3 w-full max-w-screen-sm border border-black">
                   <CardHeader className="grid">
                     <CardTitle className="-mb-2">JER</CardTitle>
                     <CardDescription>Customer #002</CardDescription>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           2x fried chicken
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 280.00
                         </div>
-                        <div className="text-left self-center">
-                          legs only
-                        </div>
+                        <div className="self-center text-left">legs only</div>
                       </div>
                     </Card>
-                    <Card className="px-3 py-6 bg-gray-300">
+                    <Card className="bg-gray-300 px-3 py-6">
                       <div className="grid grid-cols-2 gap-0">
-                        <div className="font-bold text-left self-center">
+                        <div className="self-center text-left font-bold">
                           1x spaghetti
                         </div>
-                        <div className="font-bold text-right self-center">
+                        <div className="self-center text-right font-bold">
                           ₱ 130.00
                         </div>
-                        <div className="text-left self-center">
-                          no cheese
-                        </div>
+                        <div className="self-center text-left">no cheese</div>
                       </div>
                     </Card>
-                    <Button className="justify-self-center w-[10rem] rounded-lg hover:bg-pink-600" variant={"destructive"} onClick={() => router.push("/users/orders")}>
+                    <Button
+                      className="hover:bg-pink-600 w-[10rem] justify-self-center rounded-lg"
+                      variant={"destructive"}
+                      onClick={() => router.push("/users/orders")}
+                    >
                       Done
                     </Button>
                   </CardHeader>
