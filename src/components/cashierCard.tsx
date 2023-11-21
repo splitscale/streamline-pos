@@ -60,8 +60,6 @@ export function CashierCard(props: CashierCardProps) {
   ): void {
     let mutableQty = qty;
 
-    if (quantity <= 1) props.onTrash(props.name);
-
     if (options?.operation === "increment") mutableQty += 1;
     if (options?.operation === "decrement") mutableQty -= 1;
 
@@ -69,6 +67,7 @@ export function CashierCard(props: CashierCardProps) {
 
     setQuantity(mutableQty);
     setQuantity(mutableQty);
+    if (mutableQty < 1) props.onTrash(props.name);
   }
 
   return (
