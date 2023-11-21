@@ -74,14 +74,14 @@ export default function POSTabs() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <main className="flex min-h-screen flex-col bg-white text-primary-foreground dark:bg-[#121212]">
-          <div className=" flex flex-col gap-2  py-3">
+        <main className="flex min-h-screen flex-col bg-white text-primary-foreground ">
+          <div className=" flex flex-col gap-2 py-3">
             {/* Header */}
             <Header />
             {/* Body */}
-            <div className="container flex flex-col space-y-2">
-              <Tabs defaultValue="pos" className="flex flex-col bg-transparent">
-                <TabsList className=" flex w-80  justify-between self-center  bg-white text-[#979797] dark:bg-gradient-to-b dark:from-[#2e026d] dark:to-[#15162c] sm:w-96">
+            <div className="container flex flex-col">
+              <Tabs defaultValue="pos" className="flex flex-col">
+                <TabsList className="flex w-screen justify-between self-center ">
                   <TabsTrigger className="rounded-full " value="pos">
                     POS
                   </TabsTrigger>

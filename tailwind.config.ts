@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
         "2xl": "1400px",
       },
@@ -20,7 +20,7 @@ module.exports = {
       },
 
       aspectRatio: {
-        "square": "2 / 1",
+        square: "2 / 1",
       },
     },
     extend: {
@@ -30,7 +30,7 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        pink:"#FC7070",
+        pink: "#FC7070",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

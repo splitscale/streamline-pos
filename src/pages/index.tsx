@@ -1,11 +1,8 @@
-import { sign } from "crypto";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-import router from "next/router";
 import { useEffect, useState } from "react";
 import { UserSignInForm } from "~/components/form/UserSignInForm";
-import { SignInForm } from "~/components/form/signInForm";
 import { SignUpForm } from "~/components/form/signUpForm";
 import { Button } from "~/components/ui/button";
 
@@ -21,13 +18,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Streamlines</title>
-        <meta name="description" content="Streamline you business" />
+        <title>Streamline</title>
+        <meta name="description" content="Streamline your business" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="flex min-h-screen flex-col items-center justify-center bg-primary">
-        {signUpMode ? <SignUpForm /> : <SignInForm />}
+        {signUpMode ? <SignUpForm /> : <UserSignInForm />}
         <div>
           <ToggleAuthModeButton
             signUpMode={signUpMode}

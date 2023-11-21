@@ -449,15 +449,15 @@ export default function CounterPage(props: { uid: string }) {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className="container fixed right-0 top-0 z-50  h-screen  w-screen  overflow-scroll bg-slate-50"
+            className=" fixed right-0 top-0 z-50  h-screen  w-screen  overflow-hidden bg-slate-50"
           >
             <div className=" m-2 text-2xl font-bold" onClick={toggleModal2}>
               {"< "}
               Receive
             </div>
 
-            <div className="grid grid-rows-2">
-              <div className="self-center ">
+            <div className="container flex h-screen flex-col place-content-evenly">
+              <div>
                 <div className="items-center text-center text-5xl font-bold">
                   ₱ {discountPayable}
                 </div>
@@ -466,7 +466,7 @@ export default function CounterPage(props: { uid: string }) {
                 </div>
               </div>
 
-              <div className="grid grid-rows-2 gap-5">
+              <div className="flex flex-col justify-center  gap-5 ">
                 <div>
                   {/* input control */}
                   <div className="grid grid-cols-2 gap-2 py-5">
@@ -593,80 +593,82 @@ export default function CounterPage(props: { uid: string }) {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className="container fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
+            className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal3}>
               {"< "}
               Change
             </div>
 
-            <div className="grid grid-rows-3">
+            <div className="container flex h-screen  flex-col  place-content-evenly">
               {/* data view */}
-              <div>
-                <div className="mt-56 items-center text-center text-6xl font-bold">
+              <div className="justify-center">
+                <div className="items-center text-center text-6xl font-bold">
                   ₱ {receiveAmount - discountPayable}
                 </div>
-                <div className="mb-20 items-center text-center text-xl font-semibold text-gray-500">
+                <div className="items-center text-center text-xl font-semibold ">
                   Change
                 </div>
               </div>
 
-              {/* input control */}
-              <div>
-                <Input
-                  placeholder="Customer Name"
-                  value={customerName}
-                  type="text"
-                  onChange={(e) => setCustomerName(e.target.value)}
-                />
-              </div>
+              <div className="flex flex-col justify-center gap-2">
+                {/* input control */}
+                <div>
+                  <Input
+                    placeholder="Customer Name"
+                    value={customerName}
+                    type="text"
+                    onChange={(e) => setCustomerName(e.target.value)}
+                  />
+                </div>
 
-              {/* submit control */}
-              <div>
-                <Button
-                  variant="default"
-                  className="w-full"
-                  onClick={(e) => {
-                    e.preventDefault();
+                {/* submit control */}
+                <div>
+                  <Button
+                    variant="default"
+                    className="w-full"
+                    onClick={(e) => {
+                      e.preventDefault();
 
-                    salesOrder.mutate({
-                      user_id: props.uid,
-                      sales_Id: orderCode,
-                      customer_name: customerName,
-                      cashier_name: "default",
-                      initial_price: total,
-                      discount: discount,
-                      final_price: discountPayable,
-                      payment: receiveAmount,
-                    });
-                    setTimeout(() => {
-                      cartItems.forEach((cartItem, index) => {
-                        setTimeout(() => {
-                          addItemOrder.mutate({
-                            sales: {
-                              connect: {
-                                sales_Id: orderCode,
-                              },
-                            },
-                            name: cartItem.item.name,
-                            price: cartItem.item.price,
-                            quantity: cartItem.quantity,
-                            comment: cartItem.comment,
-                          });
-                        }, index * 500);
+                      salesOrder.mutate({
+                        user_id: props.uid,
+                        sales_Id: orderCode,
+                        customer_name: customerName,
+                        cashier_name: "default",
+                        initial_price: total,
+                        discount: discount,
+                        final_price: discountPayable,
+                        payment: receiveAmount,
                       });
-                    }, 1000);
+                      setTimeout(() => {
+                        cartItems.forEach((cartItem, index) => {
+                          setTimeout(() => {
+                            addItemOrder.mutate({
+                              sales: {
+                                connect: {
+                                  sales_Id: orderCode,
+                                },
+                              },
+                              name: cartItem.item.name,
+                              price: cartItem.item.price,
+                              quantity: cartItem.quantity,
+                              comment: cartItem.comment,
+                            });
+                          }, index * 500);
+                        });
+                      }, 1000);
 
-                    toggleModal3(),
-                      toggleModal(),
-                      toggleModal2(),
-                      clearCart(),
-                      clearAmountPayable(),
-                      clearDiscountAmount();
-                  }}
-                >
-                  Done
-                </Button>
+                      toggleModal3(),
+                        toggleModal(),
+                        toggleModal2(),
+                        clearCart(),
+                        clearAmountPayable(),
+                        clearDiscountAmount();
+                    }}
+                  >
+                    Done
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

@@ -65,6 +65,8 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         console.log("[Environment] ", env.NODE_ENV);
 
+        console.log("[Auth] Attempting to login as SuperUser");
+
         if (!credentials) return null;
 
         const username = credentials["username"];
@@ -99,8 +101,10 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         if (credentials?.username === env.SUPER_ADMIN_USERNAME) return null;
 
+        console.log("[Auth] Attempting to Register as User");
+
         const res = await fetch(
-          `http://localhost:8080/auth/v1/credential/register`,
+          `${env.SHIELD_BASE_URL}auth/v1/credential/register`,
           {
             method: "POST",
             headers: {
@@ -113,8 +117,10 @@ export const authOptions: NextAuthOptions = {
 
         if (!res.ok) return null;
 
+        console.log("[Auth] Attempting to login as User");
+
         const loginRes = await fetch(
-          `http://localhost:8080/auth/v1/credential/login`,
+          `${env.SHIELD_BASE_URL}auth/v1/credential/login`,
           {
             method: "POST",
             headers: {
@@ -156,8 +162,10 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         if (credentials?.username === env.SUPER_ADMIN_USERNAME) return null;
 
+        console.log("[Auth] Attempting to login as User");
+
         const loginRes = await fetch(
-          `http://localhost:8080/auth/v1/credential/login`,
+          `${env.SHIELD_BASE_URL}auth/v1/credential/login`,
           {
             method: "POST",
             headers: {
