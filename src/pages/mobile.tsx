@@ -26,8 +26,11 @@ export default function POSTabs() {
   const utils = api.useUtils();
   const { data: sessionData } = useSession();
   const res = sessionData as unknown as { id: string };
-
   const [uid, setUid] = useState<string>("");
+  useEffect(() => {
+    if (!res) router.push("/");
+    if (res) setUid(res.id);
+  });
 
   const { data: items } = api.cashier.getAllItem.useQuery({
     user_id: uid,
@@ -42,11 +45,6 @@ export default function POSTabs() {
 
   const salesEntry = () =>
     isSuccess ? mapJsonSalesArr(JSON.stringify(sales)) : [];
-
-  useEffect(() => {
-    if (!res) router.push("/");
-    if (res) setUid(res.id);
-  });
 
   const updateStatus = api.cashier.updateSalesStatus.useMutation({
     onSuccess() {

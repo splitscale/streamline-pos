@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { BoxCard } from "~/components/BoxCard";
 import {
@@ -26,6 +27,8 @@ interface Props {
 }
 
 export default function Inventory({ card = [], userId }: Props) {
+  const router = useRouter();
+
   const totalStock = card.reduce((total, item) => total + item.stock, 0);
   const numberOfItems = card.length;
 
@@ -74,7 +77,12 @@ export default function Inventory({ card = [], userId }: Props) {
           <div className="flex-col">
             <div className="mb-2 grid grid-cols-2">
               <div className="text-md self-end font-semibold">Items</div>
-              <Button variant={"default"}>Add item</Button>
+              <Button
+                variant={"default"}
+                onClick={() => router.push("/addItem")}
+              >
+                Add item
+              </Button>
             </div>
             {/* Item list */}
             {card.map((item, index) => (
@@ -88,8 +96,6 @@ export default function Inventory({ card = [], userId }: Props) {
                 />
               </div>
             ))}
-
-            <div className="my-2 grid grid-cols-1 gap-2 "></div>
           </div>
         </div>
       </div>

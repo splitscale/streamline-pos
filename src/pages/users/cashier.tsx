@@ -4,34 +4,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import ItemCard from "~/components/itemCard";
-import { Navbar } from "~/components/navbar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClipboard,
-  faMinus,
-  faPlus,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "~/components/searchbar";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
 import { Input } from "~/components/ui/input";
+import { CashierCard } from "~/components/cashierCard";
 
 export default function CounterPage(props: { uid: string }) {
   const [cartItems, setCartItems] = useState<any[]>([]);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [commentOpen, setCommentOpen] = useState(false);
-  const [comment, setComment] = useState("");
   const [discount, setDiscount] = useState(0);
   const [amountPayable, setAmountPayable] = useState(0);
   const [receiveAmount, setReceiveAmount] = useState(0);
@@ -39,63 +22,28 @@ export default function CounterPage(props: { uid: string }) {
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
 
-  const handleCommentOpen = () => {
-    setCommentOpen(true);
-  };
-
-  const handleCommentClose = () => {
-    setCommentOpen(false);
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   // Adds an item to the cart.
   const addToCart = (item: any) => {
     setCartItems((prevItems) => [...prevItems, { item, quantity: 1 }]);
   };
+
   //Deletes the item from the cart
-  const removeFromCart = (itemToRemove: any) => {
+  const removeFromCart = (name: string) => {
     setCartItems((prevItems) =>
-      prevItems.filter((cartItem) => cartItem.item !== itemToRemove),
-    );
-  };
-  // Increments the quantity of an item in the cart.
-  const incrementQuantity = (item: any) => {
-    setCartItems((prevItems) =>
-      prevItems
-        .map((cartItem) =>
-          cartItem.item === item
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem,
-        )
-        .filter((cartItem) => cartItem.quantity > 0),
+      prevItems.filter((cartItem) => cartItem.item.name !== name),
     );
   };
 
-  // Decrements the quantity of an item in the cart.
-  const decrementQuantity = (item: any) => {
-    setCartItems((prevItems) =>
-      prevItems
-        .map((cartItem) =>
-          cartItem.item === item
-            ? { ...cartItem, quantity: cartItem.quantity - 1 }
-            : cartItem,
-        )
-        .filter((cartItem) => cartItem.quantity > 0),
+  const addComment = (comment: string, name: string) => {
+    const mapped = cartItems.map((cartItem) =>
+      cartItem.item.name === name
+        ? { ...cartItem, comment: comment }
+        : cartItem,
     );
-  };
-  const addComment = (item: any, comment: string) => {
-    setCartItems((prevItems) =>
-      prevItems.map((cartItem) =>
-        cartItem.item === item ? { ...cartItem, comment: comment } : cartItem,
-      ),
-    );
+
+    setCartItems(mapped);
+
+    console.log("[COMMENT ADDED] ", cartItems);
   };
 
   const toggleModal = () => {
@@ -141,8 +89,9 @@ export default function CounterPage(props: { uid: string }) {
     setReceiveAmount(value);
   };
 
-  const [showWarning, setShowWarning] = useState(false);
   const checkCartItems = () => {
+    console.log("[CART ITEMS] ", cartItems);
+
     if (cartItems.length === 0) {
       console.log("Cart is Empty");
     } else {
@@ -176,137 +125,24 @@ export default function CounterPage(props: { uid: string }) {
         <hr className="m-4 h-px bg-gray-200  dark:bg-gray-700"></hr>
 
         <div className="grid grid-cols-1 gap-2">
+          {/* 
+          items_id: string;
+        user_id: string;
+        name: string;
+        price: number;
+        stock: number;
+          */}
           {cartItems.map((cartItem, index) => (
-            <div
-              className=" grid grid-cols-3 items-center gap-2 rounded-md bg-gray-200 text-black"
+            <CashierCard
               key={index}
-            >
-              <div className="grid grid-rows-2 text-center text-black">
-                <div className="text-lg font-semibold normal-case">
-                  {cartItem.item.name}
-                </div>
-                <p>{`P ${cartItem.item.price * cartItem.quantity}`}</p>
-                <p>{cartItem.comment}</p>
-              </div>
-              {/* qty control */}
-              <div className="grid grid-cols-3 rounded-full bg-pink">
-                <div
-                  className="self-center p-3"
-                  onClick={() => decrementQuantity(cartItem.item)}
-                >
-                  <FontAwesomeIcon
-                    icon={faMinus}
-                    style={{ color: "#ffffff" }}
-                    size="xs"
-                  />
-                </div>
-
-                <div className="flex content-center justify-center ">
-                  <p className="self-center  text-center text-xl font-semibold text-white">
-                    {cartItem.quantity}
-                  </p>
-                </div>
-
-                <div
-                  className="self-center p-3"
-                  onClick={() => incrementQuantity(cartItem.item)}
-                >
-                  <FontAwesomeIcon icon={faPlus} style={{ color: "#ffffff" }} />
-                </div>
-              </div>
-
-              {/* comment control */}
-              <div className=" grid grid-cols-2 text-center text-2xl text-red-500 ">
-                <div>
-                  <div className="p-5">
-                    <FontAwesomeIcon
-                      icon={faClipboard}
-                      onClick={handleCommentOpen}
-                    />
-                  </div>
-
-                  <Dialog
-                    open={commentOpen}
-                    onClose={handleCommentClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                  >
-                    <DialogTitle id="alert-dialog-title">
-                      {"Add Comment"}
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
-                        Please enter a comment for this item.
-                      </DialogContentText>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Comment"
-                        type="text"
-                        fullWidth
-                        value={comment}
-                        onChange={(event) => setComment(event.target.value)}
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button
-                        variant={"secondary"}
-                        onClick={handleCommentClose}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          handleCommentClose();
-                          addComment(cartItem.item, comment);
-                          console.log(cartItems);
-                        }}
-                      >
-                        Done
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
-
-                <div>
-                  <div className="p-5">
-                    <FontAwesomeIcon icon={faTrash} onClick={handleClickOpen} />
-                    <div />
-
-                    <Dialog
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {"Confirm Delete"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          Are you sure you want to delete this item?
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button variant={"secondary"} onClick={handleClose}>
-                          Cancel
-                        </Button>
-                        <Button
-                          variant={"destructive"}
-                          onClick={() => {
-                            handleClose();
-                            removeFromCart(cartItem.item);
-                          }}
-                        >
-                          Yes
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </div>
-                </div>
-              </div>
-            </div>
+              id={cartItem.id}
+              name={cartItem.item.name}
+              price={cartItem.item.price}
+              quantity={cartItem.quantity}
+              comment={cartItem.comment}
+              onTrash={removeFromCart}
+              onComment={addComment}
+            />
           ))}
         </div>
 
@@ -327,40 +163,44 @@ export default function CounterPage(props: { uid: string }) {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className="container fixed right-0 top-0 z-50  h-screen  w-screen justify-center overflow-scroll bg-slate-50 text-black"
+            className="container fixed right-0 top-0 z-50  h-screen  w-screen justify-center overflow-scroll bg-slate-50 text-black "
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
               {"< "}
-              Payment{" "}
-            </div>
-            <div className="text-l m-2 grid w-auto grid-cols-3 gap-2  rounded p-2 text-center font-semibold ">
-              <div className="">Item</div>
-              <div className="">Quantity</div>
-              <div className="">Subtotal</div>
+              Payment
             </div>
 
-            {cartItems.map((cartItem, index) => (
-              <div
-                className=" m-2 grid grid-cols-3 items-center gap-1 rounded-lg border-4  border-gray-100
-                 bg-gray-300 md:text-3xl "
-                key={index}
-              >
-                <div className=" grid grid-rows-2 p-2 text-center ">
-                  <div className="tex-center font-bold">
-                    {cartItem.item.name}
+            <div className="grid grid-cols-1 gap-2">
+              {cartItems.map((cartItem, index) => (
+                <div
+                  className="flex flex-col gap-2 divide-y-2 divide-dashed divide-slate-500 rounded-md bg-gray-300 p-2"
+                  key={index}
+                >
+                  <div className="flex flex-col px-2">
+                    <div className="flex flex-row place-content-between   text-start">
+                      <p className="truncate font-semibold">{`${cartItem.quantity}x ${cartItem.item.name}`}</p>
+
+                      <p className=" font-bold">
+                        {`P ${
+                          Number(cartItem.quantity) *
+                          Number(cartItem.item.price)
+                        }`}
+                      </p>
+                    </div>
+
+                    <p>{`P ${cartItem.item.price}`}</p>
                   </div>
-                  <div>{cartItem.item.price}</div>
-                  <div>{cartItem.comment}</div>
-                </div>
-                <div className="  text-center font-bold  ">
-                  {cartItem.quantity}
-                </div>
 
-                <div className=" text-center font-bold ">
-                  {Number(cartItem.quantity) * Number(cartItem.item.price)}
+                  {cartItem.comment ? (
+                    <div className="flex grow flex-col">
+                      <p className="whitespace-pre-wrap break-words text-sm normal-case">
+                        {cartItem.comment}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
             <div className="grid grid-rows-3 p-4">
               <div className="grid grid-cols-2 font-semibold">
@@ -386,10 +226,11 @@ export default function CounterPage(props: { uid: string }) {
                 <Button
                   variant={"secondary"}
                   onClick={() => {
-                    toggleDiscount(0), setAmountPayable(total - discountAmount);
+                    toggleDiscount(10),
+                      setAmountPayable(total - discountAmount);
                   }}
                 >
-                  0%
+                  10%
                 </Button>
                 <Button
                   variant={"secondary"}
