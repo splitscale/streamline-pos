@@ -25,7 +25,6 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
 
-
 export default function CounterPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -34,7 +33,7 @@ export default function CounterPage() {
   const [comment, setComment] = useState("");
   const [discount, setDiscount] = useState(0);
   const [amountPayable, setAmountPayable] = useState(0);
-  const [receiveAmount,setReceiveAmount] = useState(0)
+  const [receiveAmount, setReceiveAmount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
@@ -107,9 +106,9 @@ export default function CounterPage() {
   const toggleModal3 = () => {
     setIsModalOpen3(!isModalOpen3);
   };
-  const toggleDiscount = (discountAmount: number)=>{
-    setDiscount(discountAmount)
-  }
+  const toggleDiscount = (discountAmount: number) => {
+    setDiscount(discountAmount);
+  };
 
   const mockData = [
     { name: "Item 1", price: 100 },
@@ -124,11 +123,13 @@ export default function CounterPage() {
 
     // More items...
   ];
+
   const {
     data: item,
     isLoading,
     isError,
-  } = api.cashier.getAllItem.useQuery({user_id:"123"});
+  } = api.cashier.getAllItem.useQuery({ user_id: "123" });
+
   const clearCart = () => {
     setCartItems([]);
   };
@@ -139,32 +140,32 @@ export default function CounterPage() {
 
   // clear discount to 0 when done
   const clearDiscountAmount = () => {
-    setDiscount(0)
-  }
+    setDiscount(0);
+  };
   const total = cartItems.reduce((total, cartItem) => {
     return total + Number(cartItem.quantity) * Number(cartItem.item.price);
   }, 0);
 
-  const discountRate = discount/100
+  const discountRate = discount / 100;
   const discountAmount = total * discountRate;
   const discountPayable = total - discountAmount;
   const setValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     setReceiveAmount(value);
- };
+  };
 
- const [showWarning, setShowWarning] = useState(false);
- const checkCartItems = () => {
-  if (cartItems.length === 0) {
-    console.log("Cart is Empty")
-  } else {
-    toggleModal()
-  }
- };
- const addItemOrder = api.cashier.createItemOrder.useMutation();
- const salesOrder = api.cashier.createSale.useMutation();
- const orderCode = orderCodeGenerator();
- const [customerName,setCustomerName] = useState("");
+  const [showWarning, setShowWarning] = useState(false);
+  const checkCartItems = () => {
+    if (cartItems.length === 0) {
+      console.log("Cart is Empty");
+    } else {
+      toggleModal();
+    }
+  };
+  const addItemOrder = api.cashier.createItemOrder.useMutation();
+  const salesOrder = api.cashier.createSale.useMutation();
+  const orderCode = orderCodeGenerator();
+  const [customerName, setCustomerName] = useState("");
   return (
     <>
       <div className="m-2 grid-rows-3 items-center text-black ">
@@ -177,7 +178,7 @@ export default function CounterPage() {
         <div className="grid grid-cols-1 gap-2">
           {cartItems.map((cartItem, index) => (
             <div
-              className=" text-blackgrid grid-cols-3 items-center gap-2 rounded-md bg-gray-200"
+              className=" grid grid-cols-3 items-center gap-2 rounded-md bg-gray-200 text-black"
               key={index}
             >
               <div className="grid grid-rows-2 text-center text-black">
@@ -314,7 +315,7 @@ export default function CounterPage() {
             <Button
               className="hover:bg-pink-600  w-full rounded-md"
               variant="default"
-              onClick={(checkCartItems)}
+              onClick={checkCartItems}
             >
               Proceed to payment
             </Button>
@@ -326,7 +327,7 @@ export default function CounterPage() {
             id="staticModal"
             data-modal-backdrop="static"
             aria-hidden="true"
-            className=" fixed text-black right-0 top-0  z-50  h-screen w-screen justify-center overflow-scroll bg-slate-50"
+            className=" fixed right-0 top-0 z-50  h-screen  w-screen justify-center overflow-scroll bg-slate-50 text-black"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
               {"< "}
@@ -381,11 +382,46 @@ export default function CounterPage() {
               <div className="  m-2 text-end">%</div>
             </div>
             <div className="m-1 grid grid-cols-5 gap-1 rounded-md px-2 text-center font-semibold text-white">
-            <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(0), setAmountPayable(total - discountAmount)}}>0%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(25), setAmountPayable(total - discountAmount)}}>25%</div>
-              <div className="rounded-md bg-pink" onClick={()=>{toggleDiscount(50), setAmountPayable(total - discountAmount)}}>50%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount(75), setAmountPayable(total - discountAmount)}}>75%</div>
-              <div className="rounded-md bg-pink"onClick={()=>{toggleDiscount(100), setAmountPayable(total - discountAmount)}}>100%</div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount(0), setAmountPayable(total - discountAmount);
+                }}
+              >
+                0%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount(25), setAmountPayable(total - discountAmount);
+                }}
+              >
+                25%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount(50), setAmountPayable(total - discountAmount);
+                }}
+              >
+                50%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount(75), setAmountPayable(total - discountAmount);
+                }}
+              >
+                75%
+              </div>
+              <div
+                className="rounded-md bg-pink"
+                onClick={() => {
+                  toggleDiscount(100), setAmountPayable(total - discountAmount);
+                }}
+              >
+                100%
+              </div>
               <div
                 className="rounded-md bg-pink"
                 onClick={() => {
@@ -432,8 +468,10 @@ export default function CounterPage() {
               </div>
             </div>
             <div
-              className="ml-1 mr-1 mb-3 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={()=>{toggleModal2(),setAmountPayable(total - discountAmount)}}
+              className="mb-3 ml-1 mr-1 mt-3 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              onClick={() => {
+                toggleModal2(), setAmountPayable(total - discountAmount);
+              }}
             >
               Receive Payment
             </div>
@@ -457,34 +495,101 @@ export default function CounterPage() {
             <div className="items-center text-center font-semibold text-gray-500">
               Amount Payable
             </div>
-            <div className="p-2 gap-5 grid grid-cols-2 mt-16 items-center justify-center">
-            <div className="">
-            <input className="border-red-100 border-2 w-56" value={receiveAmount} onChange={setValue}></input>
-
-            </div>
-            <div className="bg-pink fles text-xl item-center text-center rounded-md h-auto mx-10 text-white  w-3/4"
-            onClick={()=>{
-              setReceiveAmount(amountPayable)
-            }}
-            >
-              exact
-            </div>
-            </div>
-            <div className="mt-5  ml-2 mr-2 gap-2 grid-row 3 grid text-center font-semibold text-white">
-              <div className="gap-1 grid grid-cols-3 h-10">
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(10)}}>10</div>
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(20)}}>20</div>
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(50)}} >50</div>
+            <div className="mt-16 grid grid-cols-2 items-center justify-center gap-5 p-2">
+              <div className="">
+                <input
+                  className="w-56 border-2 border-red-100"
+                  value={receiveAmount}
+                  onChange={setValue}
+                ></input>
               </div>
-              <div className="gap-1 grid grid-cols-3 h-10">
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(100)}}>100</div>
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(200)}}>200</div>
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(300)}}>300</div>
+              <div
+                className="fles item-center mx-10 h-auto w-3/4 rounded-md bg-pink text-center text-xl  text-white"
+                onClick={() => {
+                  setReceiveAmount(amountPayable);
+                }}
+              >
+                exact
               </div>
-              <div className="gap-1 grid grid-cols-3 h-10 ">
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(400)}}>400</div>
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(500)}}>500</div>
-                <div className="bg-pink rounded-md" onClick={()=>{setReceiveAmount(1000)}}>1000</div>
+            </div>
+            <div className="grid-row  3 ml-2 mr-2 mt-5 grid gap-2 text-center font-semibold text-white">
+              <div className="grid h-10 grid-cols-3 gap-1">
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(10);
+                  }}
+                >
+                  10
+                </div>
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(20);
+                  }}
+                >
+                  20
+                </div>
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(50);
+                  }}
+                >
+                  50
+                </div>
+              </div>
+              <div className="grid h-10 grid-cols-3 gap-1">
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(100);
+                  }}
+                >
+                  100
+                </div>
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(200);
+                  }}
+                >
+                  200
+                </div>
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(300);
+                  }}
+                >
+                  300
+                </div>
+              </div>
+              <div className="grid h-10 grid-cols-3 gap-1 ">
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(400);
+                  }}
+                >
+                  400
+                </div>
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(500);
+                  }}
+                >
+                  500
+                </div>
+                <div
+                  className="rounded-md bg-pink"
+                  onClick={() => {
+                    setReceiveAmount(1000);
+                  }}
+                >
+                  1000
+                </div>
               </div>
             </div>
 
@@ -508,50 +613,57 @@ export default function CounterPage() {
               Done
             </div>
             <div className="mt-56 items-center text-center text-6xl font-bold">
-              ₱ {receiveAmount-discountPayable}
+              ₱ {receiveAmount - discountPayable}
             </div>
             <div className="mb-20 items-center text-center text-xl font-semibold text-gray-500">
               Change
             </div>
-            <input className=" border-red-100 border-2 w-full" placeholder="Customers Name" value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    ></input>
-           
+            <input
+              className=" w-full border-2 border-red-100"
+              placeholder="Customers Name"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+            ></input>
+
             <div
-              className="mt-10 ml-1 mr-1 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
-              onClick={(e)=>{ e.preventDefault(); 
-                
+              className="ml-1 mr-1 mt-10 flex h-10 items-center justify-center rounded-md bg-pink text-xl font-bold text-stone-50"
+              onClick={(e) => {
+                e.preventDefault();
+
                 salesOrder.mutate({
-                  user_id:'123',
+                  user_id: "123",
                   sales_Id: orderCode,
                   customer_name: customerName,
                   cashier_name: "Ferj2",
                   initial_price: total,
                   discount: discount,
                   final_price: discountPayable,
-                  payment:receiveAmount
+                  payment: receiveAmount,
                 });
                 setTimeout(() => {
-                cartItems.forEach((cartItem, index) => {
-                  setTimeout(() => {
-                    addItemOrder.mutate({
-                      sales: {
-                        connect: {
-                          sales_Id: orderCode,
+                  cartItems.forEach((cartItem, index) => {
+                    setTimeout(() => {
+                      addItemOrder.mutate({
+                        sales: {
+                          connect: {
+                            sales_Id: orderCode,
+                          },
                         },
-                      },
-                      name: cartItem.item.name,
-                      price: cartItem.item.price,
-                      quantity: cartItem.quantity,
-                      comment: cartItem.comment,
-                    });
-                  }, index * 500);
-                 });
+                        name: cartItem.item.name,
+                        price: cartItem.item.price,
+                        quantity: cartItem.quantity,
+                        comment: cartItem.comment,
+                      });
+                    }, index * 500);
+                  });
                 }, 1000);
-                
-                
-                toggleModal3(),toggleModal(),toggleModal2(),clearCart(),clearAmountPayable(),clearDiscountAmount()
-              
+
+                toggleModal3(),
+                  toggleModal(),
+                  toggleModal2(),
+                  clearCart(),
+                  clearAmountPayable(),
+                  clearDiscountAmount();
               }}
             >
               DONE
