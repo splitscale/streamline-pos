@@ -11,12 +11,32 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { api } from "~/utils/api";
+import { excelToJSON } from "~/modules/excelManager";
+import _logger from "node_modules/next-auth/utils/logger";
+import { useState, ChangeEvent } from "react";
 
 const formSchema = z.object({
   file: z.string(),
 });
 
-export function FileUploadInput() {
+export interface CallbackValue {
+  name: string;
+  price: number;
+  stock: number;
+}
+
+export function FileUploadInput(props: {
+  submitCallback: (value: CallbackValue) => void;
+}) {
+  const [file, setFile] = useState<File>();
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -28,7 +48,19 @@ export function FileUploadInput() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log("Uploading: " + JSON.stringify(values));
+    _logger.debug("Uploading: " + values.file, null);
+
+    if (file === undefined) return;
+
+    const data = await excelToJSON({ arrayBuffer: await file.arrayBuffer() });
+
+    data.forEach((item) => {
+      props.submitCallback({
+        name: item.name,
+        price: item.price,
+        stock: item.availableUnits,
+      });
+    });
   }
 
   return (
@@ -52,6 +84,7 @@ export function FileUploadInput() {
                     type="file"
                     className="w-full rounded-lg bg-gray-200 text-black"
                     {...field}
+                    onChange={handleFileChange}
                   />
                   <span className="text-sm text-gray-400">
                     File formats: .xlsx, .xls
