@@ -8,7 +8,12 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Card, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DbItem, Inventory } from "./inventory";
 import { Header } from "~/components/header";
@@ -29,34 +34,46 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Button } from "~/components/ui/button";
+import { SalesEntry } from "~/types/global";
+import {
+  mapJsonSalesArr,
+  mapJsonToSalesEntry,
+} from "~/utils/mapJsonToSalesEntry";
 
 export default function POSTabs() {
+  const router = useRouter();
+  const utils = api.useUtils();
   const { data: sessionData } = useSession();
   const res = sessionData as unknown as { id: string };
 
   const [uid, setUid] = useState<string>("");
-  const router = useRouter();
 
   const { data: items } = api.cashier.getAllItem.useQuery({
     user_id: uid,
   });
+
+  const {
+    data: sales,
+    isLoading,
+    isError,
+    isSuccess,
+  } = api.cashier.getAllSales.useQuery({ user_id: uid });
+
+  const salesEntry = () =>
+    isSuccess ? mapJsonSalesArr(JSON.stringify(sales)) : [];
 
   useEffect(() => {
     if (!res) router.push("/");
     if (res) setUid(res.id);
   });
 
-  function handleRedirect() {
-    window.location.reload();
-  }
+  const updateStatus = api.cashier.updateSalesStatus.useMutation({
+    onSuccess() {
+      utils.cashier.invalidate();
+    },
+  });
 
-  const {
-    data: sales,
-    isLoading,
-    isError,
-  } = api.cashier.getAllSales.useQuery({ user_id: uid });
-
-  const updateStatus = api.cashier.updateSalesStatus.useMutation();
   const handleClick = (sales_id: string) => {
     // Call the mutation function here
     console.log("success");
@@ -91,13 +108,7 @@ export default function POSTabs() {
                   <TabsTrigger className="rounded-full" value="dashboard">
                     Dashboard
                   </TabsTrigger>
-                  <TabsTrigger
-                    onClick={() => {
-                      sales;
-                    }}
-                    className="rounded-full"
-                    value="orders"
-                  >
+                  <TabsTrigger className="rounded-full" value="orders">
                     Orders
                   </TabsTrigger>
                   <TabsTrigger className="rounded-full" value="inventory">
@@ -143,75 +154,46 @@ export default function POSTabs() {
                   </div>
                 </TabsContent>
 
-                <TabsContent
-                  value="orders"
-                  className="grid justify-items-center"
-                >
-                  {sales?.map(
-                    (
-                      sales: {
-                        customer_name:
-                          | string
-                          | number
-                          | boolean
-                          | ReactElement<
-                              any,
-                              string | JSXElementConstructor<any>
-                            >
-                          | Iterable<ReactNode>
-                          | ReactPortal
-                          | PromiseLikeOfReactNode
-                          | null
-                          | undefined;
-                        itemOrders: any[];
-                        sales_Id: string;
-                      },
-                      index: Key | null | undefined,
-                    ) => (
+                <TabsContent value="orders">
+                  {salesEntry().length <= 0 ? (
+                    <p className="text-black">No current sales</p>
+                  ) : (
+                    salesEntry().map((sale, index) => (
                       <div key={index}>
-                        <Card className="mb-3 w-64 border border-black">
+                        <Card className="mb-3 w-full max-w-screen-sm border border-black">
                           <CardHeader className="grid">
-                            <CardTitle className="mb-2">
-                              {sales.customer_name}
+                            <CardTitle>
+                              {sale.customer_name.toUpperCase()}
                             </CardTitle>
+                            <CardDescription>Items</CardDescription>
 
-                            {sales.itemOrders.map((item) => (
-                              <div key={index}>
-                                <Card className="bg-gray-300 px-3 py-2  ">
-                                  <div className="grid grid-cols-2 gap-0">
-                                    <div className="w-full self-center text-left font-bold">
-                                      {item.quantity}x {item.name}
-                                    </div>
-                                    <div className="self-center text-right font-bold"></div>
-                                    <div className="self-center text-left">
-                                      {item.comment}
-                                    </div>
-                                  </div>
-                                </Card>
+                            {sale.itemOrders.map((item) => (
+                              <div className="grid grid-cols-1 grid-rows-1 rounded-md bg-gray-200 px-3 py-2">
+                                <p className="text-left font-semibold normal-case">{`${item.quantity}x ${item.name}`}</p>
+                                <div className="pl-4">
+                                  <p className="text-md font-normal normal-case">
+                                    {item.comment ?? ""}
+                                  </p>
+                                </div>
                               </div>
                             ))}
-                            <div
-                              className="rounded-md bg-blue-950 text-center text-white"
+                            <Button
+                              variant={"default"}
                               onClick={() => {
-                                handleClick(sales.sales_Id);
-                                window.location.reload();
+                                handleClick(sale.sales_Id);
                               }}
                             >
-                              DONE
-                            </div>
+                              Done
+                            </Button>
                           </CardHeader>
                         </Card>
                       </div>
-                    ),
+                    ))
                   )}
                 </TabsContent>
 
                 <TabsContent value="inventory">
-                  <Inventory
-                    card={items as DbItem[]}
-                    userId={uid}
-                    doneCallback={handleRedirect}
-                  />
+                  <Inventory card={items as DbItem[]} userId={uid} />
                 </TabsContent>
               </Tabs>
             </div>

@@ -1,16 +1,12 @@
-/* eslint-disable react/jsx-key */
-import { randomUUID } from "crypto";
-import router from "next/router";
-import { OrderCard } from "~/components/OrderCard";
-import { Button } from "~/components/ui/button";
 import {
-  CardTitle,
-  CardDescription,
-  Card,
-  CardHeader,
-} from "~/components/ui/card";
-import { Item, OrderProps } from "~/types/global";
-import { randomOID } from "~/utils/randomOID";
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  PromiseLikeOfReactNode,
+} from "react";
+import { OrderCard } from "~/components/OrderCard";
+import { OrderProps } from "~/types/global";
 
 const mockItems: Item[] = [
   { id: "1", name: "Item A", units: 2 },
@@ -21,7 +17,7 @@ const mockItems: Item[] = [
 const mockOrder1: OrderProps = {
   id: "someid123",
   name: "jane Doe",
-  orderId: randomOID(),
+  orderId: "adnj34uyi78",
   items: mockItems,
   doneCallback: console.log,
 };
@@ -29,14 +25,29 @@ const mockOrder1: OrderProps = {
 const mockOrder2: OrderProps = {
   id: "someid4142",
   name: "John Doe",
-  orderId: randomOID(),
+  orderId: "adf89s74gh",
   items: mockItems,
   doneCallback: console.log,
 };
 
 const orders: OrderProps[] = [mockOrder1, mockOrder2];
 
-export function Orders() {
+interface DbSales {
+  customer_name:
+    | string
+    | number
+    | boolean
+    | ReactElement<any, string | JSXElementConstructor<any>>
+    | Iterable<ReactNode>
+    | ReactPortal
+    | PromiseLikeOfReactNode
+    | null
+    | undefined;
+  itemOrders: any[];
+  sales_Id: string;
+}
+
+export function Orders(props: { sales: DbSales[] }) {
   return (
     <>
       {orders.length !== 0 ? (

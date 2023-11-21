@@ -111,20 +111,6 @@ export default function CounterPage(props: { uid: string }) {
     setDiscount(discountAmount);
   };
 
-  const mockData = [
-    { name: "Item 1", price: 100 },
-    { name: "Item 2", price: 200 },
-    { name: "Item 3", price: 300 },
-    { name: "Item 1", price: 100 },
-    { name: "Item 2", price: 200 },
-    { name: "Item 3", price: 300 },
-    { name: "Item 1", price: 100 },
-    { name: "Item 2", price: 200 },
-    { name: "Item 3", price: 300 },
-
-    // More items...
-  ];
-
   const {
     data: item,
     isLoading,
@@ -163,8 +149,21 @@ export default function CounterPage(props: { uid: string }) {
       toggleModal();
     }
   };
-  const addItemOrder = api.cashier.createItemOrder.useMutation();
-  const salesOrder = api.cashier.createSale.useMutation();
+
+  const utils = api.useUtils();
+
+  const addItemOrder = api.cashier.createItemOrder.useMutation({
+    onSuccess() {
+      utils.cashier.invalidate();
+    },
+  });
+
+  const salesOrder = api.cashier.createSale.useMutation({
+    onSuccess() {
+      utils.cashier.invalidate();
+    },
+  });
+
   const orderCode = orderCodeGenerator();
   const [customerName, setCustomerName] = useState("");
   return (
@@ -631,10 +630,10 @@ export default function CounterPage(props: { uid: string }) {
                     e.preventDefault();
 
                     salesOrder.mutate({
-                      user_id: "123",
+                      user_id: props.uid,
                       sales_Id: orderCode,
                       customer_name: customerName,
-                      cashier_name: "Ferj2",
+                      cashier_name: "default",
                       initial_price: total,
                       discount: discount,
                       final_price: discountPayable,
@@ -666,7 +665,7 @@ export default function CounterPage(props: { uid: string }) {
                       clearDiscountAmount();
                   }}
                 >
-                  Nice
+                  Done
                 </Button>
               </div>
             </div>

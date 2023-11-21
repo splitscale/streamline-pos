@@ -24,8 +24,8 @@ const itemOrderInput = z.object({
 const sales = z.object({
   sales_Id: z.string().min(1),
   user_id: z.string().min(1),
-  customer_name: z.string().min(1),
-  cashier_name: z.string().min(1),
+  customer_name: z.string().optional(),
+  cashier_name: z.string().optional(),
   initial_price: z.number().min(0),
   discount: z.number().min(0),
   final_price: z.number().min(0),
@@ -93,9 +93,9 @@ export const cashierRouter = createTRPCRouter({
     return ctx.db.sales.create({
       data: {
         user_id: input.user_id,
-        customer_name: input.customer_name,
+        customer_name: input.customer_name ?? "",
         sales_Id: input.sales_Id,
-        cashier_name: input.cashier_name,
+        cashier_name: input.cashier_name ?? "",
         initial_price: input.initial_price,
         discount_percentage: input.discount,
         final_price: input.final_price,

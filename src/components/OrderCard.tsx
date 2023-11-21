@@ -44,4 +44,29 @@ function RenderItem(props: Item) {
     </div>
   );
 }
-  
+
+let x = [
+  {
+    id: "clp7w7don0000x0mw3en8ufoi",
+    sales_Id: "af7329dc-223f-4dd6-9a43-8804f2172118",
+    user_id: "232090d3-3f78-4564-bfdb-34ab2b0cfc59",
+    customer_name: "joe joe",
+    cashier_name: "default",
+    initial_price: 237,
+    discount_percentage: 0,
+    final_price: 237,
+    payment: 237,
+    sales_status: false,
+    sales_date: "2023-11-21T05:25:59.687Z",
+    itemOrders: [
+      {
+        itemOrder_id: "clp7w7eid0001x0mwueaa7n9j",
+        name: "Shawarma Sisig",
+        price: 79,
+        quantity: 3,
+        comment: null,
+        sales_Id: "af7329dc-223f-4dd6-9a43-8804f2172118",
+      },
+    ],
+  },
+];

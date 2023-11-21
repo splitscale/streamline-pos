@@ -23,14 +23,19 @@ export interface DbItem {
 interface Props {
   card: DbItem[];
   userId?: string;
-  doneCallback?: () => void;
 }
 
-export function Inventory({ card = [], userId, doneCallback }: Props) {
+export function Inventory({ card = [], userId }: Props) {
   const totalStock = card.reduce((total, item) => total + item.stock, 0);
   const numberOfItems = card.length;
 
-  const dbItem = api.cashier.createItem.useMutation();
+  const utils = api.useUtils();
+
+  const dbItem = api.cashier.createItem.useMutation({
+    onSuccess() {
+      utils.cashier.invalidate();
+    },
+  });
 
   const handleSubmit = (values: CallbackValue[]) => {
     if (!userId || userId.trim() === "") {
@@ -46,9 +51,6 @@ export function Inventory({ card = [], userId, doneCallback }: Props) {
         stock: item.stock,
       });
     });
-
-    alert("Upload completed!");
-    if (doneCallback) doneCallback();
   };
 
   return (
