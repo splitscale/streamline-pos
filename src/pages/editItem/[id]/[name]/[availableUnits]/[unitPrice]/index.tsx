@@ -8,9 +8,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 export default function EditItem() {
-  const { id, name, availableUnits, unitPrice } = useParams();
   const router = useRouter();
-
   const utils = api.useUtils();
   const { data: sessionData } = useSession();
   const res = sessionData as unknown as { id: string };
@@ -19,6 +17,13 @@ export default function EditItem() {
     if (!res) router.push("/");
     if (res) setUid(res.id);
   });
+
+  const { id, name, availableUnits, unitPrice } = useParams() || {
+    id: "",
+    name: "",
+    availableUnits: "0",
+    unitPrice: "0",
+  };
 
   const dbItem = api.cashier.updateItem.useMutation({
     onSuccess() {
