@@ -10,7 +10,7 @@ import { cashierRouter } from "./routers/cashierRoute";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
-  cashier:cashierRouter
+  cashier: cashierRouter,
 });
 
 // export type definition of API

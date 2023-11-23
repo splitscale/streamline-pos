@@ -5,14 +5,14 @@ export default function SearchBar() {
       <form>
         <label
           htmlFor="default-search"
-          className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="sr-only text-sm font-medium text-gray-900 dark:text-white"
         >
           Search
         </label>
-        <div className="relative m-2 mt-5">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <div className="relative ">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5">
             <svg
-              className="h-4 w-4 text-gray-500 dark:text-gray-400"
+              className="h-3 w-3 text-gray-500 dark:text-gray-400"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

@@ -10,9 +10,7 @@ export default function Admin() {
   const router = useRouter();
 
   function isNormalUser() {
- 
-    if (sessionData && sessionData.user.name !== "gigachad")
-      return true;
+    if (sessionData && sessionData.user.name !== "gigachad") return true;
   }
 
   useEffect(() => {

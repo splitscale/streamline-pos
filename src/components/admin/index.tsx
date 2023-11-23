@@ -1,15 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import users from "~/pages/api/auth/users";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 
@@ -23,7 +14,7 @@ export interface Users {
   email: null;
 }
 
-export default function DisplayUserList(userData: any) {
+export default function DisplayUserList() {
   const { data: sessionData } = useSession();
 
   const { data: users } = api.post.getUsers.useQuery(
@@ -56,5 +47,3 @@ export default function DisplayUserList(userData: any) {
     </>
   );
 }
-
-// name id fname lname

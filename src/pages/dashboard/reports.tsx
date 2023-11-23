@@ -1,6 +1,6 @@
 import { EarningReportProps } from "~/types/global";
 
-export function EarningsReport(props: EarningReportProps) {
+export default function EarningsReport(props: EarningReportProps) {
   return (
     <>
       <div className="grid grid-rows-2 gap-2">
