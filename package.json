@@ -14,6 +14,7 @@
     "test:ci": "jest --ci"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.27.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
