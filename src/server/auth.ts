@@ -52,43 +52,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   secret: env.NEXTAUTH_SECRET,
-  providers: [
-    CredentialsProvider({
-      name: "Admin Privileges",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "chad" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        console.log("[Environment] ", env.NODE_ENV);
-
-        console.log("[Auth] Attempting to login as SuperUser");
-
-        if (!credentials) return null;
-
-        const username = credentials["username"];
-        const password = credentials["password"];
-
-        const isAuthorized =
-          username === env.SUPER_ADMIN_USERNAME &&
-          password === env.SUPER_ADMIN_PASSWORD;
-
-        if (!isAuthorized) {
-          // Return null if user data could not be retrieved
-          return null;
-        }
-
-        const user = {
-          id: "sudo",
-          name: env.SUPER_ADMIN_USERNAME,
-        };
-
-        console.log("[Auth] ", "Super admin Authorized");
-
-        return user;
-      },
-    }),
-  ],
+  providers: [],
 };
 
 /**
