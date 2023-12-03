@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
+import { DbItem } from "~/pages/inventory";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 interface Props {
   card:
@@ -11,22 +13,33 @@ interface Props {
         stock: number;
       }[]
     | undefined;
-  addToCart: (item: { name: string; price: number }) => void;
+  addToCart: (item: DbItem) => void;
 }
 
 export default function ItemCard({ addToCart, card = [] }: Props) {
   const mappedDivs = card.map((item, index) => (
     <div
       key={index}
-      onClick={() => addToCart({ name: item.name, price: Number(item.price) })}
-      className=" h-24 rounded-md bg-pink text-center sm:aspect-square sm:h-auto md:h-auto"
+      onClick={() => addToCart(item)}
+      className="flex aspect-[5/3] flex-col place-content-around rounded-md bg-pink p-2 text-center"
     >
-      <div className="mt-4 grid grid-rows-2 font-bold text-white md:mt-16 md:text-6xl">
-        <div>{item.name}</div>
-        <div>{item.price}</div>
+      <div className="font-semibold uppercase text-white">
+        <p>{item.name}</p>
+      </div>
+
+      <div className="flex flex-row place-content-between text-xs text-primary-foreground">
+        <p>{`P ${item.price}`}</p>
+        <p>{`Stock: ${item.stock}`}</p>
       </div>
     </div>
   ));
 
-  return <div className="grid grid-cols-3 gap-2 p-2">{mappedDivs}</div>;
+  return (
+    <ScrollArea className="my-2 whitespace-nowrap rounded-md">
+      <div className="relative z-0 grid auto-cols-auto grid-flow-col grid-rows-4 gap-2">
+        {mappedDivs}
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+  );
 }

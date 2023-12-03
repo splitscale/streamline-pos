@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { api } from "~/utils/api";
 import { Button } from "~/components/ui/button";
-import { useSession } from "next-auth/react";
 import router from "next/router";
 
 export default function AddItem() {
   const utils = api.useUtils();
-  const { data: sessionData } = useSession();
-  const res = sessionData as unknown as { id: string };
-  const [uid, setUid] = useState<string>("");
-  useEffect(() => {
-    if (!res) router.push("/");
-    if (res) setUid(res.id);
-  });
 
   const dbItem = api.cashier.createItem.useMutation({
     onSuccess() {
@@ -26,11 +17,6 @@ export default function AddItem() {
   const [itemStock, setItemStock] = useState("");
 
   const handleSubmit = () => {
-    if (!uid || uid.trim() === "") {
-      alert("Please Login");
-      return;
-    }
-
     // Validate input values (add more validation if needed)
     if (!itemName || !itemPrice || !itemStock) {
       alert("Please fill in all fields");
@@ -38,7 +24,6 @@ export default function AddItem() {
     }
 
     dbItem.mutate({
-      user_id: uid,
       name: itemName,
       price: parseFloat(itemPrice),
       stock: parseInt(itemStock, 10),

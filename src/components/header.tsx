@@ -1,5 +1,4 @@
-import { signOut } from "next-auth/react";
-import { Button } from "./ui/button";
+import { UserButton } from "@clerk/nextjs";
 
 export function Header() {
   return (
@@ -9,13 +8,7 @@ export function Header() {
         <p className="text-xs text-black">By Splitscale Systems</p>
       </div>
 
-      <Button
-        className="font-semibold text-black"
-        variant="ghost"
-        onClick={() => void signOut({ callbackUrl: "/" })}
-      >
-        Sign out
-      </Button>
+      <UserButton afterSignOutUrl="/" />
     </div>
   );
 }

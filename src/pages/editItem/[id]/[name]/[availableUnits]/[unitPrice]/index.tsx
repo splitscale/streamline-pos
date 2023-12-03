@@ -3,26 +3,18 @@
 import React, { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { Button } from "~/components/ui/button";
-import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 export default function EditItem() {
   const router = useRouter();
   const utils = api.useUtils();
-  const { data: sessionData } = useSession();
-  const res = sessionData as unknown as { id: string };
-  const [uid, setUid] = useState<string>("");
-  useEffect(() => {
-    if (!res) router.push("/");
-    if (res) setUid(res.id);
-  });
 
   const { id, name, availableUnits, unitPrice } = useParams() || {
     id: "",
     name: "",
-    availableUnits: "0",
-    unitPrice: "0",
+    availableUnits: "",
+    unitPrice: "",
   };
 
   const dbItem = api.cashier.updateItem.useMutation({
@@ -40,11 +32,6 @@ export default function EditItem() {
   );
 
   const handleSubmit = () => {
-    if (!uid || uid.trim() === "") {
-      alert("Please Login");
-      return;
-    }
-
     // Validate input values (add more validation if needed)
     if (!itemName || !itemPrice || !itemStock) {
       alert("Please fill in all fields");
@@ -56,7 +43,6 @@ export default function EditItem() {
       name: itemName,
       price: itemPrice,
       stock: itemStock,
-      user_id: uid,
     });
 
     router.back();
@@ -96,7 +82,7 @@ export default function EditItem() {
                   id="price"
                   className="input-field mx-auto w-full rounded bg-gray-300 p-2"
                   placeholder="Price"
-                  value={itemPrice}
+                  value={itemPrice === 0 ? "" : itemPrice}
                   onChange={(e) => setItemPrice(Number(e.target.value))}
                 />
               </div>
@@ -107,7 +93,7 @@ export default function EditItem() {
                   id="quantity"
                   className="input-field mx-auto w-full rounded bg-gray-300 p-2"
                   placeholder="Stock Quantity"
-                  value={itemStock}
+                  value={itemStock === 0 ? "" : itemStock}
                   onChange={(e) => setItemStock(Number(e.target.value))}
                 />
               </div>
