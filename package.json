@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build --no-lint",
+    "build:dev": "next build --no-lint",
+    "build": "npx prisma db push && npx prisma generate && npx next build --no-lint",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "dev": "next dev",
