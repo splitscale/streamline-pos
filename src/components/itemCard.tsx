@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+
 import { DbItem } from "~/pages/inventory";
-import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 interface Props {
   card:
@@ -21,10 +20,10 @@ export default function ItemCard({ addToCart, card = [] }: Props) {
     <div
       key={index}
       onClick={() => addToCart(item)}
-      className="flex aspect-[5/3] flex-col place-content-around rounded-md bg-pink p-2 text-center"
+      className="flex h-24 min-h-full w-28 flex-col place-content-around rounded-md bg-pink p-2 text-center"
     >
-      <div className="font-semibold uppercase text-white">
-        <p>{item.name}</p>
+      <div className="font-semibold uppercase text-white ">
+        <p className="whitespace-normal break-words">{item.name}</p>
       </div>
 
       <div className="flex flex-row place-content-between text-xs text-primary-foreground">
@@ -34,12 +33,5 @@ export default function ItemCard({ addToCart, card = [] }: Props) {
     </div>
   ));
 
-  return (
-    <ScrollArea className="my-2 whitespace-nowrap rounded-md">
-      <div className="relative z-0 grid auto-cols-auto grid-flow-col grid-rows-4 gap-2">
-        {mappedDivs}
-      </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
-  );
+  return mappedDivs;
 }

@@ -13,8 +13,11 @@ import { orderCodeGenerator } from "~/components/randomCodeGen";
 import { Input } from "~/components/ui/input";
 import { CashierCard } from "~/components/cashierCard";
 import { DbItem } from "../inventory";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import { CartItemType } from "~/types/global";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { ButtonLoading } from "~/components/ButtonLoading";
+import { LoadingDialog } from "~/components/loadingDialog";
 
 export default function CounterPage() {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -24,10 +27,12 @@ export default function CounterPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const updateStock = api.cashier.updateSalesStock.useMutation({
     onSuccess() {
       utils.cashier.invalidate();
+      setIsLoading(false);
     },
   });
 
@@ -85,6 +90,7 @@ export default function CounterPage() {
   const toggleModal3 = () => {
     setIsModalOpen3(!isModalOpen3);
   };
+
   const toggleDiscount = (discountAmount: number) => {
     setDiscount(discountAmount);
   };
@@ -130,23 +136,91 @@ export default function CounterPage() {
   const addItemOrder = api.cashier.createItemOrder.useMutation({
     onSuccess() {
       utils.cashier.invalidate();
+      setIsLoading(false);
     },
   });
 
   const salesOrder = api.cashier.createSale.useMutation({
     onSuccess() {
       utils.cashier.invalidate();
+      setIsLoading(false);
     },
   });
 
   const orderCode = orderCodeGenerator();
   const [customerName, setCustomerName] = useState("");
+
+  function handleSubmit() {
+    setIsLoading(true);
+
+    salesOrder.mutate({
+      sales_Id: orderCode,
+      customer_name: customerName,
+      cashier_name: "default",
+      initial_price: total,
+      discount: discount,
+      final_price: discountPayable,
+      payment: receiveAmount,
+    });
+
+    setTimeout(() => {
+      cartItems.forEach((cartItem, index) => {
+        console.log("[CART ITEMS] ", cartItem);
+        setTimeout(() => {
+          console.log("[ORDER CODE 2] ", orderCode);
+
+          addItemOrder.mutate({
+            sales: {
+              connect: {
+                sales_Id: orderCode,
+              },
+            },
+            name: cartItem.name,
+            price: cartItem.price,
+            quantity: cartItem.quantity ?? 1,
+            comment: cartItem.comment ?? "",
+          });
+        }, index * 500);
+      });
+    }, 1000);
+
+    cartItems.forEach((cartItem, index) => {
+      setTimeout(() => {
+        handleStockDecrease(
+          cartItem.items_id,
+          cartItem.stock,
+          cartItem.quantity ?? 1,
+        );
+      }, index * 500);
+    });
+
+    toggleModal3();
+    toggleModal();
+    toggleModal2();
+    clearCart();
+    clearAmountPayable();
+    clearDiscountAmount();
+  }
+
+  const [searchedItems, setSearchedItems] = useState<DbItem[]>([]);
+
   return (
     <>
       <div className="m-2 grid-rows-3 items-center text-black ">
-        <SearchBar />
+        <SearchBar input={item ?? []} output={setSearchedItems} />
 
-        <ItemCard addToCart={addToCart} card={item} />
+        <ScrollArea className="my-2 whitespace-nowrap rounded-md ">
+          <div
+            className="grid grid-flow-col auto-rows-auto gap-2 overflow-x-auto"
+            style={{ gridTemplateRows: "repeat(3, auto)" }}
+          >
+            <ItemCard
+              addToCart={addToCart}
+              card={searchedItems.length !== 0 ? searchedItems : item}
+            />
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
 
         <hr className="m-4 h-px bg-gray-200  dark:bg-gray-700"></hr>
 
@@ -502,57 +576,10 @@ export default function CounterPage() {
                     variant="default"
                     className="w-full"
                     onClick={(e) => {
-                      console.log("[ORDER CODE 1] ", orderCode);
                       e.preventDefault();
-
-                      salesOrder.mutate({
-                        sales_Id: orderCode,
-                        customer_name: customerName,
-                        cashier_name: "default",
-                        initial_price: total,
-                        discount: discount,
-                        final_price: discountPayable,
-                        payment: receiveAmount,
-                      });
-
-                      setTimeout(() => {
-                        cartItems.forEach((cartItem, index) => {
-                          console.log("[CART ITEMS] ", cartItem);
-                          setTimeout(() => {
-                            console.log("[ORDER CODE 2] ", orderCode);
-
-                            addItemOrder.mutate({
-                              sales: {
-                                connect: {
-                                  sales_Id: orderCode,
-                                },
-                              },
-                              name: cartItem.name,
-                              price: cartItem.price,
-                              quantity: cartItem.quantity ?? 1,
-                              comment: cartItem.comment ?? "",
-                            });
-                          }, index * 500);
-                        });
-                      }, 1000);
-
-                      toggleModal3(),
-                        toggleModal(),
-                        toggleModal2(),
-                        clearCart(),
-                        clearAmountPayable(),
-                        clearDiscountAmount();
-
-                      cartItems.forEach((cartItem, index) => {
-                        setTimeout(() => {
-                          handleStockDecrease(
-                            cartItem.items_id,
-                            cartItem.stock,
-                            cartItem.quantity ?? 1,
-                          );
-                        }, index * 500);
-                      });
+                      handleSubmit();
                     }}
+                    disabled={isLoading}
                   >
                     Done
                   </Button>
@@ -561,6 +588,8 @@ export default function CounterPage() {
             </div>
           </div>
         )}
+
+        {isLoading && <LoadingDialog />}
       </div>
     </>
   );

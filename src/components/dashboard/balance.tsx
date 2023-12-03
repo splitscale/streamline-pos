@@ -5,7 +5,7 @@ export default function DashboardBalance() {
     <>
       <div className="grid grid-rows-2 rounded-md bg-[#D9D9D9] text-black">
         <div className="mx-4 grid grid-rows-2">
-          <div className="text-xl font-bold">P25, 000.00</div>
+          <div className="text-xl font-bold">Coming soon...</div>
           <div className="text-xs font-bold">Cashbox Balance</div>
         </div>
         <div className="mx-4 grid grid-cols-2 gap-2">

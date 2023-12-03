@@ -1,44 +1,59 @@
 "use client";
-export default function SearchBar() {
+
+import { useState, useEffect } from "react";
+import { Input } from "./ui/input";
+import { DbItem } from "~/pages/inventory";
+import Fuse from "fuse.js";
+
+function useFuzzySearch(items: DbItem[]) {
+  // The Fuse.js options
+  const options = {
+    keys: ["name"],
+    includeScore: true,
+  };
+
+  // Create the Fuse.js instance
+  return new Fuse(items, options);
+}
+
+export default function SearchBar(props: {
+  input: DbItem[];
+  output: (items: DbItem[]) => void;
+}) {
+  const [input, setInput] = useState<string>("");
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  );
+
+  const engine = useFuzzySearch(props.input);
+
+  useEffect(() => {
+    return () => {
+      if (typingTimeout) clearTimeout(typingTimeout);
+    };
+  }, [typingTimeout]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    setTypingTimeout(
+      setTimeout(() => {
+        const res = engine.search(e.target.value);
+        const out = res.map((v) => v.item);
+
+        props.output(out);
+      }, 1000),
+    );
+  };
+
   return (
-    <>
-      <form>
-        <label
-          htmlFor="default-search"
-          className="sr-only text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Search
-        </label>
-        <div className="relative ">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5">
-            <svg
-              className="h-3 w-3 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="-5block w-full rounded-full border border-gray-300 
-        bg-gray-50 p-4 pl-10 text-sm text-gray-900 
-     dark:bg-gray-300 dark:text-white 
-        dark:placeholder-gray-400 "
-            placeholder="Search"
-            required
-          />
-        </div>
-      </form>
-    </>
+    <Input
+      type="text"
+      placeholder="Search"
+      value={input}
+      onChange={handleInputChange}
+    />
   );
 }
