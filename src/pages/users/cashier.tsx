@@ -95,7 +95,7 @@ export default function CounterPage() {
     setDiscount(discountAmount);
   };
 
-  const { data: item } = api.cashier.getAllItem.useQuery();
+  const { data: item, isFetching } = api.cashier.getAllItem.useQuery();
 
   const clearCart = () => {
     setCartItems([]);
@@ -214,10 +214,14 @@ export default function CounterPage() {
             className="grid grid-flow-col auto-rows-auto gap-2 overflow-x-auto"
             style={{ gridTemplateRows: "repeat(3, auto)" }}
           >
-            <ItemCard
-              addToCart={addToCart}
-              card={searchedItems.length !== 0 ? searchedItems : item}
-            />
+            {isFetching ? (
+              <p>Loading items...</p>
+            ) : (
+              <ItemCard
+                addToCart={addToCart}
+                card={searchedItems.length !== 0 ? searchedItems : item}
+              />
+            )}
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>

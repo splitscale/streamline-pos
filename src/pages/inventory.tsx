@@ -24,7 +24,8 @@ export interface DbItem {
 export default function Inventory() {
   const router = useRouter();
 
-  const { data: inventoryItems } = api.cashier.getAllInventoryItems.useQuery();
+  const { data: inventoryItems, isFetching } =
+    api.cashier.getAllInventoryItems.useQuery();
 
   const totalStock = inventoryItems?.reduce(
     (total, item) => total + item.stock,
@@ -79,17 +80,21 @@ export default function Inventory() {
               </Button>
             </div>
             {/* Item list */}
-            {inventoryItems?.map((item, index) => (
-              <div className="p-2">
-                <BoxCard
-                  key={index}
-                  id={item.items_id}
-                  name={item.name}
-                  availableUnits={item.stock}
-                  unitPrice={item.price}
-                />
-              </div>
-            ))}
+            {isFetching ? (
+              <p>Loading...</p>
+            ) : (
+              inventoryItems?.map((item, index) => (
+                <div className="p-2">
+                  <BoxCard
+                    key={index}
+                    id={item.items_id}
+                    name={item.name}
+                    availableUnits={item.stock}
+                    unitPrice={item.price}
+                  />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

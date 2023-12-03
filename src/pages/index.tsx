@@ -27,7 +27,7 @@ export default function POSTabs() {
   const utils = api.useUtils();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: sales } = api.cashier.getAllSales.useQuery();
+  const { data: sales, isFetching } = api.cashier.getAllSales.useQuery();
   const { data: transactions } = api.cashier.getAllTransactions.useQuery();
 
   const updateStatus = api.cashier.updateSalesStatus.useMutation({
@@ -129,7 +129,9 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="orders">
-                {sales ? (
+                {isFetching ? (
+                  <p className="text-black">Loading...</p>
+                ) : sales ? (
                   sales.length === 0 ? (
                     <p className="text-black">No current sales</p>
                   ) : (
