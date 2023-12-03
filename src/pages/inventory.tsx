@@ -23,10 +23,9 @@ export interface DbItem {
 
 interface Props {
   card: DbItem[];
-  userId?: string;
 }
 
-export default function Inventory({ card = [], userId }: Props) {
+export default function Inventory({ card = [] }: Props) {
   const router = useRouter();
 
   const totalStock = card.reduce((total, item) => total + item.stock, 0);
@@ -41,14 +40,8 @@ export default function Inventory({ card = [], userId }: Props) {
   });
 
   const handleSubmit = (values: CallbackValue[]) => {
-    if (!userId || userId.trim() === "") {
-      alert("Please Login");
-      return;
-    }
-
     values.forEach((item) => {
       dbItem.mutate({
-        user_id: userId,
         name: item.name,
         price: item.price,
         stock: item.stock,

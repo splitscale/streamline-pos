@@ -13,7 +13,7 @@ import { orderCodeGenerator } from "~/components/randomCodeGen";
 import { Input } from "~/components/ui/input";
 import { CashierCard } from "~/components/cashierCard";
 
-export default function CounterPage(props: { uid: string }) {
+export default function CounterPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [discount, setDiscount] = useState(0);
   const [amountPayable, setAmountPayable] = useState(0);
@@ -71,11 +71,7 @@ export default function CounterPage(props: { uid: string }) {
     setDiscount(discountAmount);
   };
 
-  const {
-    data: item,
-    isLoading,
-    isError,
-  } = api.cashier.getAllItem.useQuery({ user_id: props.uid });
+  const { data: item } = api.cashier.getAllItem.useQuery();
 
   const clearCart = () => {
     setCartItems([]);
@@ -499,7 +495,6 @@ export default function CounterPage(props: { uid: string }) {
                       e.preventDefault();
 
                       salesOrder.mutate({
-                        user_id: props.uid,
                         sales_Id: orderCode,
                         customer_name: customerName,
                         cashier_name: "default",

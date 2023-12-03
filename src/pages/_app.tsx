@@ -33,6 +33,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           card: "bg-[#fafafa]",
         },
       }}
+      {...pageProps}
     >
       <Component
         className={cn(

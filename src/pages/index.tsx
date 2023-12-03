@@ -6,42 +6,27 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import Inventory, { DbItem } from "./inventory";
+import Inventory from "./inventory";
 import { Header } from "~/components/header";
 import CounterPage from "./users/cashier";
 import { api } from "~/utils/api";
 import DashboardBalance from "~/components/dashboard/balance";
 import DashboardMenu from "~/components/dashboard/dashboardMenuButton";
-import ReceiveTransaction from "~/components/dashboard/receive";
-import CashOutTransaction from "~/components/dashboard/cashout";
-import CashInTransaction from "~/components/dashboard/cashin";
-import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { mapJsonSalesArr } from "~/utils/mapJsonToSalesEntry";
-import { useUser } from "@clerk/nextjs";
+
+import { TransactionHistoryCard } from "~/components/dashboard/transaction";
+import Image from "next/image";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { useRouter } from "next/navigation";
 
 export default function POSTabs() {
+  const router = useRouter();
   const utils = api.useUtils();
-  const [uid, setUid] = useState<string>("");
-  const { isLoaded, user } = useUser();
 
-  useEffect(() => {
-    if (isLoaded && user) setUid(user.id);
-  });
-
-  const { data: items } = api.cashier.getAllItem.useQuery({
-    user_id: uid,
-  });
-
-  const {
-    data: sales,
-    isLoading,
-    isError,
-    isSuccess,
-  } = api.cashier.getAllSales.useQuery({ user_id: uid });
-
-  const salesEntry = () =>
-    isSuccess ? mapJsonSalesArr(JSON.stringify(sales)) : [];
+  const { data: inventoryItems } = api.cashier.getAllItem.useQuery();
+  const { data: sales } = api.cashier.getAllSales.useQuery();
+  const { data: transactions } = api.cashier.getAllTransactions.useQuery();
 
   const updateStatus = api.cashier.updateSalesStatus.useMutation({
     onSuccess() {
@@ -91,7 +76,7 @@ export default function POSTabs() {
 
               <TabsContent value="pos">
                 {/* POS */}
-                <CounterPage uid={uid} />
+                <CounterPage />
               </TabsContent>
 
               <TabsContent value="dashboard">
@@ -101,35 +86,53 @@ export default function POSTabs() {
                 {/* Grid of buttons */}
                 <DashboardMenu />
                 {/* Powered by Splitscale */}
-                <div className="grid h-14 grid-cols-4 rounded-md bg-black">
-                  <div className="col-span-1 ml-2 mt-1 text-xs">Powered by</div>
-                  <div className="col-span-3 flex items-center text-lg font-semibold">
-                    Splitscale Systems
+                <div className="flex h-14 flex-row  rounded-md bg-[#131313]">
+                  <div className="p-2 text-xs">Powered by</div>
+                  <div className="flex  grow px-16">
+                    <Image
+                      alt="Splitscale systems banner"
+                      src={"/splitscale-banner.png"}
+                      className="aspect-auto h-full w-fit object-cover"
+                      width={300}
+                      height={50}
+                    />
                   </div>
                 </div>
+
                 {/* Invoice */}
-                <div className="mt-3 flex flex-col rounded-md bg-[#D9D9D9] p-3 text-black">
+                <div className="mt-3 flex flex-col rounded-md bg-secondary p-3 text-primary">
                   {/* Transaction */}
-                  <div className="grid grid-cols-2">
-                    <div className="font-semibold">Transactions</div>
-                    <div className="text-end text-xs text-[#FC7070]">
+                  <div className="flex-rows flex place-content-between">
+                    <div className="text-lg font-semibold">Transactions</div>
+                    <Button
+                      onClick={() => router.push("/transactions")}
+                      variant={"secondary"}
+                      className="w-fit"
+                    >
                       See all
-                    </div>
+                    </Button>
                   </div>
+
+                  <Separator className="my-2" />
                   {/* Receive */}
-                  <ReceiveTransaction />
+                  <ScrollArea className="h-40 w-full whitespace-nowrap rounded-md">
+                    {transactions?.map((transaction, index) => (
+                      <div key={index}>
+                        <TransactionHistoryCard {...transaction} />
+                      </div>
+                    ))}
+                  </ScrollArea>
+
                   {/* Cash out */}
-                  <CashOutTransaction />
+                  {/* <CashOutTransaction /> */}
                   {/* Cash in */}
-                  <CashInTransaction />
+                  {/* <CashInTransaction /> */}
                 </div>
               </TabsContent>
 
               <TabsContent value="orders">
-                {salesEntry().length <= 0 ? (
-                  <p className="text-black">No current sales</p>
-                ) : (
-                  salesEntry().map((sale, index) => (
+                {sales ? (
+                  sales?.map((sale, index) => (
                     <div key={index}>
                       <Card className="mb-3 w-full max-w-screen-sm border border-black">
                         <CardHeader className="grid">
@@ -160,11 +163,13 @@ export default function POSTabs() {
                       </Card>
                     </div>
                   ))
+                ) : (
+                  <p className="text-black">No current sales</p>
                 )}
               </TabsContent>
 
               <TabsContent value="inventory">
-                <Inventory card={items as DbItem[]} userId={uid} />
+                <Inventory card={inventoryItems ?? []} />
               </TabsContent>
             </Tabs>
           </div>

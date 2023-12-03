@@ -3,8 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
+import { DbItem } from "~/pages/inventory";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { mapJsonSalesArr } from "~/utils/mapJsonToSalesEntry";
+import { parseSales } from "~/utils/parseSales";
 const itemOrderInput = z.object({
   name: z.string().min(1),
   price: z.number().min(0),
@@ -18,7 +21,6 @@ const itemOrderInput = z.object({
 });
 const sales = z.object({
   sales_Id: z.string().min(1),
-  user_id: z.string().min(1),
   customer_name: z.string().optional(),
   cashier_name: z.string().optional(),
   initial_price: z.number().min(0),
@@ -31,14 +33,9 @@ const saleIsDone = z.object({
   sales_status: z.boolean(),
 });
 const item = z.object({
-  user_id: z.string().min(1),
   name: z.string().min(1),
   price: z.number().min(0),
   stock: z.number().min(0),
-});
-
-const user_id = z.object({
-  user_id: z.string().min(1),
 });
 
 const item_id = z.object({
@@ -47,30 +44,27 @@ const item_id = z.object({
 
 export const cashierRouter = createTRPCRouter({
   createItem: publicProcedure.input(item).mutation(async ({ ctx, input }) => {
-    // simulate a slow db call
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
     return ctx.db.items.create({
       data: {
-        user_id: input.user_id,
+        user_id: ctx.user?.id ?? "",
         name: input.name,
         price: input.price,
         stock: input.stock,
       },
     });
   }),
-  getAllItem: publicProcedure.input(user_id).query(({ ctx, input }) => {
-    return ctx.db.items.findMany({
-      where: { user_id: input.user_id },
+  getAllItem: publicProcedure.query(async ({ ctx }) => {
+    const inventoryItems = await ctx.db.items.findMany({
+      where: { user_id: ctx.user?.id ?? "" },
     });
+
+    const dbItems = inventoryItems as DbItem[];
+    return dbItems.length !== 0 ? dbItems : [];
   }),
 
   createItemOrder: publicProcedure
     .input(itemOrderInput)
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
       return ctx.db.itemOrder.create({
         data: {
           name: input.name,
@@ -87,11 +81,9 @@ export const cashierRouter = createTRPCRouter({
     }),
 
   createSale: publicProcedure.input(sales).mutation(async ({ ctx, input }) => {
-    // simulate a slow db call
-    await new Promise((resolve) => setTimeout(resolve, 200));
     return ctx.db.sales.create({
       data: {
-        user_id: input.user_id,
+        user_id: ctx.user?.id ?? "",
         customer_name: input.customer_name ?? "",
         sales_Id: input.sales_Id,
         cashier_name: input.cashier_name ?? "",
@@ -102,22 +94,35 @@ export const cashierRouter = createTRPCRouter({
       },
     });
   }),
-  getAllSales: publicProcedure.input(user_id).query(({ ctx, input }) => {
-    return ctx.db.sales.findMany({
+  getAllSales: publicProcedure.query(async ({ ctx }) => {
+    const sales = await ctx.db.sales.findMany({
       where: {
-        user_id: input.user_id,
+        user_id: ctx.user?.id ?? "",
         sales_status: false,
       },
       include: {
         itemOrders: true,
       },
     });
+
+    return mapJsonSalesArr(JSON.stringify(sales));
+  }),
+  getAllTransactions: publicProcedure.query(async ({ ctx }) => {
+    const sales = await ctx.db.sales.findMany({
+      where: {
+        user_id: ctx.user?.id ?? "",
+        sales_status: true,
+      },
+      include: {
+        itemOrders: true,
+      },
+    });
+
+    return parseSales(mapJsonSalesArr(JSON.stringify(sales)));
   }),
   updateSalesStatus: publicProcedure
     .input(saleIsDone)
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 200));
       return ctx.db.sales.update({
         where: { sales_Id: input.sales_Id },
         data: {
@@ -128,9 +133,6 @@ export const cashierRouter = createTRPCRouter({
   deleteSingleItem: publicProcedure
     .input(item_id)
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
       return ctx.db.items.delete({
         where: {
           items_id: input.item_id,
@@ -141,12 +143,9 @@ export const cashierRouter = createTRPCRouter({
     .input(item)
     .input(item_id)
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
       return ctx.db.items.update({
         where: {
-          user_id: input.user_id,
+          user_id: ctx.user?.id ?? "",
           items_id: input.item_id,
           name: input.name,
         },

@@ -1,4 +1,4 @@
-import EarningsReport from "./dashboard/reports";
+import EarningsReport from "./dashboard/earningsReports";
 
 export default function Reports() {
   return (
