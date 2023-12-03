@@ -21,15 +21,16 @@ export interface DbItem {
   stock: number;
 }
 
-interface Props {
-  card: DbItem[];
-}
-
-export default function Inventory({ card = [] }: Props) {
+export default function Inventory() {
   const router = useRouter();
 
-  const totalStock = card.reduce((total, item) => total + item.stock, 0);
-  const numberOfItems = card.length;
+  const { data: inventoryItems } = api.cashier.getAllInventoryItems.useQuery();
+
+  const totalStock = inventoryItems?.reduce(
+    (total, item) => total + item.stock,
+    0,
+  );
+  const numberOfItems = inventoryItems?.length;
 
   const utils = api.useUtils();
 
@@ -78,7 +79,7 @@ export default function Inventory({ card = [] }: Props) {
               </Button>
             </div>
             {/* Item list */}
-            {card.map((item, index) => (
+            {inventoryItems?.map((item, index) => (
               <div className="p-2">
                 <BoxCard
                   key={index}

@@ -72,6 +72,16 @@ export const cashierRouter = createTRPCRouter({
     const dbItems = inventoryItems as DbItem[];
     return dbItems.length !== 0 ? dbItems : [];
   }),
+  getAllInventoryItems: publicProcedure.query(async ({ ctx }) => {
+    const inventoryItems = await ctx.db.items.findMany({
+      where: {
+        user_id: ctx.user?.id ?? "",
+      },
+    });
+
+    const dbItems = inventoryItems as DbItem[];
+    return dbItems.length !== 0 ? dbItems : [];
+  }),
 
   createItemOrder: publicProcedure
     .input(itemOrderInput)
