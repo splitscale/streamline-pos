@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
+import { DbItem } from "~/pages/inventory";
 
 interface Props {
   card:
@@ -11,14 +12,14 @@ interface Props {
         stock: number;
       }[]
     | undefined;
-  addToCart: (item: { name: string; price: number }) => void;
+  addToCart: (item: DbItem) => void;
 }
 
 export default function ItemCard({ addToCart, card = [] }: Props) {
   const mappedDivs = card.map((item, index) => (
     <div
       key={index}
-      onClick={() => addToCart({ name: item.name, price: Number(item.price) })}
+      onClick={() => addToCart(item)}
       className=" h-24 rounded-md bg-pink text-center sm:aspect-square sm:h-auto md:h-auto"
     >
       <div className="mt-4 grid grid-rows-2 font-bold text-white md:mt-16 md:text-6xl">

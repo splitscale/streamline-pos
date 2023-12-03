@@ -32,6 +32,12 @@ const saleIsDone = z.object({
   sales_Id: z.string().min(1),
   sales_status: z.boolean(),
 });
+
+const saleStock = z.object({
+  item_id: z.string().min(1),
+  stock: z.number().min(0),
+});
+
 const item = z.object({
   name: z.string().min(1),
   price: z.number().min(0),
@@ -55,7 +61,12 @@ export const cashierRouter = createTRPCRouter({
   }),
   getAllItem: publicProcedure.query(async ({ ctx }) => {
     const inventoryItems = await ctx.db.items.findMany({
-      where: { user_id: ctx.user?.id ?? "" },
+      where: {
+        user_id: ctx.user?.id ?? "",
+        stock: {
+          not: 0,
+        },
+      },
     });
 
     const dbItems = inventoryItems as DbItem[];
@@ -127,6 +138,16 @@ export const cashierRouter = createTRPCRouter({
         where: { sales_Id: input.sales_Id },
         data: {
           sales_status: input.sales_status,
+        },
+      });
+    }),
+  updateSalesStock: publicProcedure
+    .input(saleStock)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.items.update({
+        where: { items_id: input.item_id },
+        data: {
+          stock: input.stock,
         },
       });
     }),

@@ -12,9 +12,16 @@ import { api } from "~/utils/api";
 import { orderCodeGenerator } from "~/components/randomCodeGen";
 import { Input } from "~/components/ui/input";
 import { CashierCard } from "~/components/cashierCard";
+import { DbItem } from "../inventory";
+import { ChevronLeft } from "lucide-react";
+
+interface CartItemType extends DbItem {
+  quantity?: number;
+  comment?: string;
+}
 
 export default function CounterPage() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [discount, setDiscount] = useState(0);
   const [amountPayable, setAmountPayable] = useState(0);
   const [receiveAmount, setReceiveAmount] = useState(0);
@@ -22,16 +29,31 @@ export default function CounterPage() {
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
 
+  const updateStock = api.cashier.updateSalesStock.useMutation({
+    onSuccess() {
+      utils.cashier.invalidate();
+    },
+  });
+
+  function handleStockDecrease(
+    itemId: string,
+    itemStock: number,
+    value: number,
+  ) {
+    updateStock.mutate({
+      item_id: itemId,
+      stock: itemStock - value,
+    });
+  }
+
   // Adds an item to the cart.
-  const addToCart = (item: any) => {
-    setCartItems((prevItems) => [...prevItems, { item, quantity: 1 }]);
+  const addToCart = (item: DbItem) => {
+    setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);
   };
 
   const incrementQuantity = (quantity: number, name: string) => {
     const mapped = cartItems.map((cartItem) =>
-      cartItem.item.name === name
-        ? { ...cartItem, quantity: quantity }
-        : cartItem,
+      cartItem.name === name ? { ...cartItem, quantity: quantity } : cartItem,
     );
 
     setCartItems(mapped);
@@ -42,15 +64,13 @@ export default function CounterPage() {
   //Deletes the item from the cart
   const removeFromCart = (name: string) => {
     setCartItems((prevItems) =>
-      prevItems.filter((cartItem) => cartItem.item.name !== name),
+      prevItems.filter((cartItem) => cartItem.name !== name),
     );
   };
 
   const addComment = (comment: string, name: string) => {
     const mapped = cartItems.map((cartItem) =>
-      cartItem.item.name === name
-        ? { ...cartItem, comment: comment }
-        : cartItem,
+      cartItem.name === name ? { ...cartItem, comment: comment } : cartItem,
     );
 
     setCartItems(mapped);
@@ -86,7 +106,7 @@ export default function CounterPage() {
     setDiscount(0);
   };
   const total = cartItems.reduce((total, cartItem) => {
-    return total + Number(cartItem.quantity) * Number(cartItem.item.price);
+    return total + Number(cartItem.quantity) * Number(cartItem.price);
   }, 0);
 
   const discountRate = discount / 100;
@@ -133,21 +153,14 @@ export default function CounterPage() {
         <hr className="m-4 h-px bg-gray-200  dark:bg-gray-700"></hr>
 
         <div className="grid grid-cols-1 gap-2">
-          {/* 
-          items_id: string;
-        user_id: string;
-        name: string;
-        price: number;
-        stock: number;
-          */}
           {cartItems.map((cartItem, index) => (
             <CashierCard
               key={index}
-              id={cartItem.id}
-              name={cartItem.item.name}
-              price={cartItem.item.price}
-              quantity={cartItem.quantity}
-              comment={cartItem.comment}
+              id={cartItem.items_id}
+              name={cartItem.name}
+              price={cartItem.price}
+              quantity={cartItem.quantity ?? 1}
+              comment={cartItem.comment ?? ""}
               onTrash={removeFromCart}
               onComment={addComment}
               onQuantitySet={incrementQuantity}
@@ -175,7 +188,7 @@ export default function CounterPage() {
             className="container fixed right-0 top-0 z-50  h-screen  w-screen justify-center overflow-scroll bg-slate-50 text-black "
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal}>
-              {"< "}
+              <ChevronLeft />
               Payment
             </div>
 
@@ -187,17 +200,16 @@ export default function CounterPage() {
                 >
                   <div className="flex flex-col px-2">
                     <div className="flex flex-row place-content-between   text-start">
-                      <p className="truncate font-semibold">{`${cartItem.quantity}x ${cartItem.item.name}`}</p>
+                      <p className="truncate font-semibold">{`${cartItem.quantity}x ${cartItem.name}`}</p>
 
                       <p className=" font-bold">
                         {`P ${
-                          Number(cartItem.quantity) *
-                          Number(cartItem.item.price)
+                          Number(cartItem.quantity) * Number(cartItem.price)
                         }`}
                       </p>
                     </div>
 
-                    <p>{`P ${cartItem.item.price}`}</p>
+                    <p>{`P ${cartItem.price}`}</p>
                   </div>
 
                   {cartItem.comment ? (
@@ -316,7 +328,7 @@ export default function CounterPage() {
             className=" fixed right-0 top-0 z-50  h-screen  w-screen  overflow-hidden bg-slate-50"
           >
             <div className=" m-2 text-2xl font-bold" onClick={toggleModal2}>
-              {"< "}
+              <ChevronLeft />
               Receive
             </div>
 
@@ -460,7 +472,7 @@ export default function CounterPage() {
             className=" fixed right-0 top-0  z-50  h-screen w-screen justify-center bg-slate-50"
           >
             <div className="m-2 text-2xl font-bold" onClick={toggleModal3}>
-              {"< "}
+              <ChevronLeft />
               Change
             </div>
 
@@ -505,6 +517,12 @@ export default function CounterPage() {
                       });
                       setTimeout(() => {
                         cartItems.forEach((cartItem, index) => {
+                          handleStockDecrease(
+                            cartItem.items_id,
+                            cartItem.stock,
+                            cartItem.quantity ?? 1,
+                          );
+
                           setTimeout(() => {
                             addItemOrder.mutate({
                               sales: {
@@ -512,10 +530,10 @@ export default function CounterPage() {
                                   sales_Id: orderCode,
                                 },
                               },
-                              name: cartItem.item.name,
-                              price: cartItem.item.price,
-                              quantity: cartItem.quantity,
-                              comment: cartItem.comment,
+                              name: cartItem.name,
+                              price: cartItem.price,
+                              quantity: cartItem.quantity ?? 1,
+                              comment: cartItem.comment ?? "",
                             });
                           }, index * 500);
                         });

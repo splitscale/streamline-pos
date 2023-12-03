@@ -35,8 +35,6 @@ export default function POSTabs() {
   });
 
   const handleClick = (sales_id: string) => {
-    // Call the mutation function here
-    console.log("success");
     updateStatus.mutate({
       sales_Id: sales_id,
       sales_status: true,
