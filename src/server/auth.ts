@@ -1,5 +1,4 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { randomUUID, randomBytes } from "crypto";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -87,113 +86,6 @@ export const authOptions: NextAuthOptions = {
         console.log("[Auth] ", "Super admin Authorized");
 
         return user;
-      },
-    }),
-    CredentialsProvider({
-      id: "user-signup",
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        if (credentials?.username === env.SUPER_ADMIN_USERNAME) return null;
-
-        console.log("[Auth] Attempting to Register as User");
-
-        const res = await fetch(
-          `${env.SHIELD_BASE_URL}auth/v1/credential/register`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-          },
-        );
-
-        if (!res.ok) return null;
-
-        console.log("[Auth] Attempting to login as User");
-
-        const loginRes = await fetch(
-          `${env.SHIELD_BASE_URL}auth/v1/credential/login`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-          },
-        );
-
-        const user: {
-          tokens: {
-            accessToken: string;
-            refreshToken: string;
-          };
-          user: {
-            id: string;
-            created: string;
-            edited: string;
-            displayName: string;
-            firstName: null;
-            lastName: null;
-            photoUrl: null;
-            email: null;
-          };
-        } = await loginRes.json();
-
-        return { id: user.user.id, name: user.user.displayName };
-      },
-    }),
-
-    CredentialsProvider({
-      id: "user-signin",
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        if (credentials?.username === env.SUPER_ADMIN_USERNAME) return null;
-
-        console.log("[Auth] Attempting to login as User");
-
-        const loginRes = await fetch(
-          `${env.SHIELD_BASE_URL}auth/v1/credential/login`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-          },
-        );
-
-        if (!loginRes.ok) return null;
-
-        const user: {
-          tokens: {
-            accessToken: string;
-            refreshToken: string;
-          };
-          user: {
-            id: string;
-            created: string;
-            edited: string;
-            displayName: string;
-            firstName: null;
-            lastName: null;
-            photoUrl: null;
-            email: null;
-          };
-        } = await loginRes.json();
-
-        return { id: user.user.id, name: user.user.displayName };
       },
     }),
   ],
