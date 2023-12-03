@@ -6,6 +6,7 @@ import { z } from "zod";
 import { DbItem } from "~/pages/inventory";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { CartItemType } from "~/types/global";
 import { mapJsonSalesArr } from "~/utils/mapJsonToSalesEntry";
 import { parseSales } from "~/utils/parseSales";
 const itemOrderInput = z.object({
@@ -46,6 +47,10 @@ const item = z.object({
 
 const item_id = z.object({
   item_id: z.string().min(1),
+});
+
+const sales_id = z.object({
+  sales_id: z.string().min(1),
 });
 
 export const cashierRouter = createTRPCRouter({
@@ -126,7 +131,9 @@ export const cashierRouter = createTRPCRouter({
       },
     });
 
-    return mapJsonSalesArr(JSON.stringify(sales));
+    const res = mapJsonSalesArr(JSON.stringify(sales));
+    console.log("[GET ALL SALES RES] ", res);
+    return res;
   }),
   getAllTransactions: publicProcedure.query(async ({ ctx }) => {
     const sales = await ctx.db.sales.findMany({

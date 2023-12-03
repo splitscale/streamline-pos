@@ -24,7 +24,6 @@ export default function POSTabs() {
   const router = useRouter();
   const utils = api.useUtils();
 
-  const { data: inventoryItems } = api.cashier.getAllItem.useQuery();
   const { data: sales } = api.cashier.getAllSales.useQuery();
   const { data: transactions } = api.cashier.getAllTransactions.useQuery();
 
@@ -167,7 +166,7 @@ export default function POSTabs() {
               </TabsContent>
 
               <TabsContent value="inventory">
-                <Inventory card={inventoryItems ?? []} />
+                <Inventory />
               </TabsContent>
             </Tabs>
           </div>

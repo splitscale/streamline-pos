@@ -14,11 +14,7 @@ import { Input } from "~/components/ui/input";
 import { CashierCard } from "~/components/cashierCard";
 import { DbItem } from "../inventory";
 import { ChevronLeft } from "lucide-react";
-
-interface CartItemType extends DbItem {
-  quantity?: number;
-  comment?: string;
-}
+import { CartItemType } from "~/types/global";
 
 export default function CounterPage() {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -49,6 +45,8 @@ export default function CounterPage() {
   // Adds an item to the cart.
   const addToCart = (item: DbItem) => {
     setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);
+
+    console.log(cartItems);
   };
 
   const incrementQuantity = (quantity: number, name: string) => {
@@ -504,6 +502,7 @@ export default function CounterPage() {
                     variant="default"
                     className="w-full"
                     onClick={(e) => {
+                      console.log("[ORDER CODE 1] ", orderCode);
                       e.preventDefault();
 
                       salesOrder.mutate({
@@ -515,15 +514,13 @@ export default function CounterPage() {
                         final_price: discountPayable,
                         payment: receiveAmount,
                       });
+
                       setTimeout(() => {
                         cartItems.forEach((cartItem, index) => {
-                          handleStockDecrease(
-                            cartItem.items_id,
-                            cartItem.stock,
-                            cartItem.quantity ?? 1,
-                          );
-
+                          console.log("[CART ITEMS] ", cartItem);
                           setTimeout(() => {
+                            console.log("[ORDER CODE 2] ", orderCode);
+
                             addItemOrder.mutate({
                               sales: {
                                 connect: {
@@ -545,6 +542,16 @@ export default function CounterPage() {
                         clearCart(),
                         clearAmountPayable(),
                         clearDiscountAmount();
+
+                      cartItems.forEach((cartItem, index) => {
+                        setTimeout(() => {
+                          handleStockDecrease(
+                            cartItem.items_id,
+                            cartItem.stock,
+                            cartItem.quantity ?? 1,
+                          );
+                        }, index * 500);
+                      });
                     }}
                   >
                     Done

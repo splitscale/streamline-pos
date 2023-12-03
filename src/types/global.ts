@@ -5,6 +5,7 @@ import {
   ReactPortal,
   PromiseLikeOfReactNode,
 } from "react";
+import { DbItem } from "~/pages/inventory";
 
 export interface Item {
   id: string;
@@ -47,4 +48,9 @@ export interface SalesEntry {
   sales_status: boolean;
   sales_date: string;
   itemOrders: ItemOrder[];
+}
+
+export interface CartItemType extends DbItem {
+  quantity?: number;
+  comment?: string;
 }

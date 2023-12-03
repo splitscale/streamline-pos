@@ -2,6 +2,8 @@ import { SalesEntry } from "~/types/global";
 
 // Mapper function to convert JSON to SalesEntry object
 export function mapJsonToSalesEntry(json: any): SalesEntry {
+  console.log("[PARSING] ", json);
+
   return {
     id: json.id ?? "",
     sales_Id: json.sales_Id ?? "",
