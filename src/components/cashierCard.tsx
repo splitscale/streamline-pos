@@ -26,8 +26,8 @@ export interface CashierCardProps {
   quantity: number;
   comment: string;
   onTrash: (id: string) => void;
-  onComment: (comment: string, name: string) => void;
-  onQuantitySet: (quantity: number, name: string) => void;
+  onComment: (comment: string, id: string) => void;
+  onQuantitySet: (quantity: number, id: string) => void;
 }
 
 export function CashierCard(props: CashierCardProps) {
@@ -42,7 +42,7 @@ export function CashierCard(props: CashierCardProps) {
   };
 
   const handleCommentClose = () => {
-    props.onComment(comment, props.name);
+    props.onComment(comment, props.id);
     setCommentOpen(false);
   };
 
@@ -63,11 +63,11 @@ export function CashierCard(props: CashierCardProps) {
     if (options?.operation === "increment") mutableQty += 1;
     if (options?.operation === "decrement") mutableQty -= 1;
 
-    props.onQuantitySet(mutableQty, props.name);
+    props.onQuantitySet(mutableQty, props.id);
 
     setQuantity(mutableQty);
     setQuantity(mutableQty);
-    if (mutableQty < 1) props.onTrash(props.name);
+    if (mutableQty < 1) props.onTrash(props.id);
   }
 
   return (
@@ -177,7 +177,7 @@ export function CashierCard(props: CashierCardProps) {
                   variant={"destructive"}
                   onClick={() => {
                     handleClose();
-                    props.onTrash(props.name);
+                    props.onTrash(props.id);
                   }}
                 >
                   Yes

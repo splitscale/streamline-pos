@@ -49,31 +49,41 @@ export default function CounterPage() {
 
   // Adds an item to the cart.
   const addToCart = (item: DbItem) => {
-    setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);
+    const newItem = { ...item, quantity: 1 };
 
-    console.log(cartItems);
+    setCartItems((prevItems) => {
+      if (prevItems.length === 0) return [...prevItems, newItem];
+
+      return prevItems.map((prevItem) => {
+        return prevItem.items_id === item.items_id ? prevItem : newItem;
+      });
+    });
   };
 
-  const incrementQuantity = (quantity: number, name: string) => {
+  const incrementQuantity = (quantity: number, itemId: string) => {
     const mapped = cartItems.map((cartItem) =>
-      cartItem.name === name ? { ...cartItem, quantity: quantity } : cartItem,
+      cartItem.items_id === itemId
+        ? { ...cartItem, quantity: quantity }
+        : cartItem,
     );
 
     setCartItems(mapped);
 
-    console.log(`[QUANTITY SET] Item: ${name}, New Quantity: ${quantity}`);
+    console.log(`[QUANTITY SET] Item: ${itemId}, New Quantity: ${quantity}`);
   };
 
   //Deletes the item from the cart
-  const removeFromCart = (name: string) => {
+  const removeFromCart = (itemId: string) => {
     setCartItems((prevItems) =>
-      prevItems.filter((cartItem) => cartItem.name !== name),
+      prevItems.filter((cartItem) => cartItem.items_id !== itemId),
     );
   };
 
-  const addComment = (comment: string, name: string) => {
+  const addComment = (comment: string, itemId: string) => {
     const mapped = cartItems.map((cartItem) =>
-      cartItem.name === name ? { ...cartItem, comment: comment } : cartItem,
+      cartItem.items_id === itemId
+        ? { ...cartItem, comment: comment }
+        : cartItem,
     );
 
     setCartItems(mapped);
