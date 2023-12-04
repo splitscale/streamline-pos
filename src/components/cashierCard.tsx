@@ -27,11 +27,11 @@ export interface CashierCardProps {
   comment: string;
   onTrash: (id: string) => void;
   onComment: (comment: string, id: string) => void;
-  onQuantitySet: (quantity: number, id: string) => void;
+  onIncrement: (quantity: number, id: string) => void;
+  onDecrement: (quantity: number, id: string) => void;
 }
 
 export function CashierCard(props: CashierCardProps) {
-  const [quantity, setQuantity] = useState<number>(props.quantity);
   const [comment, setComment] = useState<string>(props.comment);
   const [backupComment, setBackupComment] = useState<string>(props.comment);
   const [commentOpen, setCommentOpen] = useState(false);
@@ -54,22 +54,6 @@ export function CashierCard(props: CashierCardProps) {
     setOpen(false);
   };
 
-  function handleQuantitySet(
-    qty: number,
-    options?: { operation: "increment" | "decrement" },
-  ): void {
-    let mutableQty = qty;
-
-    if (options?.operation === "increment") mutableQty += 1;
-    if (options?.operation === "decrement") mutableQty -= 1;
-
-    props.onQuantitySet(mutableQty, props.id);
-
-    setQuantity(mutableQty);
-    setQuantity(mutableQty);
-    if (mutableQty < 1) props.onTrash(props.id);
-  }
-
   return (
     <>
       <div className="flex flex-col gap-2 rounded-md  bg-gray-300 p-2">
@@ -83,7 +67,7 @@ export function CashierCard(props: CashierCardProps) {
               {props.name}
             </p>
             <p className="text-black">{`P ${
-              Number(props.price) * Number(quantity)
+              Number(props.price) * Number(props.quantity)
             }`}</p>
           </div>
           <div className="flex pr-5">
@@ -93,13 +77,9 @@ export function CashierCard(props: CashierCardProps) {
 
         <div className="flex flex-col gap-3 divide-y-2 divide-dashed divide-slate-500">
           <QuantityControl
-            quantity={quantity}
-            onIncrement={() =>
-              handleQuantitySet(quantity, { operation: "increment" })
-            }
-            onDecrement={() =>
-              handleQuantitySet(quantity, { operation: "decrement" })
-            }
+            quantity={props.quantity}
+            onIncrement={() => props.onIncrement(props.quantity + 1, props.id)}
+            onDecrement={() => props.onDecrement(props.quantity - 1, props.id)}
           />
 
           <div className="flex grow flex-col">

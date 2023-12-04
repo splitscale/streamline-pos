@@ -66,16 +66,18 @@ export default function CounterPage() {
     });
   };
 
-  const incrementQuantity = (quantity: number, itemId: string) => {
+  const handleQuantityUpdate = (newQuantity: number, itemId: string) => {
+    if (newQuantity < 1) return removeFromCart(itemId);
+
     const mapped = cartItems.map((cartItem) =>
       cartItem.items_id === itemId
-        ? { ...cartItem, quantity: quantity }
+        ? { ...cartItem, quantity: newQuantity }
         : cartItem,
     );
 
     setCartItems(mapped);
 
-    console.log(`[QUANTITY SET] Item: ${itemId}, New Quantity: ${quantity}`);
+    console.log(`[QUANTITY SET] Item: ${itemId}, New Quantity: ${newQuantity}`);
   };
 
   //Deletes the item from the cart
@@ -253,7 +255,8 @@ export default function CounterPage() {
                     comment={cartItem.comment ?? ""}
                     onTrash={removeFromCart}
                     onComment={addComment}
-                    onQuantitySet={incrementQuantity}
+                    onIncrement={handleQuantityUpdate}
+                    onDecrement={handleQuantityUpdate}
                   />
                 ))}
               </div>
