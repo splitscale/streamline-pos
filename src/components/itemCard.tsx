@@ -20,10 +20,10 @@ export default function ItemCard({ addToCart, card = [] }: Props) {
     <div
       key={index}
       onClick={() => addToCart(item)}
-      className="flex h-24 min-h-full w-28 flex-col place-content-around rounded-md bg-pink p-2 text-center"
+      className="flex h-fit min-h-full w-28 min-w-full flex-col place-content-between rounded-md bg-pink p-2 text-center"
     >
       <div className="font-semibold uppercase text-white ">
-        <p className="whitespace-normal break-words">{item.name}</p>
+        <p className="whitespace-normal break-normal">{item.name}</p>
       </div>
 
       <div className="flex flex-row place-content-between text-xs text-primary-foreground">

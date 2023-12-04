@@ -197,8 +197,8 @@ function QuantityControl(props: {
   onDecrement: () => void;
 }) {
   return (
-    <div className="grid h-12  grid-cols-3 place-content-center rounded-md bg-pink">
-      <div className="flex place-content-center ">
+    <div className="grid h-12 grid-cols-3 place-content-center rounded-md bg-pink">
+      <div className="flex-shrink-1 flex place-content-center">
         <IconButton
           aria-label="decrement"
           onClick={props.onDecrement}
@@ -211,13 +211,13 @@ function QuantityControl(props: {
         </IconButton>
       </div>
 
-      <div className="flex place-content-center">
-        <p className="grow self-center  text-center text-2xl font-semibold text-white">
+      <div className="flex-shrink-1 flex place-content-center">
+        <p className="grow self-center text-center text-2xl font-semibold text-white">
           {props.quantity}
         </p>
       </div>
 
-      <div className="flex place-content-center ">
+      <div className="flex-shrink-1 flex place-content-center">
         <IconButton
           aria-label="increment"
           onClick={props.onIncrement}

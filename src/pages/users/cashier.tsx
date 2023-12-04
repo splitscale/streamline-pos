@@ -209,51 +209,52 @@ export default function CounterPage() {
       <div className="m-2 grid-rows-3 items-center text-black ">
         <SearchBar input={item ?? []} output={setSearchedItems} />
 
-        <ScrollArea className="my-2 whitespace-nowrap rounded-md ">
-          <div
-            className="grid grid-flow-col auto-rows-auto gap-2 overflow-x-auto"
-            style={{ gridTemplateRows: "repeat(3, auto)" }}
-          >
-            {isFetching ? (
-              <p>Loading items...</p>
-            ) : (
-              <ItemCard
-                addToCart={addToCart}
-                card={searchedItems.length !== 0 ? searchedItems : item}
-              />
-            )}
+        <div className="grid grid-cols-1 ">
+          <ScrollArea className="sticky my-2  h-[300px] whitespace-nowrap rounded-md">
+            <div className="grid auto-cols-auto grid-flow-row gap-2 px-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {isFetching ? (
+                <p>Loading items...</p>
+              ) : (
+                <ItemCard
+                  addToCart={addToCart}
+                  card={searchedItems.length !== 0 ? searchedItems : item}
+                />
+              )}
+            </div>
+            <ScrollBar orientation="vertical" />
+          </ScrollArea>
+
+          <div className="w-full place-self-center  md:w-full lg:w-1/2">
+            <ScrollArea className="sticky my-2 h-[300px] whitespace-nowrap rounded-md">
+              <div className="flex flex-col gap-2">
+                {cartItems.map((cartItem, index) => (
+                  <CashierCard
+                    key={index}
+                    id={cartItem.items_id}
+                    name={cartItem.name}
+                    price={cartItem.price}
+                    quantity={cartItem.quantity ?? 1}
+                    comment={cartItem.comment ?? ""}
+                    onTrash={removeFromCart}
+                    onComment={addComment}
+                    onQuantitySet={incrementQuantity}
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+
+            <div className="pt-2">
+              {cartItems.length !== 0 ? (
+                <Button
+                  className="hover:bg-pink-600  w-full rounded-md"
+                  variant="default"
+                  onClick={checkCartItems}
+                >
+                  Proceed to payment
+                </Button>
+              ) : null}
+            </div>
           </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-
-        <hr className="m-4 h-px bg-gray-200  dark:bg-gray-700"></hr>
-
-        <div className="grid grid-cols-1 gap-2">
-          {cartItems.map((cartItem, index) => (
-            <CashierCard
-              key={index}
-              id={cartItem.items_id}
-              name={cartItem.name}
-              price={cartItem.price}
-              quantity={cartItem.quantity ?? 1}
-              comment={cartItem.comment ?? ""}
-              onTrash={removeFromCart}
-              onComment={addComment}
-              onQuantitySet={incrementQuantity}
-            />
-          ))}
-        </div>
-
-        <div className="pt-2">
-          {cartItems.length !== 0 ? (
-            <Button
-              className="hover:bg-pink-600  w-full rounded-md"
-              variant="default"
-              onClick={checkCartItems}
-            >
-              Proceed to payment
-            </Button>
-          ) : null}
         </div>
 
         {isModalOpen && (
