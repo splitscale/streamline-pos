@@ -52,11 +52,17 @@ export default function CounterPage() {
     const newItem = { ...item, quantity: 1 };
 
     setCartItems((prevItems) => {
-      if (prevItems.length === 0) return [...prevItems, newItem];
+      const newArr = [...prevItems, newItem];
+      if (prevItems.length === 0) return newArr;
 
-      return prevItems.map((prevItem) => {
-        return prevItem.items_id === item.items_id ? prevItem : newItem;
+      let isDuplicate = false;
+      prevItems.forEach((v) => {
+        if (v.items_id === item.items_id) isDuplicate = true;
       });
+
+      if (isDuplicate) return prevItems;
+
+      return newArr;
     });
   };
 
