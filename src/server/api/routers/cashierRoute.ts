@@ -181,15 +181,24 @@ export const cashierRouter = createTRPCRouter({
     .input(item)
     .input(item_id)
     .mutation(async ({ ctx, input }) => {
+      console.log(
+        "[TRPC] ",
+        "updating: ",
+        ctx.user?.id,
+        input.item_id,
+        "new data: ",
+        input.name,
+      );
+
       return ctx.db.items.update({
         where: {
           user_id: ctx.user?.id ?? "",
           items_id: input.item_id,
-          name: input.name,
         },
         data: {
           price: input.price,
           stock: input.stock,
+          name: input.name,
         },
       });
     }),

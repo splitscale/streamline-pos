@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { Button } from "~/components/ui/button";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { ChevronLeft } from "lucide-react";
 
 export default function EditItem() {
   const router = useRouter();
@@ -20,6 +21,9 @@ export default function EditItem() {
   const dbItem = api.cashier.updateItem.useMutation({
     onSuccess() {
       utils.cashier.invalidate();
+    },
+    onError() {
+      alert("Failed to update item: ");
     },
   });
 
@@ -38,6 +42,8 @@ export default function EditItem() {
       return;
     }
 
+    console.log("[SAVING EDITED ITEM] ", id, itemName);
+
     dbItem.mutate({
       item_id: id as string,
       name: itemName,
@@ -51,10 +57,10 @@ export default function EditItem() {
   return (
     <div className="container flex h-screen touch-none  flex-col overflow-hidden bg-white">
       <div className="my-3 flex items-center">
-        <div className="text-lg font-bold text-black" onClick={router.back}>
-          {"<"}
+        <div className="text-lg text-black" onClick={router.back}>
+          <ChevronLeft />
         </div>
-        <h1 className="ml-2 text-2xl font-extrabold">Add Item</h1>
+        <p className="ml-2 text-2xl font-semibold">Add Item</p>
       </div>
 
       <div className="flex flex-col place-content-start gap-5">

@@ -27,6 +27,7 @@ export function BoxCard(props: BoxCardProps) {
   };
 
   const handleEdit = () => {
+    console.log("[EDITING] ", props);
     router.push(
       `/editItem/${props.id}/${props.name}/${props.availableUnits}/${props.unitPrice}`,
     );
