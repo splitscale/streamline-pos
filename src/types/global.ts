@@ -24,6 +24,8 @@ export interface OrderProps {
 export interface EarningReportProps {
   todaysEarnings?: number;
   totalEarnings?: number;
+  totalItems?: number;
+  itemsToday?: number;
 }
 
 export interface ItemOrder {
