@@ -9,6 +9,11 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { CartItemType } from "~/types/global";
 import { mapJsonSalesArr } from "~/utils/mapJsonToSalesEntry";
 import { parseSales } from "~/utils/parseSales";
+
+const today = new Date();
+const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+
 const itemOrderInput = z.object({
   name: z.string().min(1),
   price: z.number().min(0),
@@ -202,4 +207,74 @@ export const cashierRouter = createTRPCRouter({
         },
       });
     }),
+  getEarningsToday: publicProcedure.query(async ({ ctx }) => {
+    const todaysEarnings = await ctx.db.sales.aggregate({
+      _sum: {
+        final_price: true,
+      },
+      where: {
+        sales_date: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+        sales_status: true,
+      },
+    });
+
+    return Number(todaysEarnings._sum.final_price);
+  }),
+  getTotalEarnings: publicProcedure.query(async ({ ctx }) => {
+    const totalEarnings = await ctx.db.sales.aggregate({
+      _sum: {
+        final_price: true,
+      },
+      where: {
+        sales_status: true,
+      },
+    });
+
+    return Number(totalEarnings._sum.final_price);
+  }),
+  getItemsToday: publicProcedure.query(async ({ ctx }) => {
+    const itemsToday = await ctx.db.sales.findMany({
+      where: {
+        sales_date: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+        sales_status: true,
+      },
+      include: {
+        itemOrders: true,
+      },
+    });
+
+    let totalQuantity = 0;
+    itemsToday.forEach((record) => {
+      record.itemOrders.forEach((order) => {
+        totalQuantity += order.quantity;
+      });
+    });
+
+    return totalQuantity;
+  }),
+  getTotalItems: publicProcedure.query(async ({ ctx }) => {
+    const totalItems = await ctx.db.sales.findMany({
+      where: {
+        sales_status: true,
+      },
+      include: {
+        itemOrders: true,
+      },
+    })
+
+    let totalQuantity = 0;
+    totalItems.forEach((record) => {
+      record.itemOrders.forEach((order) => {
+        totalQuantity += order.quantity;
+      });
+    });
+
+    return totalQuantity;
+  }),
 });
