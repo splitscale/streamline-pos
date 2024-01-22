@@ -213,6 +213,7 @@ export const cashierRouter = createTRPCRouter({
         final_price: true,
       },
       where: {
+        user_id: ctx.user?.id ?? "",
         sales_date: {
           gte: startOfToday,
           lte: endOfToday,
@@ -229,6 +230,7 @@ export const cashierRouter = createTRPCRouter({
         final_price: true,
       },
       where: {
+        user_id: ctx.user?.id ?? "",
         sales_status: true,
       },
     });
@@ -238,6 +240,7 @@ export const cashierRouter = createTRPCRouter({
   getItemsToday: publicProcedure.query(async ({ ctx }) => {
     const itemsToday = await ctx.db.sales.findMany({
       where: {
+        user_id: ctx.user?.id ?? "",
         sales_date: {
           gte: startOfToday,
           lte: endOfToday,
@@ -261,6 +264,7 @@ export const cashierRouter = createTRPCRouter({
   getTotalItems: publicProcedure.query(async ({ ctx }) => {
     const totalItems = await ctx.db.sales.findMany({
       where: {
+        user_id: ctx.user?.id ?? "",
         sales_status: true,
       },
       include: {
